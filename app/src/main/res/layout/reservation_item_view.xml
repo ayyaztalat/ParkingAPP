@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:weightSum="3"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/image_name"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/_18sdp"
+        android:textAllCaps="true"
+        android:layout_weight="0.6"
+        android:layout_margin="@dimen/_5sdp"
+        android:padding="@dimen/_5sdp"
+        android:text="BP"
+        android:background="@drawable/circle"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_weight="1.3"
+        android:layout_width="0dp"
+        android:weightSum="3"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_weight="1"
+            android:text="Bop Parking"
+            android:id="@+id/name_user"
+            android:textSize="@dimen/_16sdp"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp" />
+
+        <TextView
+            android:id="@+id/time_from"
+            android:layout_weight="1"
+            android:text="From :21 jan, 17:00"
+            android:textSize="@dimen/_13sdp"
+            android:textColor="@color/black"
+            android:singleLine="true"
+            android:drawableLeft="@drawable/time"
+            android:drawablePadding="@dimen/_5sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp" />
+
+        <TextView
+            android:layout_weight="1"
+            android:text="To :21 jan, 17:00"
+            android:textSize="@dimen/_13sdp"
+            android:textColor="@color/black"
+            android:id="@+id/time_to"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_weight="1.1"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/_15sdp"
+        android:text="Cancel"
+        android:id="@+id/cancel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

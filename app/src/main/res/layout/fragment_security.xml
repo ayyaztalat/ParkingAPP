@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/security_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_centerInParent="true">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/edit_text_oldPassword"
+            android:textSize="@dimen/_15sdp"
+            android:textColor="@color/black"
+            android:hint="Enter Old Pasword"
+            android:layout_marginTop="@dimen/_18sdp"
+            android:textColorHint="@color/colorPrimaryDark"
+            android:drawableLeft="@drawable/lock"
+            android:drawablePadding="@dimen/_8sdp"
+            android:layout_width="match_parent"
+            android:inputType="textPassword"
+            android:layout_height="wrap_content" />
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/edit_text_newPassword"
+            android:textSize="@dimen/_15sdp"
+            android:textColor="@color/black"
+            android:hint="Enter Old Pasword"
+            android:inputType="textPassword"
+            android:layout_marginTop="@dimen/_18sdp"
+            android:textColorHint="@color/colorPrimaryDark"
+            android:drawableLeft="@drawable/lock"
+            android:drawablePadding="@dimen/_8sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/edit_text_confirmPassword"
+            android:textSize="@dimen/_15sdp"
+            android:textColor="@color/black"
+            android:layout_marginTop="@dimen/_18sdp"
+            android:hint="Enter Old Pasword"
+            android:inputType="textPassword"
+            android:textColorHint="@color/colorPrimaryDark"
+            android:drawableLeft="@drawable/lock"
+            android:drawablePadding="@dimen/_8sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/save"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:textColor="@color/white"
+            android:text="Save"
+            android:textSize="@dimen/_15sdp"
+            android:textAllCaps="false"
+            android:background="@drawable/button_background"
+            android:layout_width="@dimen/_180sdp"
+            android:layout_height="@dimen/_45sdp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.FragmentActivities.MyReservation">
+
+
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_above="@+id/bottom_button"
+        android:layout_width="match_parent"
+        android:id="@+id/recycler_my_parking"
+        android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:id="@+id/bottom_button"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:padding="@dimen/_8sdp"
+        android:gravity="center"
+        android:layout_margin="@dimen/_8sdp"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="@dimen/_150sdp"
+            android:textColor="@color/white"
+            android:background="@drawable/button_background"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:id="@+id/add_parking"
+            android:textSize="@dimen/_15sdp"
+            android:text="Add Parking"
+            android:textAllCaps="false"
+            android:layout_height="@dimen/_35sdp" />
+
+    </LinearLayout>
+</RelativeLayout>

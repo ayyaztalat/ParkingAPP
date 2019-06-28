@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Activities.AddParkingActivity">
+
+    <LinearLayout
+        android:id="@+id/top_bar"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:background="@color/colorPrimary"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/back_press"
+            android:src="@drawable/back_white"
+            android:padding="@dimen/_8sdp"
+            android:layout_margin="@dimen/_8sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="@dimen/_16sdp"
+            android:textColor="@color/white"
+            android:text="Add Parking Details"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_above="@+id/save_parking"
+        android:layout_below="@id/top_bar"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_5sdp"
+        android:text="Parking Information"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_18sdp" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/edit_parking_name"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/title"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:hint="Parking Name"
+        android:padding="@dimen/_15sdp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textSize="@dimen/_14sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/splash_text_one"
+        app:layout_constraintVertical_bias="0.069"
+        tools:layout_editor_absoluteX="6dp" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/edit_parking_description"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/edit_parking_name"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:hint="Parking Description"
+        android:padding="@dimen/_15sdp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textSize="@dimen/_14sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/splash_text_one"
+        app:layout_constraintVertical_bias="0.069"
+        tools:layout_editor_absoluteX="6dp" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/edit_parking_status"
+        android:layout_below="@+id/edit_parking_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:hint="Parking Availability"
+        android:padding="@dimen/_15sdp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textSize="@dimen/_14sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintVertical_bias="0.069"
+        tools:layout_editor_absoluteX="6dp" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/edit_parking_car_type"
+        android:layout_below="@+id/edit_parking_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:hint="Type of Vehicle"
+        android:padding="@dimen/_15sdp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textSize="@dimen/_14sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintVertical_bias="0.069"
+        tools:layout_editor_absoluteX="6dp" />
+
+        <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/edit_parking_price"
+        android:layout_below="@+id/edit_parking_car_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:hint="Price"
+            android:inputType="number"
+        android:padding="@dimen/_15sdp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textSize="@dimen/_14sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintVertical_bias="0.069"
+        tools:layout_editor_absoluteX="6dp" />
+    
+    
+    <TextView
+        android:id="@+id/location_parking"
+        android:text="Click to enter parking Location"
+        android:textSize="@dimen/_15sdp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:padding="@dimen/_8sdp"
+
+        android:layout_below="@id/edit_parking_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+        <LinearLayout
+            android:id="@+id/set_availablity_days"
+            android:orientation="horizontal"
+            android:weightSum="7"
+            android:layout_below="@+id/location_parking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/sunday"
+                android:text="S"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/_15sdp"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/_5sdp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:background="@drawable/button_backgrounds"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/monday"
+                android:text="M"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/_15sdp"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/_5sdp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:background="@drawable/button_backgrounds"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/Tuesday"
+                android:text="T"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/_15sdp"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/_5sdp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:background="@drawable/button_backgrounds"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/wednesday"
+                android:text="W"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/_15sdp"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/_5sdp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:background="@drawable/button_backgrounds"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/thursday"
+                android:text="Th"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/_15sdp"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/_5sdp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:background="@drawable/button_backgrounds"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/friday"
+                android:text="F"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/_15sdp"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/_5sdp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:background="@drawable/button_backgrounds"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/saturday"
+                android:text="Sa"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/_15sdp"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/_5sdp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:background="@drawable/button_backgrounds"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </RelativeLayout>
+    <Button
+        android:id="@+id/save_parking"
+        android:text="Next"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:layout_margin="@dimen/_18sdp"
+        android:textSize="@dimen/_18sdp"
+        android:layout_alignParentBottom="true"
+        android:padding="@dimen/_5sdp"
+        android:background="@drawable/button_background"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_35sdp" />
+
+
+</RelativeLayout>

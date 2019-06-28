@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single" android:id="@+id/first_aliment">
+
+        <item
+            android:id="@+id/Account"
+            android:icon="@drawable/user"
+            android:title="@string/menu_home" />
+        <item
+            android:id="@+id/my_parking"
+            android:icon="@drawable/reserve"
+            android:title="@string/menu_gallery" />
+
+        <item
+            android:id="@+id/booked_parking"
+            android:icon="@drawable/reserve"
+            android:title="My Bookings"/>
+
+        <item
+            android:id="@+id/my_reservation"
+            android:icon="@drawable/reserve"
+            android:title="My Reservations"
+            android:visible="false"/>
+    </group>
+    <group>
+        <item
+            android:id="@+id/map"
+            android:icon="@drawable/gray_loc"
+            android:title="@string/menu_slideshow" />
+        <item
+            android:id="@+id/traffic_text"
+            android:icon="@drawable/traffic"
+            app:actionLayout="@layout/layout_switch"
+            android:title="@string/menu_tools" />
+        <item
+            android:id="@+id/night_mood"
+            android:icon="@drawable/night_mode"
+            app:actionLayout="@layout/layout_switch"
+            android:title="@string/menu_share" />
+</group>
+
+
+<group>
+    <item
+                android:id="@+id/payments"
+                android:icon="@drawable/payments"
+                android:title="@string/menu_payment" />
+
+    <item
+                android:id="@+id/invite_friend"
+                android:icon="@drawable/invite"
+                android:title="@string/menu_invite_friend" />
+
+</group>
+
+    <group>
+    <item
+                android:id="@+id/support"
+                android:icon="@drawable/support"
+                android:title="@string/menu_support" />
+
+    <item
+                android:id="@+id/about"
+                android:icon="@drawable/about"
+                android:title="@string/menu_about" />
+
+        <item
+                android:id="@+id/sign_out"
+                android:icon="@drawable/logout"
+                android:title="@string/menu_sign_out" />
+
+</group>
+
+</menu>

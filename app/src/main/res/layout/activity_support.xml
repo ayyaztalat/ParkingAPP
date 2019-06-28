@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/toolbar" android:id="@+id/top"/>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_support"
+        android:layout_below="@+id/top"
+        android:layout_margin="@dimen/_8sdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/linear_data"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/title"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/_15sdp"
+                android:textStyle="bold"
+                android:text="Having problem? Let us know"
+                android:padding="@dimen/_8sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/message"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14sdp"
+                android:layout_margin="@dimen/_8sdp"
+                android:hint="Enter Message"
+                android:padding="@dimen/_8sdp"
+                android:layout_width="match_parent"
+                android:maxLines="5"
+                android:inputType="text"
+                android:layout_height="@dimen/_150sdp" />
+
+            <EditText
+                android:id="@+id/edit_text_Email"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14sdp"
+                android:hint="Enter Subject"
+                android:layout_margin="@dimen/_8sdp"
+                android:padding="@dimen/_8sdp"
+                android:layout_width="match_parent"
+                android:inputType="text"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/send"
+                android:textSize="@dimen/_16sdp"
+                android:text="Send"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:layout_margin="@dimen/_8sdp"
+                android:background="@drawable/button_background"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_35sdp" />
+
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>
