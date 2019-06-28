@@ -1,6 +1,7 @@
 package com.example.parkingapp.Intefaces;
 
 
+import com.example.parkingapp.Models.AddImageParking;
 import com.example.parkingapp.Models.AddParkingModel;
 import com.example.parkingapp.Models.EditModel;
 import com.example.parkingapp.Models.ImageParkingModel;
@@ -77,6 +78,11 @@ public interface APIService {
                                      @Field("parking_price")String park_price,
                                      @Field("parking_description")String park_description,
                                      @Field("type_of_vehicle")String type_of_vehicle);
+
+    @Multipart
+    @POST("add_parking_pic.php")
+    Call<AddImageParking> AddParkingImage(@Part("parking_id")RequestBody parking_id,
+                                          @Part MultipartBody.Part image);
 
     @FormUrlEncoded
     @POST("view_parking_pics.php")
