@@ -22,7 +22,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activities.ReservationParkingClass"></activity>
+        <activity android:name=".Activities.EditParkingClass"></activity>
+        <activity android:name=".Activities.ReservationParkingClass" />
         <activity android:name=".Activities.AddPhotosParking" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

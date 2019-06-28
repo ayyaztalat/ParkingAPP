@@ -3,6 +3,7 @@ package com.example.parkingapp.Intefaces;
 
 import com.example.parkingapp.Models.AddImageParking;
 import com.example.parkingapp.Models.AddParkingModel;
+import com.example.parkingapp.Models.DeleteParkingModel;
 import com.example.parkingapp.Models.EditModel;
 import com.example.parkingapp.Models.ImageParkingModel;
 import com.example.parkingapp.Models.LoginModel;
@@ -87,4 +88,8 @@ public interface APIService {
     @FormUrlEncoded
     @POST("view_parking_pics.php")
     Call<ImageParkingModel> getImage(@Field("parking_id")String parking_id);
+
+    @FormUrlEncoded
+    @POST("delete_parking.php")
+    Call<DeleteParkingModel> Delete(@Field("parking_id") String parkingId);
 }
