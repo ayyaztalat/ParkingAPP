@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -46,7 +47,12 @@ public class AddPhotosParking extends AppCompatActivity {
         imageRecyclerView=findViewById(R.id.image_recycler_view);
         add_image=findViewById(R.id.add_image);
         backPress=findViewById(R.id.back_press);
-
+        add_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addImageMechanism();
+            }
+        });
 
         layoutManager=new GridLayoutManager(this,3, LinearLayoutManager.VERTICAL,false);
 
@@ -55,13 +61,28 @@ public class AddPhotosParking extends AppCompatActivity {
 
     }
 
+    private void addImageMechanism() {
+
+        
+
+    }
+
+
     private void callImageHistory() {
         APIService service= APIClient.getClient().create(APIService.class);
-        Call<ImageParkingModel> callModel=service.getImage();
+        Call<ImageParkingModel> callModel=service.getImage(parkingId);
         callModel.enqueue(new Callback<ImageParkingModel>() {
             @Override
             public void onResponse(Call<ImageParkingModel> call, Response<ImageParkingModel> response) {
                 ImageParkingModel model=response.body();
+                if (model.getStatus().equalsIgnoreCase("success")){
+
+                    modelArrayList=model.getArrayList();
+
+                    imageParkingAdapter=new ImageParkingAdapter(AddPhotosParking.this,modelArrayList);
+                    imageRecyclerView.setAdapter(imageParkingAdapter);
+
+                }
             }
 
             @Override

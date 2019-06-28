@@ -34,7 +34,7 @@ public class ImageParkingAdapter extends RecyclerView.Adapter<ImageParkingAdapte
 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int i) {
-        Glide.with(context).load(BASE_URL+arrayList.get(i).getImage()).into(holder.imageView);
+        Glide.with(context).load(BASE_URL+arrayList.get(i).getPicture()).into(holder.imageView);
     }
 
     @Override

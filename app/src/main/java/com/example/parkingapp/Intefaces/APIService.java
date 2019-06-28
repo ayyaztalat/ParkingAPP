@@ -78,5 +78,7 @@ public interface APIService {
                                      @Field("parking_description")String park_description,
                                      @Field("type_of_vehicle")String type_of_vehicle);
 
-    Call<ImageParkingModel> getImage();
+    @FormUrlEncoded
+    @POST("view_parking_pics.php")
+    Call<ImageParkingModel> getImage(@Field("parking_id")String parking_id);
 }
