@@ -119,7 +119,7 @@ public class AddPhotosParking extends AppCompatActivity {
     }
 
     private void selectImage(String title) {
-        // TODO Auto-generated method stub
+        
         final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
