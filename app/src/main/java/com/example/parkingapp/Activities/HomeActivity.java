@@ -53,6 +53,8 @@ public class HomeActivity extends AppCompatActivity
     private GoogleMap mMap;
     GoogleApiClient mGoogleApiClient;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
