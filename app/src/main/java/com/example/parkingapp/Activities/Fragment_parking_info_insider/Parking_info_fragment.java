@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.parkingapp.Activities.ReserveParking;
 import com.example.parkingapp.Preferences.ReservationPreferences;
 import com.example.parkingapp.R;
 
@@ -77,7 +78,7 @@ public class Parking_info_fragment extends Fragment {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(context,ReserveParking.class));
+                startActivity(new Intent(context, ReserveParking.class));
             }
         });
 
