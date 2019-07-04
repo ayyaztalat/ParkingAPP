@@ -1,14 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.FragmentActivities.AboutFragment">
 
-  <!-- TODO: Update blank fragment layout -->
   <TextView
+      android:id="@+id/title"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:text="@string/hello_blank_fragment" />
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/_15sdp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      android:textColor="@color/black"
+      android:text="Bob Parking"
+      android:textSize="@dimen/_18sdp"
+      app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+  <TextView
+      android:id="@+id/info"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/_15sdp"
+      android:text="Its all about parking and reservation \n we provide Parking,reservations and online payment and tracking of parkingand vehicals"
+      android:textColor="@color/black"
+      android:textSize="@dimen/_14sdp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/title" />
+
+</android.support.constraint.ConstraintLayout>

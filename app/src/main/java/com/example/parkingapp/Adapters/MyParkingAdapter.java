@@ -58,7 +58,14 @@ public class MyParkingAdapter extends RecyclerView.Adapter<MyParkingAdapter.Hold
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context, EditParkingClass.class).putExtra("parking_id",modelArrayList.get(i).getParkingId()));
+                context.startActivity(new Intent(context, EditParkingClass.class)
+                        .putExtra("parking_id",modelArrayList.get(i).getParkingId())
+                        .putExtra("parking_price",modelArrayList.get(i).getParkingPrice())
+                        .putExtra("parking_vehical",modelArrayList.get(i).getTypeOfVehicle())
+                        .putExtra("parking_time",modelArrayList.get(i).getParkingTime())
+                        .putExtra("owner_number",modelArrayList.get(i).getParkingOwnerNumber())
+                        .putExtra("parking_description",modelArrayList.get(i).getParkingDescription())
+                        .putExtra("parking_owner_name",modelArrayList.get(i).getParkingOwnerName()));
             }
         });
 

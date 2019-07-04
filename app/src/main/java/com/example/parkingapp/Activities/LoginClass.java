@@ -166,6 +166,7 @@ public class LoginClass extends AppCompatActivity {
         progressDialog.dismiss();
         if (model.getStatus().equalsIgnoreCase("success")){
           preferences.setName(model.getUserData().get(0).getName());
+          preferences.setSession(true);
           preferences.setPhone(model.getUserData().get(0).getPhone());
           preferences.setPassword(model.getUserData().get(0).getPassword());
           preferences.setEmail(model.getUserData().get(0).getEmail());

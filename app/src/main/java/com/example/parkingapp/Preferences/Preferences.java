@@ -138,4 +138,26 @@ public class Preferences {
     public String getTruckName() {
         return  Prefs.getString("truckName","");
     }
+
+    public String getBrainTreeToker() {
+        return Prefs.getString("braintree_token","");
+    }
+
+    private void SetBrainTreeToken(String BrainTree){
+        Prefs.putString("braintree_token",BrainTree);
+    }
+
+    public void setCustomerID(String customerID) {
+        Prefs.putString("customer_id",customerID);
+    }
+    private String getCustomerID(){
+        return Prefs.getString("customer_id","");
+    }
+
+    public void setSession(boolean b) {
+        Prefs.putBoolean("session",b);
+    }
+    public Boolean getSession(){
+        return Prefs.getBoolean("session",false);
+    }
 }

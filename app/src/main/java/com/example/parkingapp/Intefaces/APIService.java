@@ -3,8 +3,10 @@ package com.example.parkingapp.Intefaces;
 
 import com.example.parkingapp.Models.AddImageParking;
 import com.example.parkingapp.Models.AddParkingModel;
+import com.example.parkingapp.Models.BrainTreeModel;
 import com.example.parkingapp.Models.DeleteParkingModel;
 import com.example.parkingapp.Models.EditModel;
+import com.example.parkingapp.Models.EditParkingModel;
 import com.example.parkingapp.Models.ImageParkingModel;
 import com.example.parkingapp.Models.LoginModel;
 import com.example.parkingapp.Models.ParkingModel;
@@ -92,4 +94,22 @@ public interface APIService {
     @FormUrlEncoded
     @POST("delete_parking.php")
     Call<DeleteParkingModel> Delete(@Field("parking_id") String parkingId);
+
+    @FormUrlEncoded
+    @POST("edit_parking.php")
+    Call<EditParkingModel> editParking(@Field("parking_id")String parking_id,
+                                       @Field("parking_name")String parking_name,
+                                       @Field("parking_time")String parking_time,
+                                       @Field("parking_owner_number")String parking_owner_number,
+                                       @Field("parking_price")String parking_price,
+                                       @Field("parking_description")String parking_description,
+                                       @Field("type_of_vehicle")String type_of_vehicle);
+
+    @FormUrlEncoded
+    @POST("")
+    Call<BrainTreeModel> BrainTree(@Field("nonce") String paymentNonce,@Field("email") String email,@Field("userid") String userId);
+
+
+
+
 }

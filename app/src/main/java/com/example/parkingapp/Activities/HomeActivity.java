@@ -189,6 +189,7 @@ public class HomeActivity extends AppCompatActivity
 
     private void CallSignOutAPI() {
         startActivity(new Intent(getApplicationContext(),LoginClass.class));
+        preferences.setSession(false);
         finish();
 
     }

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.Fragment_parking_info_insider.Parking_info_fragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:id="@+id/main_linear"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:textColor="@color/black"
+            android:textSize="@dimen/_18sdp"
+            android:textAllCaps="false"
+            android:text="Parking Details"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:padding="@dimen/_15sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:textColor="@color/black"
+            android:textSize="@dimen/_15sdp"
+            android:textAllCaps="false"
+            android:id="@+id/Available_time"
+            android:text="Parking Details"
+            android:layout_gravity="start"
+            android:gravity="start"
+            android:padding="@dimen/_15sdp"
+            android:drawablePadding="@dimen/_15sdp"
+            android:drawableLeft="@drawable/reserve"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+            <TextView
+            android:textColor="@color/black"
+            android:textSize="@dimen/_15sdp"
+            android:textAllCaps="false"
+            android:id="@+id/parking_name"
+            android:text="Parking Name"
+            android:layout_gravity="start"
+            android:gravity="start"
+            android:padding="@dimen/_15sdp"
+            android:drawablePadding="@dimen/_15sdp"
+            android:drawableLeft="@drawable/user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+            <TextView
+            android:textColor="@color/black"
+            android:textSize="@dimen/_15sdp"
+            android:textAllCaps="false"
+            android:id="@+id/parking_number"
+            android:text="Parking Description "
+            android:layout_gravity="start"
+            android:gravity="start"
+            android:padding="@dimen/_15sdp"
+            android:drawablePadding="@dimen/_15sdp"
+            android:drawableLeft="@drawable/blue_loc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+            <TextView
+            android:textColor="@color/black"
+            android:textSize="@dimen/_15sdp"
+            android:textAllCaps="false"
+            android:id="@+id/Owner_name"
+            android:text="Parking Owner name"
+            android:layout_gravity="start"
+            android:gravity="start"
+            android:padding="@dimen/_15sdp"
+            android:drawablePadding="@dimen/_15sdp"
+            android:drawableLeft="@drawable/reserve"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <Button
+            android:id="@+id/next"
+            android:text="Next"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_18sdp"
+            android:textAllCaps="false"
+            android:layout_margin="@dimen/_15sdp"
+
+            android:background="@drawable/button_background"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_38sdp" />
+
+
+    </LinearLayout>
+
+</FrameLayout>

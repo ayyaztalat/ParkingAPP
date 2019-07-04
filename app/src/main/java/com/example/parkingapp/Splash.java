@@ -8,6 +8,7 @@ import android.os.Bundle;
 import com.example.parkingapp.Activities.HomeActivity;
 import com.example.parkingapp.Activities.LoginClass;
 import com.example.parkingapp.FCM.firebaseClass;
+import com.example.parkingapp.Preferences.Preferences;
 
 public class Splash extends AppCompatActivity {
 
@@ -18,12 +19,23 @@ public class Splash extends AppCompatActivity {
 
         firebaseClass firebaseClass=new firebaseClass();
         firebaseClass.onTokenRefresh(this);
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(getApplicationContext(), LoginClass.class));
-                finish();
+
+        Preferences preferences=new Preferences(Splash.this);
+        Boolean abc=preferences.getSession();
+
+        if (abc){
+            startActivity(new Intent(getApplicationContext(),HomeActivity.class));
+            finish();
+        }else{
+
+            startActivity(new Intent(getApplicationContext(), LoginClass.class));
+            finish();
+        }
+
+
             }
         },5000);
     }

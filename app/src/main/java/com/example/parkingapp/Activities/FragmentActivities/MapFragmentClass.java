@@ -108,6 +108,9 @@ private String TAG="error";
   private GoogleMap googleMap;
   Context context;
     Preferences preference;
+
+
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -143,8 +146,8 @@ private String TAG="error";
       // to handle the case where the user grants the permission. See the documentation
       // for ActivityCompat#requestPermissions for more details.
     }else {
-      mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
-              0, mLocationListener);
+      mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000,
+              1000, mLocationListener);
     }
     try {
       MapsInitializer.initialize(getActivity().getApplicationContext());
