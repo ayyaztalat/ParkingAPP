@@ -6,4 +6,263 @@
     android:layout_height="match_parent"
     tools:context=".Activities.ReserveParking">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/main_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_15sdp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/grey"
+        app:cardCornerRadius="@dimen/_8sdp"
+        app:layout_constraintBottom_toTopOf="@+id/reserve"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:id="@+id/first_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/first"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <TextView
+                    android:id="@+id/name_icon"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/_8sdp"
+                    android:layout_weight="0.6"
+                    android:background="@drawable/circle"
+                    android:gravity="center"
+                    android:text="BP" />
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1.5"
+                    android:gravity="center"
+                    android:padding="@dimen/_5sdp"
+                    android:text="Bob Parking"
+                    android:textSize="@dimen/_19sdp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.9"
+                    android:gravity="center"
+                    android:text="Free"
+                    android:textAllCaps="true"
+                    android:textSize="@dimen/_16sdp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_margin="@dimen/_2sdp"
+                android:background="@color/black" />
+
+            <LinearLayout
+                android:id="@+id/second"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <TextView
+                    android:id="@+id/from"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/_8sdp"
+                    android:layout_weight="0.6"
+                    android:gravity="center"
+                    android:text="From"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="@dimen/_18sdp" />
+
+                <TextView
+                    android:id="@+id/from_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1.3"
+                    android:gravity="center"
+                    android:hint="Start Date"
+                    android:padding="@dimen/_5sdp"
+
+                    android:textSize="@dimen/_14sdp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1.1"
+                    android:gravity="center"
+                    android:id="@+id/time_from"
+                    android:hint="time"
+                    android:textAllCaps="true"
+                    android:textSize="@dimen/_16sdp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/Third"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <TextView
+                    android:id="@+id/to"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/_8sdp"
+                    android:layout_weight="0.6"
+                    android:gravity="center"
+                    android:text="To"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="@dimen/_18sdp" />
+
+                <TextView
+                    android:id="@+id/to_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1.3"
+                    android:gravity="center"
+                    android:hint="End Date"
+                    android:padding="@dimen/_5sdp"
+
+                    android:textSize="@dimen/_14sdp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1.1"
+                    android:gravity="center"
+                    android:id="@+id/time_to"
+                    android:hint="time"
+                    android:textAllCaps="true"
+                    android:textSize="@dimen/_16sdp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/fourth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:gravity="end"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/text_total_days"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:padding="@dimen/_8sdp"
+                    android:text="Total:"
+                    android:textSize="@dimen/_14sdp" />
+
+                <TextView
+                    android:id="@+id/text_days"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:text="1 day"
+                    android:textSize="@dimen/_14sdp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_margin="@dimen/_2sdp"
+                android:background="@color/black" />
+
+            <LinearLayout
+                android:id="@+id/fifth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <TextView
+                    android:id="@+id/text_provide_estimate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/_8sdp"
+                    android:layout_weight="1.5"
+                    android:gravity="center"
+                    android:text="Please Provide Estimated Time:"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="@dimen/_14sdp" />
+
+                <TextView
+                    android:id="@+id/time_picker"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/_8sdp"
+                    android:layout_weight="0.5"
+                    android:padding="@dimen/_8sdp"
+                    android:text="12:35 "
+                    android:textSize="@dimen/_14sdp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+    <LinearLayout
+        android:id="@+id/calender"
+
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <CalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/reserve"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="Reserve Parking Spot"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_15sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </android.support.constraint.ConstraintLayout>
