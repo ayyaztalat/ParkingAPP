@@ -108,6 +108,8 @@ public class HomeActivity extends AppCompatActivity
                     switcher.setChecked(false);
                     night=false;
                     preferences.setSwitchNightMod(false);
+                    startActivity(new Intent(getApplicationContext(),tempClass.class));
+                    finish();
 
                 }else{
                     switcher.setChecked(true);
@@ -133,6 +135,8 @@ public class HomeActivity extends AppCompatActivity
                     switchers.setChecked(false);
                     traffic=false;
                     preferences.setTrafficCheck(false);
+                    startActivity(new Intent(getApplicationContext(),tempClass.class));
+                    finish();
                 }else{
                     switchers.setChecked(true);
                     traffic=true;
@@ -286,6 +290,8 @@ public class HomeActivity extends AppCompatActivity
              switchers.setChecked(false);
              traffic=false;
              preferences.setTrafficCheck(false);
+             startActivity(new Intent(getApplicationContext(),tempClass.class));
+             finish();
          }else{
              switchers.setChecked(true);
              traffic=true;
@@ -310,6 +316,8 @@ public class HomeActivity extends AppCompatActivity
              switcher.setChecked(false);
              night=false;
              preferences.setSwitchNightMod(false);
+             startActivity(new Intent(getApplicationContext(),tempClass.class));
+             finish();
          }else{
              switcher.setChecked(true);
              night=true;
