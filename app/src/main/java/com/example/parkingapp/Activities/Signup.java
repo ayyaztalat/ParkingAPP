@@ -138,7 +138,7 @@ public class Signup extends AppCompatActivity {
         i_have_parking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                status_value = "I have Parking";
+                status_value = "parking_owner";
 
                 i_have_parking.setBackground(getResources().getDrawable(R.drawable.button_background));
                 i_have_parking.setTextColor(getResources().getColor(R.color.white));
@@ -151,7 +151,7 @@ public class Signup extends AppCompatActivity {
         i_have_truck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                status_value = "I have Truck";
+                status_value = "truck_owner";
 
                 i_have_truck.setBackground(getResources().getDrawable(R.drawable.button_background));
                 i_have_truck.setTextColor(getResources().getColor(R.color.white));
@@ -256,6 +256,8 @@ public class Signup extends AppCompatActivity {
                         preferences.setLatitude(model.getUserData().get(0).getLatitude());
                         preferences.setLongitude(model.getUserData().get(0).getLongitude());
 
+
+                        preferences.setSession(true);
                         startActivity(new Intent(getApplicationContext(), HomeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         finish();
                     } else {

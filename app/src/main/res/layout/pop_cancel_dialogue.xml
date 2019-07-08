@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_gravity="center"
+    android:layout_height="@dimen/_280sdp">
+
+    <ImageView
+        android:id="@+id/abc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_15sdp"
+        android:src="@drawable/cross"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:padding="@dimen/_5sdp"
+        android:text="Are your sure?"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_18sdp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/abc" />
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:padding="@dimen/_5sdp"
+        android:text="Are you sure you want to cancel the Reservations we will only return 20 Percent"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_15sdp"
+        android:textStyle="normal"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+    <Button
+        android:id="@+id/confirm"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_35sdp"
+        android:layout_marginTop="8dp"
+        android:layout_margin="@dimen/_8sdp"
+        android:background="@drawable/button_background"
+        android:text="confirm"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_17sdp"
+        app:layout_constraintTop_toBottomOf="@+id/message" />
+
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_35sdp"
+        android:layout_margin="@dimen/_8sdp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/button_backgrounds"
+        android:text="cancel"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/_17sdp"
+        app:layout_constraintTop_toBottomOf="@+id/confirm" />
+    
+</android.support.constraint.ConstraintLayout>

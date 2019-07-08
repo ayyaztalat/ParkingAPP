@@ -22,7 +22,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activities.ReserveParking"></activity>
+        <activity android:name=".Activities.tempClass"></activity>
+        <activity android:name=".Activities.BookingClass" />
+        <activity android:name=".Activities.ReserveParking" />
         <activity android:name=".Activities.EditParkingClass" />
         <activity android:name=".Activities.ReservationParkingClass" />
         <activity android:name=".Activities.AddPhotosParking" />

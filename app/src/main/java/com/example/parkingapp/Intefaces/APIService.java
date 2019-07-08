@@ -3,7 +3,9 @@ package com.example.parkingapp.Intefaces;
 
 import com.example.parkingapp.Models.AddImageParking;
 import com.example.parkingapp.Models.AddParkingModel;
+import com.example.parkingapp.Models.AddReservationModel;
 import com.example.parkingapp.Models.BrainTreeModel;
+import com.example.parkingapp.Models.CancelReservationModel;
 import com.example.parkingapp.Models.DeleteParkingModel;
 import com.example.parkingapp.Models.EditModel;
 import com.example.parkingapp.Models.EditParkingModel;
@@ -110,6 +112,21 @@ public interface APIService {
     Call<BrainTreeModel> BrainTree(@Field("nonce") String paymentNonce,@Field("email") String email,@Field("userid") String userId);
 
 
+    @FormUrlEncoded
+    @POST("add_reserved_parking.php")
+    Call<AddReservationModel> addReservation(@Field("truck_id")String truck_id,
+                                             @Field("parking_id")String parking_id,
+                                             @Field("truck_owner_name")String truck_owner_name,
+                                             @Field("parking_owner_name")String parking_owner_name,
+                                             @Field("truck_number")String truck_number,
+                                             @Field("truck_color")String truck_color,
+                                             @Field("estimated_time")String estimated_time,
+                                             @Field("from_date")String from_date,
+                                             @Field("to_date")String to_date);
 
+    @FormUrlEncoded
+    @POST("delete_reservation.php")
+    Call<CancelReservationModel> cancelReservation(@Field("reserved_parking_id")String reserved_parking_id,
+                                                   @Field("parking_id")String parking_id);
 
 }

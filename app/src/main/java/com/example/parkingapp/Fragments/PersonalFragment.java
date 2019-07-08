@@ -206,6 +206,7 @@ public class PersonalFragment extends Fragment {
                     TruckModel model=response.body();
                     if (model.getStatus().equalsIgnoreCase("success")){
                         Toast.makeText(context, model.getParkingData(), Toast.LENGTH_SHORT).show();
+                        preferences.setTruckID(model.getTruck_id()) ;
                     }else{
                         Toast.makeText(context, "Error while uploading", Toast.LENGTH_SHORT).show();
                     }

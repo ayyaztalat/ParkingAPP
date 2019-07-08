@@ -227,5 +227,21 @@
             android:src="@drawable/twitter" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/continue_as_guest"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+
+        android:gravity="center"
+        android:padding="@dimen/_8sdp"
+        android:text="Continue as a guest"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_18sdp"
+        app:layout_constraintBottom_toTopOf="@+id/other_way"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signup" />
+
 
 </android.support.constraint.ConstraintLayout>

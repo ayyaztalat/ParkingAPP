@@ -33,6 +33,7 @@ public class LoginClass extends AppCompatActivity {
   ImageView google_signup,facebook_signup,twitter_signup;
   Preferences preferences;
   ProgressDialog progressDialog;
+  TextView continue_as_guest;
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -48,7 +49,7 @@ public class LoginClass extends AppCompatActivity {
     edit_text_password=findViewById(R.id.edit_text_password);
     forgot_password=findViewById(R.id.forgot_password);
     signup=findViewById(R.id.signup);
-
+    continue_as_guest=findViewById(R.id.continue_as_guest);
     signin=findViewById(R.id.signin);
     google_signup=findViewById(R.id.google_signup);
     facebook_signup=findViewById(R.id.facebook_signup);
@@ -58,6 +59,14 @@ public class LoginClass extends AppCompatActivity {
       @Override
       public void onClick(View v) {
         validatedata();
+      }
+    });
+
+    continue_as_guest.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        preferences.setTypeGuest("guest");
+        startActivity(new Intent(getApplicationContext(),HomeActivity.class));
       }
     });
 
@@ -158,7 +167,8 @@ public class LoginClass extends AppCompatActivity {
   private void CallApiServiceLogin(String email, String password) {
     progressDialog.show();
     APIService service= APIClient.getClient().create(APIService.class);
-    final Call<LoginModel> modelCall=service.login(email,password,preferences.getFcmToken());
+    String token=preferences.getFcmToken();
+    final Call<LoginModel> modelCall=service.login(email,password,token);
     modelCall.enqueue(new Callback<LoginModel>() {
       @Override
       public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
@@ -172,11 +182,12 @@ public class LoginClass extends AppCompatActivity {
           preferences.setEmail(model.getUserData().get(0).getEmail());
           preferences.setTime(model.getUserData().get(0).getTimeStamp());
           preferences.setUserId(model.getUserData().get(0).getId());
-          preferences.setStatusValue(model.getUserData().get(0).getStatus_value());
+          preferences.setStatusValue(model.getUserData().get(0).getStatusValue());
           preferences.setLatitude(model.getUserData().get(0).getLatitude());
           preferences.setLongitude(model.getUserData().get(0).getLongitude());
 
           startActivity(new Intent(getApplicationContext(),HomeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+          preferences.setTypeGuest("");
           finish();
         }else{
           Toast.makeText(LoginClass.this, model.getError(), Toast.LENGTH_SHORT).show();

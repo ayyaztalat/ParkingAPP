@@ -9,6 +9,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -34,6 +35,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -74,6 +76,10 @@ public class MapFragmentClass extends Fragment {
       latitude=location.getLatitude();
       longitude= location.getLongitude();
 
+      if (preference.getTrafficCheck()){
+        googleMap.setTrafficEnabled(true);
+      }
+
       Log.e(TAG, "onLocationChanged: "+latitude+longitude );
       onMapWork();
     }
@@ -110,7 +116,7 @@ private String TAG="error";
     Preferences preference;
 
 
-
+  FloatingActionButton fab;
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -119,6 +125,8 @@ private String TAG="error";
       mParam2 = getArguments().getString(ARG_PARAM2);
     }
   }
+
+  Boolean fabCLicked=false;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -129,6 +137,23 @@ private String TAG="error";
     mMapView.onCreate(savedInstanceState);
 
     preference=new Preferences(context);
+
+    fab=view.findViewById(R.id.fab);
+    fab.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        if (fabCLicked){
+          fabCLicked=false;
+          fab.setBackground(context.getResources().getDrawable(R.drawable.leku_ic_satellite_on));
+          googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        }else {
+          fabCLicked=true;
+          fab.setBackground(context.getResources().getDrawable(R.drawable.leku_ic_satellite_off));
+          googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        }
+      }
+    });
 
     AlertDialog.Builder builder = new AlertDialog.Builder(context);
     builder.setCancelable(false); // if you want user to wait for some process to finish,
@@ -160,6 +185,22 @@ private String TAG="error";
       @Override
       public void onMapReady(GoogleMap googleMaps) {
         googleMap = googleMaps;
+
+        if (preference.getSwitchNightMod()){
+          googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.map_in_night));
+
+        }
+
+        if (preference.getTrafficCheck()){
+          googleMap.setTrafficEnabled(true);
+        }
+
+
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
+        googleMap.getUiSettings().setRotateGesturesEnabled(true);
+        googleMap.getUiSettings().setScrollGesturesEnabled(true);
+        googleMap.getUiSettings().setTiltGesturesEnabled(true);
+
       }
     });
 

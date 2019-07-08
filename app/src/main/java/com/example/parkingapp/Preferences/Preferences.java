@@ -160,4 +160,26 @@ public class Preferences {
     public Boolean getSession(){
         return Prefs.getBoolean("session",false);
     }
+
+    public void setTruckID(String truck_id) {
+        Prefs.putString("truck_id",truck_id);
+    }
+    public String getTruckID(){
+        return Prefs.getString("truck_id","");
+    }
+
+    public void setSwitchNightMod(boolean b) {
+        Prefs.putBoolean("nightMod",b);
+    }
+
+    public Boolean getSwitchNightMod() {
+      return   Prefs.getBoolean("nightMod",false);
+    }
+
+    public void setTypeGuest(String guest) {
+        Prefs.putString("guest_type",guest);
+    }
+    public String getTypeGuest(){
+        return Prefs.getString("guest_type","");
+    }
 }

@@ -13,6 +13,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
 import android.support.v4.view.GravityCompat;
@@ -24,6 +26,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.widget.CompoundButton;
 
 import com.example.parkingapp.Activities.FragmentActivities.AboutFragment;
 import com.example.parkingapp.Activities.FragmentActivities.MapFragmentClass;
@@ -52,9 +55,10 @@ public class HomeActivity extends AppCompatActivity
     String status_value;
     private GoogleMap mMap;
     GoogleApiClient mGoogleApiClient;
+     private SwitchCompat switcher;
+     private SwitchCompat switchers;
 
-
-
+     NavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +75,7 @@ public class HomeActivity extends AppCompatActivity
 
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+         navigationView= findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -84,6 +88,85 @@ public class HomeActivity extends AppCompatActivity
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+      night=  preferences.getSwitchNightMod();
+        traffic=preferences.getTrafficCheck();
+
+
+
+        Menu menu = navigationView.getMenu();
+        MenuItem menuItem = menu.findItem(R.id.night_mood);
+        View actionView = MenuItemCompat.getActionView(menuItem);
+
+        switcher = (SwitchCompat) actionView.findViewById(R.id.drawer_switch);
+      //  switcher.setChecked(true);
+        switcher.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (night){
+                    switcher.setChecked(false);
+                    night=false;
+                    preferences.setSwitchNightMod(false);
+
+                }else{
+                    switcher.setChecked(true);
+                    night=true;
+                    preferences.setSwitchNightMod(true);
+                    startActivity(new Intent(getApplicationContext(),tempClass.class));
+                    finish();
+                }
+            }
+
+
+        });
+
+        MenuItem menuItems = menu.findItem(R.id.traffic_text);
+        View actionViews = MenuItemCompat.getActionView(menuItems);
+
+        switchers = (SwitchCompat) actionViews.findViewById(R.id.drawer_switch);
+    //    switchers.setChecked(true);
+        switchers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (traffic){
+                    switchers.setChecked(false);
+                    traffic=false;
+                    preferences.setTrafficCheck(false);
+                }else{
+                    switchers.setChecked(true);
+                    traffic=true;
+                    preferences.setTrafficCheck(true);
+                    startActivity(new Intent(getApplicationContext(),tempClass.class));
+                    finish();
+                }
+            }
+
+            });
+
+        if (night){
+
+        //    night=false;
+            preferences.setSwitchNightMod(true);
+            switcher.setChecked(true);
+        }else{
+            switcher.setChecked(false);
+          //  night=true;
+            preferences.setSwitchNightMod(false);
+
+        }
+
+        if (traffic){
+
+        //    traffic=false;
+          //  preferences.setTrafficCheck(false);
+            switchers.setChecked(true);
+        }else{
+            switchers.setChecked(false);
+
+           // traffic=true;
+           // preferences.setTrafficCheck(true);
+
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -109,10 +192,10 @@ public class HomeActivity extends AppCompatActivity
 
         MenuItem item1=findViewById(R.id.my_parking);
         MenuItem item2=findViewById(R.id.my_reservation);
-        if (status_value.equalsIgnoreCase("IHaveTruck")){
+        if (status_value.equalsIgnoreCase("truck_owner")){
             item1.setVisible(true);
 
-        }else if (status_value.equalsIgnoreCase("ihaveparking")){
+        }else if (status_value.equalsIgnoreCase("parking_owner")){
             item2.setVisible(true);
         }
         return true;
@@ -137,6 +220,9 @@ public class HomeActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+
+    boolean night=true; boolean traffic=true;
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -157,16 +243,18 @@ public class HomeActivity extends AppCompatActivity
             fragmentClass= MyBookingClass.class;
             change();
         }
+        else if (id==R.id.night_mood){
+            changeWork();
+        }
+        else if (id==R.id.traffic_text){
+            trafficChange();
+        }
 
         else if (id == R.id.map) {
             fragmentClass = MapFragmentClass.class;
             change();
 
-        } else if (id == R.id.traffic_text) {
-
-        } else if (id == R.id.night_mood) {
-
-        } else if (id == R.id.payments) {
+        }  else if (id == R.id.payments) {
 
         } else if (id == R.id.invite_friend) {
 
@@ -187,7 +275,54 @@ public class HomeActivity extends AppCompatActivity
         return true;
     }
 
-    private void CallSignOutAPI() {
+     private void trafficChange() {
+         Menu menu = navigationView.getMenu();
+         MenuItem menuItems = menu.findItem(R.id.traffic_text);
+         View actionViews = MenuItemCompat.getActionView(menuItems);
+
+         switchers = (SwitchCompat) actionViews.findViewById(R.id.drawer_switch);
+        // switchers.setChecked(true);
+         if (traffic){
+             switchers.setChecked(false);
+             traffic=false;
+             preferences.setTrafficCheck(false);
+         }else{
+             switchers.setChecked(true);
+             traffic=true;
+             startActivity(new Intent(getApplicationContext(),tempClass.class));
+             finish();
+             preferences.setTrafficCheck(true);
+
+         }
+
+     }
+
+     private void changeWork() {
+
+         Menu menu = navigationView.getMenu();
+         MenuItem menuItem = menu.findItem(R.id.night_mood);
+         View actionView = MenuItemCompat.getActionView(menuItem);
+
+       final SwitchCompat  switcher = (SwitchCompat) actionView.findViewById(R.id.drawer_switch);
+      //   switcher.setChecked(true);
+
+         if (night){
+             switcher.setChecked(false);
+             night=false;
+             preferences.setSwitchNightMod(false);
+         }else{
+             switcher.setChecked(true);
+             night=true;
+             startActivity(new Intent(getApplicationContext(),tempClass.class));
+            finish();
+             preferences.setSwitchNightMod(true);
+
+         }
+
+
+    }
+
+     private void CallSignOutAPI() {
         startActivity(new Intent(getApplicationContext(),LoginClass.class));
         preferences.setSession(false);
         finish();
