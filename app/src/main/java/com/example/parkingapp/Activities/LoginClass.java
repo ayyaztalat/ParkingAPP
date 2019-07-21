@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.example.parkingapp.Intefaces.APIClient;
 import com.example.parkingapp.Intefaces.APIService;
+import com.example.parkingapp.Models.ForgotModel;
 import com.example.parkingapp.Models.LoginModel;
 import com.example.parkingapp.Models.SignupModel;
 import com.example.parkingapp.Preferences.Preferences;
@@ -567,9 +568,10 @@ public class LoginClass extends AppCompatActivity {
           email.setError("Please Enter Email Address");
         }else{
           dialog.dismiss();
-          Toast.makeText(LoginClass.this, "Email Sent", Toast.LENGTH_SHORT).show();
+            apiServiceCall(emails);
+         // Toast.makeText(LoginClass.this, "Email Sent", Toast.LENGTH_SHORT).show();
         }
-        //  apiServiceCall();
+        //
 
 
       }
@@ -577,7 +579,30 @@ public class LoginClass extends AppCompatActivity {
     dialog.show();
   }
 
-  private void validatedata() {
+    private void apiServiceCall(String emails) {
+
+        APIService service=APIClient.getClient().create(APIService.class);
+        Call<ForgotModel> modelCall=service.ForgotPassword(emails);
+        modelCall.enqueue(new Callback<ForgotModel>() {
+            @Override
+            public void onResponse(Call<ForgotModel> call, Response<ForgotModel> response) {
+                ForgotModel model=response.body();
+                if (model.getStatus().equalsIgnoreCase("success")){
+                    Toast.makeText(LoginClass.this, "Email send Successfully", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(LoginClass.this, "Failed to find Linked email", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ForgotModel> call, Throwable t) {
+                Toast.makeText(LoginClass.this, "Network Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    private void validatedata() {
     String email=edit_text_email.getText().toString();
     String password=edit_text_password.getText().toString();
 

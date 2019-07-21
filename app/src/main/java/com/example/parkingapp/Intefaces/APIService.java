@@ -112,7 +112,7 @@ public interface APIService {
 
     @FormUrlEncoded
     @POST("user_forgot_password_e.php")
-    Call<ForgotModel> ForgotPassword();
+    Call<ForgotModel> ForgotPassword(@Field("email") String emails);
 
     @FormUrlEncoded
     @POST("add_reserved_parking.php")
