@@ -96,7 +96,7 @@ public class Photos_parking extends Fragment {
             public void onResponse(Call<ImageParkingModel> call, Response<ImageParkingModel> response) {
                 ImageParkingModel model=response.body();
                 if (model.getStatus().equalsIgnoreCase("success")){
-                    models=model.arrayList;
+                    models=model.getParkingPicData();
                     adapter=new ImageParkingAdapter(context,models);
                     recyclerMain.setAdapter(adapter);
 

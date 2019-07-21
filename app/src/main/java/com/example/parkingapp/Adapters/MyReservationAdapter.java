@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,13 +12,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.parkingapp.Activities.BookingClass;
 import com.example.parkingapp.Activities.HomeActivity;
-import com.example.parkingapp.Activities.Reservation;
-import com.example.parkingapp.Activities.ReserveParking;
 import com.example.parkingapp.Intefaces.APIClient;
 import com.example.parkingapp.Intefaces.APIService;
 import com.example.parkingapp.Models.CancelReservationModel;
@@ -51,7 +47,7 @@ public class MyReservationAdapter extends RecyclerView.Adapter<MyReservationAdap
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Holder holder, int i) {
+    public void onBindViewHolder(@NonNull Holder holder, final int i) {
 
         String fullname=preferences.getName();
 
@@ -65,16 +61,27 @@ public class MyReservationAdapter extends RecyclerView.Adapter<MyReservationAdap
         holder.name_user.setText(preferences.getName());
         holder.time_from.setText(arrayList.get(i).getFromDate());
         holder.time_to.setText(arrayList.get(i).getToDate());
-        holder.main_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                context.startActivity(new Intent(context, BookingClass.class));
-            }
-        });
+
 
         final String reservedParkingId=arrayList.get(i).getReservedParkingId();
         final String parkingID=arrayList.get(i).getParkingId();
-
+        holder.main_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(context, BookingClass.class)
+                .putExtra("truck_id",arrayList.get(i).getTruckId())
+                .putExtra("parking_id",arrayList.get(i).getParkingId())
+                .putExtra("truck_owner_name",arrayList.get(i).getTruckOwnerName())
+                .putExtra("parking_owner_name",arrayList.get(i).getParkingOwnerName())
+                .putExtra("truck_number",arrayList.get(i).getTruckNumber())
+                .putExtra("truck_color",arrayList.get(i).getTruckColor())
+                .putExtra("estimated_time",arrayList.get(i).getEstimatedTime())
+                .putExtra("from_date",arrayList.get(i).getFromDate())
+                .putExtra("to_date",arrayList.get(i).getToDate())
+                .putExtra("truck_owner_id",preferences.getUserId())
+                );
+            }
+        });
         holder.cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

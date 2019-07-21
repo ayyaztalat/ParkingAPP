@@ -27,13 +27,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import com.example.parkingapp.Activities.FragmentActivities.AboutFragment;
+import com.example.parkingapp.Activities.FragmentActivities.HistoryFragment;
 import com.example.parkingapp.Activities.FragmentActivities.MapFragmentClass;
 import com.example.parkingapp.Activities.FragmentActivities.MyBookingClass;
 import com.example.parkingapp.Activities.FragmentActivities.MyParking;
 import com.example.parkingapp.Activities.FragmentActivities.MyReservation;
 import com.example.parkingapp.Activities.FragmentActivities.SupportFragment;
+import com.example.parkingapp.BuildConfig;
+import com.example.parkingapp.Intefaces.APIClient;
+import com.example.parkingapp.Intefaces.APIService;
+import com.example.parkingapp.Models.BrainTreeModel;
+import com.example.parkingapp.Models.BrainTreeToken;
 import com.example.parkingapp.Preferences.Preferences;
 import com.example.parkingapp.R;
 import com.google.android.gms.common.ConnectionResult;
@@ -45,10 +52,14 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.Marker;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener ,MapFragmentClass.OnFragmentInteractionListener ,
         MyParking.OnFragmentInteractionListener,AboutFragment.OnFragmentInteractionListener,MyReservation.OnFragmentInteractionListener,
-        SupportFragment.OnFragmentInteractionListener,MyBookingClass.OnFragmentInteractionListener
+        SupportFragment.OnFragmentInteractionListener,MyBookingClass.OnFragmentInteractionListener,HistoryFragment.OnFragmentInteractionListener
  {
 
     Preferences preferences;
@@ -59,6 +70,7 @@ public class HomeActivity extends AppCompatActivity
      private SwitchCompat switchers;
 
      NavigationView navigationView;
+     String guest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,11 +78,14 @@ public class HomeActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        callToken();
+
 
 
 
 
         preferences=new Preferences(this);
+        guest=preferences.getTypeGuest();
         status_value=preferences.getStatusVaalue();
 
 
@@ -126,6 +141,33 @@ public class HomeActivity extends AppCompatActivity
         MenuItem menuItems = menu.findItem(R.id.traffic_text);
         View actionViews = MenuItemCompat.getActionView(menuItems);
 
+        MenuItem myParking=menu.findItem(R.id.my_parking);
+      //  View actionV=MenuItemCompat.getActionView(myParking);
+        MenuItem myReservations=menu.findItem(R.id.my_reservation);
+     //   View action=MenuItemCompat.getActionView(myReservations);
+
+        MenuItem history=menu.findItem(R.id.history);
+     //   View historyAction=MenuItemCompat.getActionView(history);
+
+        MenuItem myBooking=menu.findItem(R.id.booked_parking);
+    //    View bookingAction=MenuItemCompat.getActionView(myBooking);
+
+        if (status_value.equalsIgnoreCase("truck_owner")){
+            myParking.setVisible(false);
+            myReservations.setVisible(true);
+            myBooking.setVisible(true);
+            history.setVisible(false);
+        }else{
+            myParking.setVisible(true);
+            myReservations.setVisible(false);
+            history.setVisible(true);
+            myBooking.setVisible(false);
+        }
+
+
+
+
+
         switchers = (SwitchCompat) actionViews.findViewById(R.id.drawer_switch);
     //    switchers.setChecked(true);
         switchers.setOnClickListener(new View.OnClickListener() {
@@ -178,12 +220,35 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
-    @Override
+     private void callToken() {
+         APIService service= APIClient.getClient().create(APIService.class);
+         Call<BrainTreeToken> tokenCall=service.braintree();
+         tokenCall.enqueue(new Callback<BrainTreeToken>() {
+             @Override
+             public void onResponse(Call<BrainTreeToken> call, Response<BrainTreeToken> response) {
+                 BrainTreeToken treeToken=response.body();
+                 assert treeToken != null;
+                 if (treeToken.status.equalsIgnoreCase("success")){
+                     preferences.setBraintreeToken(treeToken.getToken());
+                 }else {
+                     Toast.makeText(HomeActivity.this, treeToken.getError(), Toast.LENGTH_SHORT).show();
+                 }
+             }
+
+             @Override
+             public void onFailure(Call<BrainTreeToken> call, Throwable t) {
+                 Toast.makeText(HomeActivity.this, "No Network", Toast.LENGTH_SHORT).show();
+             }
+         });
+    }
+
+     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            preferences.setTypeGuest("");
             super.onBackPressed();
         }
     }
@@ -197,10 +262,10 @@ public class HomeActivity extends AppCompatActivity
         MenuItem item1=findViewById(R.id.my_parking);
         MenuItem item2=findViewById(R.id.my_reservation);
         if (status_value.equalsIgnoreCase("truck_owner")){
-            item1.setVisible(true);
+        //    item1.setVisible(true);
 
         }else if (status_value.equalsIgnoreCase("parking_owner")){
-            item2.setVisible(true);
+        //    item2.setVisible(true);
         }
         return true;
     }
@@ -235,17 +300,32 @@ public class HomeActivity extends AppCompatActivity
 
 
         if (id == R.id.Account) {
-            startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+            if (guest.equalsIgnoreCase("guest")) {
+                callToast();
+            }else{
+                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+            }
         } else if (id == R.id.my_parking) {
-            fragmentClass = MyParking.class;
-            change();
+            if (guest.equalsIgnoreCase("guest")) {
+                callToast();
+            }else {
+                fragmentClass = MyParking.class;
+                change();
+            }
         } else if (id == R.id.my_reservation) {
-            fragmentClass = MyReservation.class;
-            change();
-
-        }else if (id==R.id.booked_parking){
-            fragmentClass= MyBookingClass.class;
-            change();
+            if (guest.equalsIgnoreCase("guest")) {
+                callToast();
+            }else {
+                fragmentClass = MyReservation.class;
+                change();
+            }
+        }else if (id==R.id.booked_parking) {
+            if (guest.equalsIgnoreCase("guest")) {
+                callToast();
+            } else {
+                fragmentClass = MyBookingClass.class;
+                change();
+            }
         }
         else if (id==R.id.night_mood){
             changeWork();
@@ -255,12 +335,19 @@ public class HomeActivity extends AppCompatActivity
         }
 
         else if (id == R.id.map) {
-            fragmentClass = MapFragmentClass.class;
-            change();
+
+                fragmentClass = MapFragmentClass.class;
+                change();
 
         }  else if (id == R.id.payments) {
+            if (guest.equalsIgnoreCase("guest")) {
+                callToast();
+            }else {
+                fragmentClass= HistoryFragment.class;
+            }
 
         } else if (id == R.id.invite_friend) {
+            startInviteLink();
 
         } else if (id == R.id.support) {
             fragmentClass = SupportFragment.class;
@@ -271,13 +358,50 @@ public class HomeActivity extends AppCompatActivity
 
 
         } else if (id == R.id.sign_out) {
-            CallSignOutAPI();
+            if (guest.equalsIgnoreCase("guest")) {
+                preferences.setTypeGuest("");
+                    startActivity(new Intent(getApplicationContext(),LoginClass.class));
+                    finishAffinity();
+            }else{
+                CallSignOutAPI();
+            }
+
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+     private void startInviteLink() {
+         try {
+             Intent shareIntent = new Intent(Intent.ACTION_SEND);
+             shareIntent.setType("text/plain");
+             shareIntent.putExtra(Intent.EXTRA_SUBJECT, "My application name");
+             String shareMessage= "\nLet me recommend you this application\n\n";
+             shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID +"\n\n";
+             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+
+             int walletAmount=preferences.getWalletInvite();
+
+             if (walletAmount==0){
+                 walletAmount=5;
+                 preferences.putWalletInvite(walletAmount);
+             }
+             else {
+                 walletAmount=walletAmount+5;
+                 preferences.putWalletInvite(walletAmount);
+             }
+
+             startActivity(Intent.createChooser(shareIntent, "choose one"));
+         } catch(Exception e) {
+             //e.toString();
+         }
+     }
+
+     private void callToast() {
+         Toast.makeText(this, "Please login to view these options", Toast.LENGTH_LONG).show();
+     }
 
      private void trafficChange() {
          Menu menu = navigationView.getMenu();
@@ -333,6 +457,7 @@ public class HomeActivity extends AppCompatActivity
      private void CallSignOutAPI() {
         startActivity(new Intent(getApplicationContext(),LoginClass.class));
         preferences.setSession(false);
+        preferences.clear();
         finish();
 
     }

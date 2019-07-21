@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tuck_information"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_text_Number"
+        android:padding="@dimen/_5sdp"
+        android:text="Truck Information"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_18sdp" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/edit_text_truck_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tuck_information"
+        android:layout_margin="@dimen/_5sdp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:hint="Truck Number"
+        android:padding="@dimen/_15sdp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textSize="@dimen/_14sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/splash_text_one"
+        app:layout_constraintVertical_bias="0.069"
+        tools:layout_editor_absoluteX="6dp" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/edit_text_truck_make"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_text_truck_number"
+        android:layout_margin="@dimen/_5sdp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:hint="Truck Make"
+        android:padding="@dimen/_15sdp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textSize="@dimen/_14sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/splash_text_one"
+        app:layout_constraintVertical_bias="0.069"
+        tools:layout_editor_absoluteX="6dp" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/edit_text_truck_color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_text_truck_make"
+        android:layout_margin="@dimen/_5sdp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:hint="Truck Color"
+        android:padding="@dimen/_15sdp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textSize="@dimen/_14sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/splash_text_one"
+        app:layout_constraintVertical_bias="0.069"
+        tools:layout_editor_absoluteX="6dp" />
+
+
+    <TextView
+        android:id="@+id/documents"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_text_truck_color"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:padding="@dimen/_8sdp"
+        android:text="Douments"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_16sdp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/linar_doc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/documents"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <ImageView
+                android:id="@+id/image_thumb"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="0.6"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/text_data"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1.3"
+                android:alpha="0.8"
+                android:text="Truck_registration"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/text_confirm2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1.1"
+                android:alpha="0.8"
+                android:drawableLeft="@drawable/done"
+                android:drawablePadding="@dimen/_5sdp"
+                android:gravity="center"
+                android:text="Confirm"
+                android:textColor="@color/green"
+                android:textSize="@dimen/_15sdp"
+
+                android:textStyle="normal" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/item2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <ImageView
+                android:id="@+id/image_thumb2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="0.6"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/text_data2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1.3"
+                android:alpha="0.8"
+                android:text="Truck License"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_16sdp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/text_confirm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1.1"
+                android:alpha="0.8"
+                android:drawableLeft="@drawable/done"
+                android:drawablePadding="@dimen/_8sdp"
+                android:gravity="center"
+                android:text="Confirm"
+                android:textColor="@color/green"
+                android:textSize="@dimen/_15sdp"
+                android:textStyle="normal" />
+
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/save_truck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:background="@drawable/button_background"
+            android:text="Save Truck"
+            android:padding="@dimen/_8sdp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_13sdp" />
+
+    </LinearLayout>
+
+</LinearLayout>

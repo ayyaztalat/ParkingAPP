@@ -14,6 +14,7 @@ import com.example.parkingapp.R;
 
 import java.util.ArrayList;
 
+import static com.example.parkingapp.Intefaces.APIClient.BASE_IMG;
 import static com.example.parkingapp.Intefaces.APIClient.BASE_URL;
 
 public class ImageParkingAdapter extends RecyclerView.Adapter<ImageParkingAdapter.Holder> {
@@ -34,7 +35,7 @@ public class ImageParkingAdapter extends RecyclerView.Adapter<ImageParkingAdapte
 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int i) {
-        Glide.with(context).load(BASE_URL+arrayList.get(i).getPicture()).into(holder.imageView);
+        Glide.with(context).load(BASE_IMG+arrayList.get(i).getPicture()).into(holder.imageView);
     }
 
     @Override
@@ -46,7 +47,7 @@ public class ImageParkingAdapter extends RecyclerView.Adapter<ImageParkingAdapte
         ImageView imageView;
         public Holder(@NonNull View itemView) {
             super(itemView);
-            itemView=itemView.findViewById(R.id.image_item);
+            imageView=itemView.findViewById(R.id.image_item);
         }
     }
 }

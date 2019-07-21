@@ -113,6 +113,22 @@ public class Preferences {
 
     public void clear() {
 
+        Prefs.remove("name");
+        Prefs.remove("phone");
+        Prefs.remove("password");
+        Prefs.remove("email");
+        Prefs.remove("time_stamp");
+        Prefs.remove("status_value");
+        Prefs.remove("longitude");
+        Prefs.remove("truckNum");
+        Prefs.remove("truckColor");
+        Prefs.remove("latitude");
+        Prefs.remove("longitude");
+        Prefs.remove("truckName");
+        Prefs.remove("braintree_token");
+        Prefs.remove("customer_id");
+        Prefs.remove("guest_type");
+        Prefs.remove("id");
     }
 
     public void setTruckNum(String truckNum) {
@@ -150,7 +166,7 @@ public class Preferences {
     public void setCustomerID(String customerID) {
         Prefs.putString("customer_id",customerID);
     }
-    private String getCustomerID(){
+    public String getCustomerID(){
         return Prefs.getString("customer_id","");
     }
 
@@ -181,5 +197,78 @@ public class Preferences {
     }
     public String getTypeGuest(){
         return Prefs.getString("guest_type","");
+    }
+
+    public void setBraintreeToken(String token) {
+        Prefs.putString("braintree_token",token);
+    }
+
+    public String getBraintreeToken(){
+        return Prefs.getString("braintree_token","");
+    }
+
+    public int getWalletInvite() {
+        return Prefs.getInt("wallet",0);
+    }
+
+    public void putWalletInvite(int walletAmount) {
+        Prefs.putInt("wallet",walletAmount);
+    }
+
+    public void setCardToken(String cardToken) {
+        Prefs.putString("cardToken",cardToken);
+    }
+
+    public void setCardBin(String cardBin) {
+        Prefs.putString("cardBin",cardBin);
+    }
+
+    public void setCardLastDigit(String cardLast4) {
+        Prefs.putString("cardLast4",cardLast4);
+    }
+
+    public void setCardType(String cardType) {
+        Prefs.putString("cardType",cardType);
+    }
+
+    public void setCardHolderName(String cardCardholderName) {
+        Prefs.putString("cardHolder",cardCardholderName);
+    }
+
+    public void setCardExpirationDate(String cardExpirationDate) {
+        Prefs.putString("Expirationate",cardExpirationDate);
+    }
+
+    public void setCardCustomerLocation(String cardCustomerLocation) {
+        Prefs.putString("CustomerLocation",cardCustomerLocation);
+    }
+
+
+    public String getCardToken() {
+       return Prefs.getString("cardToken","");
+    }
+
+    public String getCardBin() {
+       return Prefs.getString("cardBin","");
+    }
+
+    public String getCardLastdigits() {
+         return Prefs.getString("cardLast4","");
+    }
+
+    public String getCardType() {
+        return Prefs.getString("cardType","");
+    }
+
+    public String getCardCardholderName() {
+      return   Prefs.getString("cardHolder","");
+    }
+
+    public String getCardExpirationDate() {
+      return   Prefs.getString("Expirationate","");
+    }
+
+    public String getCardCustomerLocation() {
+      return   Prefs.getString("CustomerLocation","");
     }
 }

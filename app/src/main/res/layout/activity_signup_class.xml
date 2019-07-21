@@ -132,6 +132,21 @@
         app:layout_constraintVertical_bias="0.33"
         tools:layout_editor_absoluteX="6dp" />
 
+    <TextView
+        android:id="@+id/add_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:text="CLick to enter location"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_15sdp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/i_have_parking"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_number" />
+
     <Button
         android:id="@+id/i_have_truck"
         android:layout_width="@dimen/_110sdp"
@@ -147,7 +162,7 @@
         app:layout_constraintHorizontal_bias="0.205"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_text_number"
-        app:layout_constraintVertical_bias="0.087" />
+        app:layout_constraintVertical_bias="0.176" />
 
     <Button
         android:id="@+id/i_have_parking"
@@ -161,10 +176,10 @@
         android:textSize="@dimen/_12sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.85"
+        app:layout_constraintHorizontal_bias="0.865"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_text_number"
-        app:layout_constraintVertical_bias="0.087" />
+        app:layout_constraintVertical_bias="0.174" />
 
     <Button
         android:id="@+id/signup"
@@ -180,10 +195,10 @@
         android:textSize="@dimen/_14sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.605"
+        app:layout_constraintHorizontal_bias="0.642"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/i_have_truck"
-        app:layout_constraintVertical_bias="0.307" />
+        app:layout_constraintVertical_bias="0.325" />
 
     <TextView
         android:id="@+id/signin"
@@ -197,9 +212,10 @@
         android:textSize="@dimen/_14sdp"
         app:layout_constraintBottom_toTopOf="@+id/signup"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.549"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/i_have_truck"
-        app:layout_constraintVertical_bias="0.333" />
+        app:layout_constraintVertical_bias="0.525" />
 
 
     <TextView
@@ -213,9 +229,10 @@
         android:textSize="@dimen/_14sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signup"
-        app:layout_constraintVertical_bias="0.433" />
+        app:layout_constraintVertical_bias="0.252" />
 
     <View
         android:id="@+id/view"
@@ -282,6 +299,6 @@
             android:layout_weight="1"
             android:background="@color/colorPrimary"
             android:padding="@dimen/_10sdp"
-            android:src="@drawable/twitter" />
+            android:src="@drawable/twitter_shape" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

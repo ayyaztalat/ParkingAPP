@@ -62,7 +62,7 @@
             android:gravity="start"
             android:padding="@dimen/_15sdp"
             android:drawablePadding="@dimen/_15sdp"
-            android:drawableLeft="@drawable/blue_loc"
+            android:drawableLeft="@drawable/reserve"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
             <TextView

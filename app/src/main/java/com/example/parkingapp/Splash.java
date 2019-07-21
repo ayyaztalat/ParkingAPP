@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.example.parkingapp.Activities.HomeActivity;
 import com.example.parkingapp.Activities.LoginClass;
+import com.example.parkingapp.Activities.TempGuest.GuestMapFragment;
 import com.example.parkingapp.FCM.firebaseClass;
 import com.example.parkingapp.Preferences.Preferences;
 
@@ -31,7 +32,7 @@ public class Splash extends AppCompatActivity {
             finish();
         }else{
 
-            startActivity(new Intent(getApplicationContext(), LoginClass.class));
+            startActivity(new Intent(getApplicationContext(), GuestMapFragment.class));
             finish();
         }
 

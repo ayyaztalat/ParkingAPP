@@ -95,7 +95,48 @@ public class EditParkingClass extends AppCompatActivity {
 
         temp=parking_time;
 
-        Log.e("error", "onCreate: "+parking_time);
+        try {
+            String[] separated = temp.split(",");
+            String mon = separated[0];
+            String tues = separated[0];
+            String wed = separated[0];
+            String thurs = separated[0];
+            String fri = separated[0];
+            String sat = separated[0];
+            String sun = separated[0];
+
+          //  Log.e("error", "onCreate: " + startMon);
+
+            if (mon.equalsIgnoreCase("m")){
+                monday.setBackgroundColor(getResources().getColor(R.color.green));
+            }
+            if (tues.equalsIgnoreCase("t")){
+                tuesday.setBackgroundColor(getResources().getColor(R.color.green));
+            }
+            if (wed.equalsIgnoreCase("w")){
+                wednesday.setBackgroundColor(getResources().getColor(R.color.green));
+            }
+            if (thurs.equalsIgnoreCase("th")){
+                thursday.setBackgroundColor(getResources().getColor(R.color.green));
+            }
+            if (fri.equalsIgnoreCase("f")){
+                friday.setBackgroundColor(getResources().getColor(R.color.green));
+            }
+            if (sat.equalsIgnoreCase("sat")){
+                saturday.setBackgroundColor(getResources().getColor(R.color.green));
+            }
+            if (sun.equalsIgnoreCase("s")){
+                sunday.setBackgroundColor(getResources().getColor(R.color.green));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+
+
+
+            Log.e("error", "onCreate: "+parking_time);
 
 
         save_details.setOnClickListener(new View.OnClickListener() {

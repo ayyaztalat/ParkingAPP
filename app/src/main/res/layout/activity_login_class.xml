@@ -213,9 +213,23 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/_40sdp"
             android:layout_weight="1"
+            android:visibility="visible"
             android:background="@color/colorPrimaryDark"
             android:padding="@dimen/_10sdp"
             android:src="@drawable/fb" />
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/login_button"
+            android:layout_width="0dp"
+            android:padding="@dimen/_10sdp"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@color/colorPrimaryDark"
+            android:layout_height="@dimen/_40sdp"
+            />
+
+
+
 
         <ImageView
             android:id="@+id/twitter_signup"
@@ -225,6 +239,7 @@
             android:background="@color/colorPrimary"
             android:padding="@dimen/_10sdp"
             android:src="@drawable/twitter" />
+
     </LinearLayout>
 
     <TextView
@@ -232,7 +247,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-
+        android:visibility="gone"
         android:gravity="center"
         android:padding="@dimen/_8sdp"
         android:text="Continue as a guest"

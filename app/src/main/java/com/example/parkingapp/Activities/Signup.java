@@ -1,6 +1,7 @@
 package com.example.parkingapp.Activities;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -10,11 +11,25 @@ import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -36,11 +51,31 @@ import com.example.parkingapp.R;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.Task;
+import com.schibstedspain.leku.LocationPickerActivity;
+import com.twitter.sdk.android.core.DefaultLogger;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterConfig;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.schibstedspain.leku.LocationPickerActivityKt.LATITUDE;
+import static com.schibstedspain.leku.LocationPickerActivityKt.LOCATION_ADDRESS;
+import static com.schibstedspain.leku.LocationPickerActivityKt.LONGITUDE;
 
 public class Signup extends AppCompatActivity {
 
@@ -56,8 +91,11 @@ public class Signup extends AppCompatActivity {
     private String longitude;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     Preferences preferences;
-
+    TextView add_location;
     LocationRequest request;
+    private CallbackManager callbackManager;
+    TwitterAuthClient mTwitterAuthClient;
+    private GoogleSignInClient googleSignInClient;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,9 +106,25 @@ public class Signup extends AppCompatActivity {
         progressDialog.setTitle("Signing up");
         progressDialog.setMessage("Please wait...");
         progressDialog.setCancelable(false);
-        if (checkLocationPermission()) {
 
-            request = new LocationRequest();
+        checkLocationEnsblle();
+        callbackManager = CallbackManager.Factory.create();
+
+        TwitterConfig config = new TwitterConfig.Builder(this)
+                .logger(new DefaultLogger(Log.DEBUG))//enable logging when app is in debug mode
+                .twitterAuthConfig(new TwitterAuthConfig(getResources().getString(R.string.com_twitter_sdk_android_CONSUMER_KEY), getResources().getString(R.string.com_twitter_sdk_android_CONSUMER_SECRET)))//pass the created app Consumer KEY and Secret also called API Key and Secret
+                .debug(true)//enable debug mode
+                .build();
+
+        //finally initialize twitter_shape with created configs
+        Twitter.initialize(config);
+        mTwitterAuthClient  = new TwitterAuthClient();
+
+
+
+   /*      if (checkLocationPermission()) {
+
+           request = new LocationRequest();
             request.setInterval(10000);
             request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
             FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);
@@ -94,9 +148,23 @@ public class Signup extends AppCompatActivity {
             }
 
 
+
+
         } else {
             checkLocationPermission();
         }
+*/
+        add_location=findViewById(R.id.add_location);
+        add_location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkLocationPermission()){
+                    LocationGettingMechanism();
+                }else {
+                    checkLocationPermission();
+                }
+            }
+        });
 
         edit_text_email = findViewById(R.id.edit_text_email);
         edit_text_name = findViewById(R.id.edit_text_name);
@@ -106,7 +174,14 @@ public class Signup extends AppCompatActivity {
         i_have_truck = findViewById(R.id.i_have_truck);
         i_have_parking = findViewById(R.id.i_have_parking);
 
-        status_value = "I have Truck";
+        status_value = "truck_owner";
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        googleSignInClient = GoogleSignIn.getClient(Signup.this, gso);
+
+
 
         signin = findViewById(R.id.signin);
         signup = findViewById(R.id.signup);
@@ -115,6 +190,121 @@ public class Signup extends AppCompatActivity {
         twitter_signup = findViewById(R.id.twitter_signup);
 
         callInit();
+    }
+
+
+    private void LocationGettingMechanism() {
+        if (latitude!=null && longitude!=null) {
+            LatLng latLng=new LatLng(Double.parseDouble(latitude),Double.parseDouble(longitude));
+            Intent locationPickerIntent = new LocationPickerActivity.Builder()
+                    //  .withLocation(40.7128, 74.0060)
+                    .withGeolocApiKey("AIzaSyBiWCqUwYcKgZyvusgkFOKfop1vA2dLZnE")
+                    .withSearchZone("es_ES")
+                    .withLocation(latLng)
+//                        .withStreetHidden()
+//                        .withCityHidden()
+//                        .withZipCodeHidden()
+//                        .withSatelliteViewHidden()
+                    .withGooglePlacesEnabled()
+                    //   .withVoiceSearchHidden()
+                    .build(getApplicationContext());
+
+            startActivityForResult(locationPickerIntent, 1);
+        }else{
+            Intent locationPickerIntent = new LocationPickerActivity.Builder()
+                    //  .withLocation(40.7128, 74.0060)
+                    .withGeolocApiKey("AIzaSyBiWCqUwYcKgZyvusgkFOKfop1vA2dLZnE")
+                    .withSearchZone("es_ES")
+//                        .withStreetHidden()
+//                        .withCityHidden()
+//                        .withZipCodeHidden()
+//                        .withSatelliteViewHidden()
+                    .withGooglePlacesEnabled()
+                    //   .withVoiceSearchHidden()
+                    .build(getApplicationContext());
+
+            startActivityForResult(locationPickerIntent, 1);
+        }
+
+    }
+
+    private void checkLocationEnsblle() {
+
+        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+        boolean network_enabled = false;
+
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch(Exception ex) {}
+
+        try {
+            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch(Exception ex) {}
+
+        if(!gps_enabled && !network_enabled) {
+            // notify user
+            new android.support.v7.app.AlertDialog.Builder(this)
+                    .setMessage("Please Provide location access ")
+                    .setPositiveButton("Open Location", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finishAffinity();
+                        }
+                    })
+                    .show();
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        if (requestCode == 1) {
+            if(resultCode==RESULT_OK) {
+
+                Double latitudes = data.getDoubleExtra(LATITUDE, 0.0);
+                Double longitudes = data.getDoubleExtra(LONGITUDE, 0.0);
+                String Address = data.getStringExtra(LOCATION_ADDRESS);
+
+             //   location_parking.setText(Address);
+                latitude = String.valueOf(latitudes);
+                longitude = String.valueOf(longitudes);
+                Log.e("error", "onActivityResult: " + latitude + longitude);
+
+            }
+
+        }
+
+        if (resultCode == Activity.RESULT_CANCELED) {
+            Log.d("RESULT****", "CANCELLED");
+            Toast.makeText(this, "User Cancelled the request", Toast.LENGTH_SHORT).show();
+        }
+
+        if (requestCode == 101) {
+            try {
+                // The Task returned from this call is always completed, no need to attach
+                // a listener.
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                assert account != null;
+                signUpMethod(account);
+
+                // onLoggedIn(account);
+            } catch (ApiException e) {
+                // The ApiException status code indicates the detailed failure reason.
+                Log.w("error", "signInResult:failed code=" + e.getStatusCode());
+                Toast.makeText(this, "Couldnot login try again", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 
@@ -181,24 +371,110 @@ public class Signup extends AppCompatActivity {
         google_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Signup.this, "Pending Second week", Toast.LENGTH_SHORT).show();
+                Intent signInIntent = googleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent, 101);
             }
         });
+
         facebook_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Signup.this, "Pending Second Week", Toast.LENGTH_SHORT).show();
+                LoginManager.getInstance().logInWithReadPermissions(Signup.this, Arrays.asList("email", "public_profile"));
+                LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        AccessToken accessToken = loginResult.getAccessToken();
+                        useLoginInformation(accessToken);
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+
+                    @Override
+                    public void onError(FacebookException error) {
+
+                    }
+                });
             }
         });
 
         twitter_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Signup.this, "Pending Second Week", Toast.LENGTH_SHORT).show();
+                mTwitterAuthClient.authorize(Signup.this, new com.twitter.sdk.android.core.Callback<TwitterSession>() {
+                    @Override
+                    public void success(Result<TwitterSession> result) {
+                        TwitterSession twitterSession = result.data;
+
+                        //call fetch email only when permission is granted
+                        fetchTwitterEmail(twitterSession);
+                    }
+
+                    @Override
+                    public void failure(TwitterException exception) {
+
+                    }
+                });
             }
         });
 
 
+    }
+
+    private TwitterAuthClient client;
+
+    public void fetchTwitterEmail(final TwitterSession twitterSession) {
+        client.requestEmail(twitterSession, new com.twitter.sdk.android.core.Callback<String>() {
+            @Override
+            public void success(Result<String> result) {
+                //here it will give u only email and rest of other information u can get from TwitterSession
+                //    userDetailsLabel.setText("User Id : " + twitterSession.getUserId() + "\nScreen Name : " + twitterSession.getUserName() + "\nEmail Id : " + result.data);
+
+                String username=twitterSession.getUserName();
+                String email=result.data;
+              //  openDialogue(username,email);
+
+                Toast.makeText(Signup.this, "Data fetched", Toast.LENGTH_SHORT).show();
+                edit_text_email.setText(email);
+                edit_text_name.setText(username);
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                Toast.makeText(Signup.this, "Failed to authenticate. Please try again.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    private void useLoginInformation(AccessToken accessToken) {
+
+        GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+            //OnCompleted is invoked once the GraphRequest is successful
+            @Override
+            public void onCompleted(JSONObject object, GraphResponse response) {
+                try {
+                    String name = object.getString("name");
+                    String email = object.getString("email");
+                    String image = object.getJSONObject("picture").getJSONObject("data").getString("url");
+
+                  //  openDialogue(name,email);
+                    edit_text_email.setText(email);
+                    edit_text_name.setText(name);
+                    Toast.makeText(Signup.this, "Data fetched", Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        // We set parameters to the GraphRequest using a Bundle.
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,email,picture.width(200)");
+        request.setParameters(parameters);
+        // Initiate the GraphRequest
+        request.executeAsync();
     }
 
     private void validation() {
@@ -281,6 +557,21 @@ public class Signup extends AppCompatActivity {
     }
 
 
+
+    private void signUpMethod(GoogleSignInAccount account) {
+        String name=account.getDisplayName();
+        String email=account.getEmail();
+
+        Toast.makeText(this, "Data fetched", Toast.LENGTH_SHORT).show();
+        edit_text_name.setText(name);
+        edit_text_name.setText(email);
+
+      //  openDialogue(name,email);
+
+
+    }
+
+
     public boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -337,7 +628,7 @@ public class Signup extends AppCompatActivity {
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
 
-                        request = new LocationRequest();
+                       /* request = new LocationRequest();
                         request.setInterval(10000);
                         request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
                         FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);
@@ -359,6 +650,7 @@ public class Signup extends AppCompatActivity {
 
                             }, null);
                         }
+                    }*/
                     }
 
                 } else {

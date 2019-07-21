@@ -13,13 +13,6 @@ public class ReservationModel {
     @SerializedName("reserved_data")
     @Expose
     private ArrayList<ReservationModel> reservedData = null;
-    @SerializedName("error")
-    @Expose
-    private String error;
-
-    public void setError(String error) {
-        this.error = error;
-    }
 
     public String getStatus() {
         return status;
@@ -38,6 +31,10 @@ public class ReservationModel {
     }
 
 
+    @SerializedName("error")
+    @Expose
+    private String error;
+
 
     @SerializedName("reserved_parking_id")
     @Expose
@@ -51,9 +48,12 @@ public class ReservationModel {
     @SerializedName("truck_owner_name")
     @Expose
     private String truckOwnerName;
-    @SerializedName("tuck_number")
+    @SerializedName("parking_owner_name")
     @Expose
-    private String tuckNumber;
+    private String parkingOwnerName;
+    @SerializedName("truck_number")
+    @Expose
+    private String truckNumber;
     @SerializedName("truck_color")
     @Expose
     private String truckColor;
@@ -102,12 +102,20 @@ public class ReservationModel {
         this.truckOwnerName = truckOwnerName;
     }
 
-    public String getTuckNumber() {
-        return tuckNumber;
+    public String getParkingOwnerName() {
+        return parkingOwnerName;
     }
 
-    public void setTuckNumber(String tuckNumber) {
-        this.tuckNumber = tuckNumber;
+    public void setParkingOwnerName(String parkingOwnerName) {
+        this.parkingOwnerName = parkingOwnerName;
+    }
+
+    public String getTruckNumber() {
+        return truckNumber;
+    }
+
+    public void setTruckNumber(String truckNumber) {
+        this.truckNumber = truckNumber;
     }
 
     public String getTruckColor() {

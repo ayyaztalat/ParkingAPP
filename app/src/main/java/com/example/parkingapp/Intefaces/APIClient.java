@@ -12,6 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class APIClient {
     public static final String BASE_URL = "https://www.truckparkplus.com/bobparking_services/";
     // public static final String BASE_URL_BRAINTREE ="https://oomlottemp.com/oomlot_braintree/";
+    public static final String BASE_IMG="https://www.truckparkplus.com/bobparking_services/bobparking_image/";
 
 
     private static Retrofit retrofit = null;

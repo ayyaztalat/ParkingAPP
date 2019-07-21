@@ -6,19 +6,20 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 
 public class ImageParkingModel {
-
-
-    @SerializedName("status")
-    @Expose
-    public String status;
-
     @SerializedName("error")
     @Expose
     public String error;
 
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    @SerializedName("status")
+    @Expose
+    private String status;
     @SerializedName("parking_pic_data")
     @Expose
-    public ArrayList<ImageParkingModel> arrayList=null;
+    private ArrayList<ImageParkingModel> parkingPicData = null;
 
     public String getStatus() {
         return status;
@@ -28,54 +29,41 @@ public class ImageParkingModel {
         this.status = status;
     }
 
-    public String getError() {
-        return error;
+    public ArrayList<ImageParkingModel> getParkingPicData() {
+        return parkingPicData;
     }
 
-    public void setError(String error) {
-        this.error = error;
+    public void setParkingPicData(ArrayList<ImageParkingModel> parkingPicData) {
+        this.parkingPicData = parkingPicData;
     }
-
-    public ArrayList<ImageParkingModel> getArrayList() {
-        return arrayList;
-    }
-
-    public void setArrayList(ArrayList<ImageParkingModel> arrayList) {
-        this.arrayList = arrayList;
-    }
-
-
 
     @SerializedName("picture_id")
     @Expose
-    public String pictureID;
-
+    private String pictureId;
     @SerializedName("parking_id")
     @Expose
-    public String parkingID;
-
-    @SerializedName("picture")
+    private String parkingId;
+    @SerializedName("picture ")
     @Expose
-    public String picture;
-
+    private String picture;
     @SerializedName("time_stamp")
     @Expose
-    public String timeStamp;
+    private String timeStamp;
 
-    public String getPictureID() {
-        return pictureID;
+    public String getPictureId() {
+        return pictureId;
     }
 
-    public void setPictureID(String pictureID) {
-        this.pictureID = pictureID;
+    public void setPictureId(String pictureId) {
+        this.pictureId = pictureId;
     }
 
-    public String getParkingID() {
-        return parkingID;
+    public String getParkingId() {
+        return parkingId;
     }
 
-    public void setParkingID(String parkingID) {
-        this.parkingID = parkingID;
+    public void setParkingId(String parkingId) {
+        this.parkingId = parkingId;
     }
 
     public String getPicture() {
@@ -92,5 +80,9 @@ public class ImageParkingModel {
 
     public void setTimeStamp(String timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public String  getError() {
+        return error;
     }
 }

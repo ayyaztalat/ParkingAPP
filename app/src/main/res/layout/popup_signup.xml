@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/tv_wifi"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_margin="@dimen/_5sdp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="Please provide remaining information to complete signup sequence"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+
+            <EditText
+                android:id="@+id/et_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                android:background="@drawable/button_backgrounds"
+                android:drawablePadding="10dp"
+                android:fontFamily="sans-serif"
+                android:inputType="textPassword"
+                android:hint="Enter Password for account"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textCursorDrawable="@color/black" />
+
+     <EditText
+                android:id="@+id/number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                android:background="@drawable/button_backgrounds"
+                android:drawablePadding="10dp"
+                android:fontFamily="sans-serif"
+                android:inputType="number"
+                android:hint="Enter phone umber"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textCursorDrawable="@color/black" />
+
+
+            <Spinner
+                android:id="@+id/gender_spinner"
+                android:layout_width="match_parent"
+                android:background="@drawable/button_backgrounds"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingStart="@dimen/_15sdp"
+                android:layout_margin="@dimen/_8sdp"
+                android:gravity="center"
+                android:entries="@array/array_name"
+                android:textColor="@color/black" />
+
+
+            <Button
+                android:background="@drawable/button_backgrounds"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/_8sdp"
+                android:text="Signup"
+                android:id="@+id/signupsss"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+</RelativeLayout>

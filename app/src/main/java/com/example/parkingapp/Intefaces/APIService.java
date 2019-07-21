@@ -4,11 +4,14 @@ package com.example.parkingapp.Intefaces;
 import com.example.parkingapp.Models.AddImageParking;
 import com.example.parkingapp.Models.AddParkingModel;
 import com.example.parkingapp.Models.AddReservationModel;
+import com.example.parkingapp.Models.BookingModel;
 import com.example.parkingapp.Models.BrainTreeModel;
+import com.example.parkingapp.Models.BrainTreeToken;
 import com.example.parkingapp.Models.CancelReservationModel;
 import com.example.parkingapp.Models.DeleteParkingModel;
 import com.example.parkingapp.Models.EditModel;
 import com.example.parkingapp.Models.EditParkingModel;
+import com.example.parkingapp.Models.ForgotModel;
 import com.example.parkingapp.Models.ImageParkingModel;
 import com.example.parkingapp.Models.LoginModel;
 import com.example.parkingapp.Models.ParkingModel;
@@ -108,9 +111,8 @@ public interface APIService {
                                        @Field("type_of_vehicle")String type_of_vehicle);
 
     @FormUrlEncoded
-    @POST("")
-    Call<BrainTreeModel> BrainTree(@Field("nonce") String paymentNonce,@Field("email") String email,@Field("userid") String userId);
-
+    @POST("user_forgot_password_e.php")
+    Call<ForgotModel> ForgotPassword();
 
     @FormUrlEncoded
     @POST("add_reserved_parking.php")
@@ -128,5 +130,26 @@ public interface APIService {
     @POST("delete_reservation.php")
     Call<CancelReservationModel> cancelReservation(@Field("reserved_parking_id")String reserved_parking_id,
                                                    @Field("parking_id")String parking_id);
+
+    @GET("generate_token.php")
+    Call<BrainTreeToken> braintree();
+
+    @FormUrlEncoded
+    @POST("transaction_payment.php")
+    Call<BookingModel> booking(@Field("truck_id")String truck_id,
+                               @Field("parking_id")String parking_id,
+                               @Field("truck_owner_name")String truck_owner_name,
+                               @Field("parking_owner_name")String parking_owner_name,
+                               @Field("truck_number")String truck_number,
+                               @Field("truck_color")String truck_color,
+                               @Field("estimated_time")String estimated_time,
+                               @Field("from_date")String from_date,
+                               @Field("to_date")String to_date,
+                               @Field("payment_method_nonce")String payment_method_nonce,
+                               @Field("amount")String amount,
+                               @Field("customer_id")String customer_id,
+                               @Field("truck_owner_id")String truck_owner_id,
+                               @Field("total_price")String total_price
+    );
 
 }

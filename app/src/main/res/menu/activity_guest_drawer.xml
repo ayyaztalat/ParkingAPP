@@ -46,38 +46,38 @@
             android:icon="@drawable/night_mode"
             app:actionLayout="@layout/layout_switch"
             android:title="@string/menu_share" />
-</group>
+    </group>
 
-
-<group>
-    <item
-                android:id="@+id/payments"
-                android:icon="@drawable/payments"
-                android:title="@string/menu_payment" />
-
-    <item
-                android:id="@+id/invite_friend"
-                android:icon="@drawable/invite"
-                android:title="@string/menu_invite_friend" />
-
-</group>
 
     <group>
-    <item
-                android:id="@+id/support"
-                android:icon="@drawable/support"
-                android:title="@string/menu_support" />
-
-    <item
-                android:id="@+id/about"
-                android:icon="@drawable/about"
-                android:title="@string/menu_about" />
+        <item
+            android:id="@+id/payments"
+            android:icon="@drawable/payments"
+            android:title="@string/menu_payment" />
 
         <item
-                android:id="@+id/sign_out"
-                android:icon="@drawable/logout"
-                android:title="@string/menu_sign_out" />
+            android:id="@+id/invite_friend"
+            android:icon="@drawable/invite"
+            android:title="@string/menu_invite_friend" />
 
-</group>
+    </group>
+
+    <group>
+        <item
+            android:id="@+id/support"
+            android:icon="@drawable/support"
+            android:title="@string/menu_support" />
+
+        <item
+            android:id="@+id/about"
+            android:icon="@drawable/about"
+            android:title="@string/menu_about" />
+
+        <item
+            android:id="@+id/sign_out"
+            android:icon="@drawable/logout"
+            android:title="Login" />
+
+    </group>
 
 </menu>

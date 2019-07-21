@@ -1,6 +1,7 @@
 package com.example.parkingapp.Activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -39,12 +40,18 @@ public class AddParkingActivity extends AppCompatActivity {
     Button monday,tuesday,wednesday,thursday,friday,saturday,sunday;
     Button save_parking;
     String days="";
+    ProgressDialog dialog;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_add_parking);
 
         preference=new Preferences(this);
+        dialog=new ProgressDialog(this);
+        dialog.setTitle("Adding");
+        dialog.setMessage("Please wait while we are adding parking");
+        dialog.setCancelable(false);
+
         location_parking=findViewById(R.id.location_parking);
         edit_parking_price=findViewById(R.id.edit_parking_price);
         edit_parking_car_type=findViewById(R.id.edit_parking_car_type);
@@ -52,7 +59,7 @@ public class AddParkingActivity extends AppCompatActivity {
         edit_parking_name=findViewById(R.id.edit_parking_name);
         edit_parking_status=findViewById(R.id.edit_parking_status);
 
-
+        save_parking=findViewById(R.id.save_parking);
         location_parking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,12 +72,13 @@ public class AddParkingActivity extends AppCompatActivity {
         wednesday=findViewById(R.id.wednesday);
         thursday=findViewById(R.id.thursday);
         friday=findViewById(R.id.friday);
-        saturday=findViewById(R.id.satellite);
+        saturday=findViewById(R.id.saturday);
         sunday=findViewById(R.id.sunday);
 
         monday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                monday.setBackgroundColor(getResources().getColor(R.color.green));
                 days="M";
             }
         });
@@ -78,6 +86,7 @@ public class AddParkingActivity extends AppCompatActivity {
         tuesday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                tuesday.setBackgroundColor(getResources().getColor(R.color.green));
                 days=days+","+"T";
             }
         });
@@ -85,6 +94,7 @@ public class AddParkingActivity extends AppCompatActivity {
         wednesday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                wednesday.setBackgroundColor(getResources().getColor(R.color.green));
                 days=days+","+"W";
             }
         });
@@ -92,6 +102,7 @@ public class AddParkingActivity extends AppCompatActivity {
         thursday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                thursday.setBackgroundColor(getResources().getColor(R.color.green));
                 days=days+","+"TH";
             }
         });
@@ -99,6 +110,7 @@ public class AddParkingActivity extends AppCompatActivity {
         friday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                friday.setBackgroundColor(getResources().getColor(R.color.green));
                 days=days+","+"F";
             }
         });
@@ -106,6 +118,7 @@ public class AddParkingActivity extends AppCompatActivity {
         saturday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                saturday.setBackgroundColor(getResources().getColor(R.color.green));
                 days=days+","+"SA";
             }
         });
@@ -113,6 +126,7 @@ public class AddParkingActivity extends AppCompatActivity {
           sunday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sunday.setBackgroundColor(getResources().getColor(R.color.green));
                 days=days+","+"S";
             }
         });
@@ -198,19 +212,21 @@ public class AddParkingActivity extends AppCompatActivity {
     }
 
     private void CallAPI(String parkingName, String status, String carType, String description, String locationParking, String price) {
-
+        dialog.show();
         APIService service= APIClient.getClient().create(APIService.class);
         Call<AddParkingModel> modelCall=service.AddParking(preference.getUserId(),lat,lng,parkingName,days,preference.getName(),preference.getPhone(),status,price,description,carType);
         modelCall.enqueue(new Callback<AddParkingModel>() {
             @Override
             public void onResponse(Call<AddParkingModel> call, Response<AddParkingModel> response) {
                 AddParkingModel model=response.body();
+                dialog.dismiss();
                 if (model.getStatus().equalsIgnoreCase("success")){
                    // Toast.makeText(AddParkingActivity.this, model.getParkingData(), Toast.LENGTH_SHORT).show();
 
                     String parking_id=model.getParkingId();
 
                     startActivity(new Intent(getApplicationContext(),AddPhotosParking.class).putExtra("parking_id",parking_id));
+                    finish();
                 }else {
                     Toast.makeText(AddParkingActivity.this, model.getError(), Toast.LENGTH_SHORT).show();
                 }
@@ -218,6 +234,7 @@ public class AddParkingActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<AddParkingModel> call, Throwable t) {
+                dialog.dismiss();
                 Toast.makeText(AddParkingActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

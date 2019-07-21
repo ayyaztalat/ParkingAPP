@@ -32,9 +32,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static android.content.Context.LOCATION_SERVICE;
 
@@ -110,6 +112,8 @@ public class Map_fragment_parking extends Fragment {
 
     private void onMapWork(double latitude, double longitude) {
 
+
+
         GoogleDirection.withServerKey("AIzaSyBX0vQh9fJWUTTLfZ6bmVMYQTg9beo-vlQ")
                 .from(new LatLng(latitude, longitude))
                 .to(new LatLng(this.latitude, this.longitude))
@@ -153,13 +157,21 @@ public class Map_fragment_parking extends Fragment {
         mMapView = (MapView) view.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 
+        mMapView.onCreate(savedInstanceState);
+        mMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMaps) {
+                googleMap = googleMaps;
+            }
+        });
+
         preferences=new ReservationPreferences(context);
          latitude=Double.parseDouble(preferences.getLatitude());
          longitude=Double.parseDouble(preferences.getLongitude());
         String parkingName=preferences.getParkingName();
 
 
-        mLocationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
+       /* mLocationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -172,28 +184,36 @@ public class Map_fragment_parking extends Fragment {
         }else {
             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000,
                     1000, mLocationListener);
-        }
+        }*/
         try {
-            MapsInitializer.initialize(getActivity().getApplicationContext());
+            MapsInitializer.initialize(Objects.requireNonNull(getActivity()).getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-
-        try {
-            googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitude))
-                    .title(parkingName).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMaps) {
                 googleMap = googleMaps;
+
+                googleMap.getUiSettings().setZoomControlsEnabled(true);
+                googleMap.getUiSettings().setRotateGesturesEnabled(true);
+                googleMap.getUiSettings().setScrollGesturesEnabled(true);
+                googleMap.getUiSettings().setTiltGesturesEnabled(true);
+
             }
         });
+
+
+        try {
+            LatLng latLng=new LatLng(latitude,longitude);
+            googleMap.addMarker(new MarkerOptions().position(latLng).title(parkingName).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).draggable(false).visible(true));
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        mMapView.onResume();
         return view;
     }
 

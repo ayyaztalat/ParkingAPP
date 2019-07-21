@@ -37,7 +37,6 @@ public class ParkingModel {
         this.parkingData = parkingData;
     }
 
-
     @SerializedName("parking_id")
     @Expose
     private String parkingId;
@@ -182,7 +181,7 @@ public class ParkingModel {
         this.timeStamp = timeStamp;
     }
 
-    public String getError() {
+    public String  getError() {
         return error;
     }
 }

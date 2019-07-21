@@ -3,6 +3,7 @@ package com.example.parkingapp.Activities;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -61,10 +62,14 @@ public class AddPhotosParking extends AppCompatActivity {
     private static int RESULT_CAPTURE_IMAGE = 1;
     private static int RESULT_LOAD_IMAGE = 2;
     String picturePath, pictureName;
+    ProgressDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_photos_parking);
+
+        dialog=new ProgressDialog(this);
+        dialog.setCancelable(false);
 
         Intent intent=getIntent();
         if (intent!=null){
@@ -80,9 +85,16 @@ public class AddPhotosParking extends AppCompatActivity {
                 showPictureDialog();
             }
         });
-
+        backPress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               startActivity(new Intent(getApplicationContext(),HomeActivity.class));
+                finish();
+            }
+        });
         layoutManager=new GridLayoutManager(this,3, LinearLayoutManager.VERTICAL,false);
-
+        imageRecyclerView.setLayoutManager(layoutManager);
+        imageRecyclerView.setHasFixedSize(true);
         callImageHistory();
 
 
@@ -193,19 +205,22 @@ public class AddPhotosParking extends AppCompatActivity {
             RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
             picBody = MultipartBody.Part.createFormData("parking_picture", file.getName(), requestFile);
 
-        }else{
+        }else {
             Toast.makeText(this, "Please add your dp", Toast.LENGTH_SHORT).show();
-          //  progressDialog.dismiss();
-
+            //  progressDialog.dismiss();
+        }
             RequestBody parkingID = RequestBody.create(MediaType.parse("text/plain"), parkingId);
 
-
+            dialog.setTitle("Adding Images");
+            dialog.setMessage("Image are adding");
+            dialog.show();
             APIService service=APIClient.getClient().create(APIService.class);
             Call<AddImageParking> parkingCall=service.AddParkingImage(parkingID,picBody);
             parkingCall.enqueue(new Callback<AddImageParking>() {
                 @Override
                 public void onResponse(Call<AddImageParking> call, Response<AddImageParking> response) {
                     AddImageParking imageParking=response.body();
+                    dialog.dismiss();
                     if (imageParking.getStatus().equalsIgnoreCase("success")){
 
                         Toast.makeText(AddPhotosParking.this, imageParking.getParking_data(), Toast.LENGTH_SHORT).show();
@@ -217,11 +232,12 @@ public class AddPhotosParking extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<AddImageParking> call, Throwable t) {
+                    dialog.dismiss();
                     Toast.makeText(AddPhotosParking.this, "Network Error", Toast.LENGTH_SHORT).show();
                 }
             });
         }
-    }
+
 
     private String currentDateFormat() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
@@ -259,29 +275,42 @@ public class AddPhotosParking extends AppCompatActivity {
         return root + "/" + storeFilename;
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(getApplicationContext(),HomeActivity.class));
+        finish();
+    }
 
     private void callImageHistory() {
+        dialog.setTitle("loading Image");
+
         APIService service= APIClient.getClient().create(APIService.class);
         Call<ImageParkingModel> callModel=service.getImage(parkingId);
         callModel.enqueue(new Callback<ImageParkingModel>() {
             @Override
             public void onResponse(Call<ImageParkingModel> call, Response<ImageParkingModel> response) {
                 ImageParkingModel model=response.body();
+                dialog.dismiss();
                 if (model.getStatus().equalsIgnoreCase("success")){
 
-                    modelArrayList=model.getArrayList();
+                    modelArrayList=model.getParkingPicData();
 
                     imageParkingAdapter=new ImageParkingAdapter(AddPhotosParking.this,modelArrayList);
                     imageRecyclerView.setAdapter(imageParkingAdapter);
 
+                }else{
+                    Toast.makeText(AddPhotosParking.this,model.getError(),Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ImageParkingModel> call, Throwable t) {
+                dialog.dismiss();
                 Toast.makeText(AddPhotosParking.this, "network error", Toast.LENGTH_SHORT).show();
             }
         });
+
+
     }
 }

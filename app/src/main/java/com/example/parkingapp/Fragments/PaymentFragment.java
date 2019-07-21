@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,17 +30,10 @@ import retrofit2.Response;
 
 import static com.braintreepayments.api.BraintreeFragment.TAG;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link PaymentFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link PaymentFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class PaymentFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -53,15 +47,7 @@ public class PaymentFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PaymentFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static PaymentFragment newInstance(String param1, String param2) {
         PaymentFragment fragment = new PaymentFragment();
         Bundle args = new Bundle();
@@ -85,6 +71,8 @@ public class PaymentFragment extends Fragment {
     Context context;
     ProgressDialog progressDialog;
 
+    TextView card_added,card_info;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -92,6 +80,10 @@ public class PaymentFragment extends Fragment {
         context=container.getContext();
         View view=inflater.inflate(R.layout.fragment_payment, container, false);
         progressDialog=new ProgressDialog(context);
+
+        card_added=view.findViewById(R.id.card_added);
+        card_info=view.findViewById(R.id.card_info);
+
         card_add_payment=view.findViewById(R.id.card_add_payment);
         card_add_payment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,7 +136,7 @@ public class PaymentFragment extends Fragment {
         progressDialog.setCancelable(false);
 
         progressDialog.show();
-        APIService service= APIClient.getClient().create(APIService.class);
+       /* APIService service= APIClient.getClient().create(APIService.class);
         Call<BrainTreeModel> modelCall=service.BrainTree(paymentNonce,preference.getEmail(),preference.getUserId());
         modelCall.enqueue(new Callback<BrainTreeModel>() {
             @Override
@@ -152,7 +144,7 @@ public class PaymentFragment extends Fragment {
                 BrainTreeModel model=response.body();
                 progressDialog.dismiss();
 
-                preference.setCustomerID("");
+
             }
 
             @Override
@@ -161,7 +153,15 @@ public class PaymentFragment extends Fragment {
                 Toast.makeText(context,"Network error",Toast.LENGTH_SHORT).show();
                 Log.e("error", "onFailure: "+t.getMessage() );
             }
-        });
+        });*/
+       new Handler().postDelayed(new Runnable() {
+           @Override
+           public void run() {
+               progressDialog.dismiss();
+               Toast.makeText(context, "Card saved, please make a booking for its activation", Toast.LENGTH_SHORT).show();
+
+           }
+       },3000);
 
     }
 

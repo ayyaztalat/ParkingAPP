@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.parkingapp.Activities.ProfileActivity;
@@ -51,7 +52,7 @@ public class PersonalFragment extends Fragment {
         // Required empty public constructor
     }
 
-    AppCompatEditText edit_text_name,edit_text_Email,edit_text_Number,edit_text_truck_number,edit_text_truck_make,edit_text_truck_color;
+    AppCompatEditText edit_text_name,edit_text_Email,edit_text_Number;
     Context context;
     Preferences preferences;
     Button save,cancel;
@@ -75,6 +76,8 @@ public class PersonalFragment extends Fragment {
         }
     }
 
+    TextView truck_details;
+
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
@@ -83,6 +86,16 @@ public class PersonalFragment extends Fragment {
         context=container.getContext();
 
         preferences=new Preferences(context);
+
+        String status_value=preferences.getStatusVaalue();
+
+        truck_details=view.findViewById(R.id.truck_details);
+        truck_details.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context,TruckAddClass.class));
+            }
+        });
         save=view.findViewById(R.id.save);
         cancel=view.findViewById(R.id.cancel);
         edit_text_Email=view.findViewById(R.id.edit_text_Email);
@@ -90,13 +103,14 @@ public class PersonalFragment extends Fragment {
         edit_text_Number=view.findViewById(R.id.edit_text_Number);
 
 
-        edit_text_truck_number=view.findViewById(R.id.edit_text_truck_number);
-        edit_text_truck_make=view.findViewById(R.id.edit_text_truck_make);
-        edit_text_truck_color=view.findViewById(R.id.edit_text_truck_color);
 
-        edit_text_truck_number.setText(preferences.getTruckNum());
-        edit_text_truck_color.setText(preferences.getTruckColor());
-        edit_text_truck_color.setText(preferences.getTruckName());
+
+        if (status_value.equalsIgnoreCase("parking_owner")){
+            truck_details.setVisibility(View.GONE);
+        }else{
+            truck_details.setVisibility(View.VISIBLE);
+        }
+
 
         item=view.findViewById(R.id.item);
         item2=view.findViewById(R.id.item2);
@@ -124,109 +138,13 @@ public class PersonalFragment extends Fragment {
             }
         });
 
-        Button save_truck=view.findViewById(R.id.save_truck);
-        save_truck.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                callTrackAddAPI();
-            }
-        });
+
+
 
         return view;
     }
 
-    private void callTrackAddAPI() {
 
-        String truckNum=edit_text_truck_number.getText().toString();
-        String truckName=edit_text_truck_make.getText().toString();
-        String truckColor=edit_text_truck_color.getText().toString();
-
-        if (TextUtils.isEmpty(truckName)){
-            edit_text_truck_make.setError("Please enter Manufacture");
-        }else if (TextUtils.isEmpty(truckColor)){
-            edit_text_truck_color.setError("Please enter truck color");
-        }else if (TextUtils.isEmpty(truckNum)){
-            edit_text_truck_number.setError("Please enter truck number");
-        }else{
-            callAPITruck(truckNum,truckColor,truckName);
-        }
-
-    }
-    String pictureMainPath;
-    private void callAPITruck(String truckNum, String truckColor, String truckName) {
-
-
-        dialog.setTitle("updating truck data");
-        dialog.setMessage("Please wait we are uploading information");
-        dialog.show();
-
-        preferences.setTruckNum(truckNum);
-        preferences.setTruckColor(truckColor);
-        preferences.setTruckName(truckName);
-
-
-        MultipartBody.Part picBody = null;
-        MultipartBody.Part picBody2 = null;
-        try {
-            File file = new File(pictureMainPath);
-            if (file == null) {
-                Toast.makeText(context, "Registration Image is missing", Toast.LENGTH_SHORT).show();
-            }
-            // pDialog.show();
-            RequestBody requestFileRegistration = RequestBody.create(MediaType.parse("image/*"), file);
-            picBody = MultipartBody.Part.createFormData("truck_insurance_image", file.getName(), requestFileRegistration);
-
-            if (picBody == null) {
-                Toast.makeText(context, "registration is missing", Toast.LENGTH_SHORT).show();
-            }
-
-            File file2 = new File(pictureMainPath);
-            if (file2 == null) {
-                Toast.makeText(context, "License Image is missing", Toast.LENGTH_SHORT).show();
-            }
-            // pDialog.show();
-            final RequestBody requestFileLicense = RequestBody.create(MediaType.parse("image/*"), file);
-            picBody2 = MultipartBody.Part.createFormData("truck_registration_image", file.getName(), requestFileLicense);
-
-            if (picBody2 == null) {
-                Toast.makeText(context, "registration is missing", Toast.LENGTH_SHORT).show();
-            }
-
-            RequestBody truck_owner_id = RequestBody.create(MediaType.parse("text/plain"), preferences.getUserId());
-            RequestBody track_number = RequestBody.create(MediaType.parse("text/plain"), truckNum);
-            RequestBody manufacturing_name = RequestBody.create(MediaType.parse("text/plain"), truckName);
-            RequestBody truck_color = RequestBody.create(MediaType.parse("text/plain"), truckColor);
-
-            APIService service=APIClient.getClient().create(APIService.class);
-            Call<TruckModel> modelCall= service.modelTruck(truck_owner_id,track_number,manufacturing_name,truck_color,picBody,picBody2);
-            modelCall.enqueue(new Callback<TruckModel>() {
-                @Override
-                public void onResponse(Call<TruckModel> call, Response<TruckModel> response) {
-                    dialog.dismiss();
-                    TruckModel model=response.body();
-                    if (model.getStatus().equalsIgnoreCase("success")){
-                        Toast.makeText(context, model.getParkingData(), Toast.LENGTH_SHORT).show();
-                        preferences.setTruckID(model.getTruck_id()) ;
-                    }else{
-                        Toast.makeText(context, "Error while uploading", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<TruckModel> call, Throwable t) {
-                    dialog.dismiss();
-                    Toast.makeText(context, "Network error", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-
-
-
-        }catch (Exception e){
-            e.printStackTrace();
-            dialog.dismiss();
-        }
-    }
 
     private void callEditProfileAPI() {
 
