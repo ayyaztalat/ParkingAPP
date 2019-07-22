@@ -78,7 +78,9 @@ public class MyReservationAdapter extends RecyclerView.Adapter<MyReservationAdap
                 .putExtra("estimated_time",arrayList.get(i).getEstimatedTime())
                 .putExtra("from_date",arrayList.get(i).getFromDate())
                 .putExtra("to_date",arrayList.get(i).getToDate())
-                .putExtra("truck_owner_id",preferences.getUserId())
+                .putExtra("truck_owner_id",arrayList.get(i).getTruckOwnerId())
+                        .putExtra("amount",arrayList.get(i).getAmount())
+                        .putExtra("parking_owner_id",arrayList.get(i).getParkingOwnerId())
                 );
             }
         });

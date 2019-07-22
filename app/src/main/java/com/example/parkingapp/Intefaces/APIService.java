@@ -15,8 +15,10 @@ import com.example.parkingapp.Models.ForgotModel;
 import com.example.parkingapp.Models.ImageParkingModel;
 import com.example.parkingapp.Models.LoginModel;
 import com.example.parkingapp.Models.ParkingModel;
+import com.example.parkingapp.Models.ProfileModel;
 import com.example.parkingapp.Models.ReservationModel;
 import com.example.parkingapp.Models.SignupModel;
+import com.example.parkingapp.Models.SupportModel;
 import com.example.parkingapp.Models.TruckModel;
 
 import okhttp3.MultipartBody;
@@ -124,7 +126,11 @@ public interface APIService {
                                              @Field("truck_color")String truck_color,
                                              @Field("estimated_time")String estimated_time,
                                              @Field("from_date")String from_date,
-                                             @Field("to_date")String to_date);
+                                             @Field("to_date")String to_date,
+                                            @Field("amount")String amount,
+                                             @Field("truck_owner_id")String truck_owner_id,
+                                             @Field("parking_owner_id")String parking_owner_id
+                                             );
 
     @FormUrlEncoded
     @POST("delete_reservation.php")
@@ -151,5 +157,11 @@ public interface APIService {
                                @Field("truck_owner_id")String truck_owner_id,
                                @Field("total_price")String total_price
     );
+    @FormUrlEncoded
+    @POST("view_profile.php")
+    Call<ProfileModel> profile(@Field("email")String email);
 
+    @FormUrlEncoded
+    @POST("comment_mail.php")
+    Call<SupportModel> Support(@Field("user_email")String email, @Field("comment")String comment);
 }

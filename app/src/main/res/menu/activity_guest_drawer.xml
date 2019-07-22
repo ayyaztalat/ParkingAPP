@@ -53,6 +53,7 @@
         <item
             android:id="@+id/payments"
             android:icon="@drawable/payments"
+            android:visible="false"
             android:title="@string/menu_payment" />
 
         <item

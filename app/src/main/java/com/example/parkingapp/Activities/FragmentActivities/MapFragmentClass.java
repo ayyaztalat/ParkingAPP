@@ -402,6 +402,7 @@ private String TAG="error";
       final String parking_id=arrayList.get(i).getParkingId();
       final String parking_description=arrayList.get(i).getParkingDescription();
       final String parking_price=arrayList.get(i).getParkingPrice();
+      final String parking_owner_id=arrayList.get(i).getParkingOwnerId();
 
       try{
         googleMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(latitude),Double.parseDouble(longitude)))
@@ -413,7 +414,7 @@ private String TAG="error";
               startActivity(new Intent(context, ReservationParkingClass.class).putExtra("latitude",latitude)
               .putExtra("longitude",longitude).putExtra("parking_owner",parking_owner_name).putExtra("parking_name",parking_title)
               .putExtra("parking_availability",parking_avaibility).putExtra("parking_id",parking_id).putExtra("parking_des",parking_description)
-              .putExtra("price",parking_price));
+              .putExtra("price",parking_price).putExtra("owner_id",parking_owner_id));
             return true;
           }
         });

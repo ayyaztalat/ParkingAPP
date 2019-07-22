@@ -21,7 +21,7 @@ import com.example.parkingapp.R;
 
 public class ReservationParkingClass extends AppCompatActivity implements Map_fragment_parking.OnFragmentInteractionListener, Parking_info_fragment.OnFragmentInteractionListener, Photos_parking.OnFragmentInteractionListener {
 
-    String latitude,longitude,parking_owner,parking_name,parking_availablity,parking_id,parking_des,parking_price;
+    String latitude,longitude,parking_owner,parking_name,parking_availablity,parking_id,parking_des,parking_price,parking_owner_id;
  //   Preferences preferences;
     ReservationPreferences reservationPreferences;
     @Override
@@ -39,6 +39,7 @@ public class ReservationParkingClass extends AppCompatActivity implements Map_fr
             parking_id=intent.getStringExtra("parking_id");
             parking_des=intent.getStringExtra("parking_des");
             parking_price=intent.getStringExtra("price");
+            parking_owner_id=intent.getStringExtra("owner_id");
         }
 
 
@@ -52,6 +53,7 @@ public class ReservationParkingClass extends AppCompatActivity implements Map_fr
         reservationPreferences.setParkingID(parking_id);
         reservationPreferences.setParkingDes(parking_des);
         reservationPreferences.setParkingPrice(parking_price);
+        reservationPreferences.setParkingOwnerId(parking_owner_id);
 
         Toolbar toolbar = findViewById(R.id.top_bar);
         setSupportActionBar(toolbar);

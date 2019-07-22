@@ -52,6 +52,7 @@
 <group>
     <item
                 android:id="@+id/payments"
+        android:visible="false"
                 android:icon="@drawable/payments"
                 android:title="@string/menu_payment" />
 

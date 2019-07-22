@@ -41,6 +41,7 @@ import com.example.parkingapp.Intefaces.APIClient;
 import com.example.parkingapp.Intefaces.APIService;
 import com.example.parkingapp.Models.BrainTreeModel;
 import com.example.parkingapp.Models.BrainTreeToken;
+import com.example.parkingapp.Models.ProfileModel;
 import com.example.parkingapp.Preferences.Preferences;
 import com.example.parkingapp.R;
 import com.google.android.gms.common.ConnectionResult;
@@ -80,7 +81,7 @@ public class HomeActivity extends AppCompatActivity
 
         callToken();
 
-
+    callProfileLoading();
 
 
 
@@ -219,6 +220,49 @@ public class HomeActivity extends AppCompatActivity
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
     }
+
+     private void callProfileLoading() {
+         APIService service=APIClient.getClient().create(APIService.class);
+         Call<ProfileModel> modelCall=service.profile(preferences.getEmail());
+         modelCall.enqueue(new Callback<ProfileModel>() {
+             @Override
+             public void onResponse(Call<ProfileModel> call, Response<ProfileModel> response) {
+                 ProfileModel model=response.body();
+                 if (model.getStatus().equalsIgnoreCase("success")){
+
+                     preferences.setName(model.getUserData().get(0).getName());
+                     preferences.setPhone(model.getUserData().get(0).getPhone());
+                     preferences.setPassword(model.getUserData().get(0).getPassword());
+                     preferences.setEmail(model.getUserData().get(0).getEmail());
+                     preferences.setTime(model.getUserData().get(0).getTimeStamp());
+                     preferences.setUserId(model.getUserData().get(0).getId());
+                     preferences.setStatusValue(model.getUserData().get(0).getStatusValue());
+                     preferences.setLatitude(model.getUserData().get(0).getLatitude());
+                     preferences.setLongitude(model.getUserData().get(0).getLongitude());
+
+                     preferences.setCardToken(model.getUserData().get(0).getCardToken());
+                     preferences.setCardBin(model.getUserData().get(0).getCardBin());
+                     preferences.setCardLastDigit(model.getUserData().get(0).getCardLast4());
+                     preferences.setCardType(model.getUserData().get(0).getCardType());
+                     preferences.setCardHolderName(model.getUserData().get(0).getCardCardholderName());
+                     preferences.setCardExpirationDate(model.getUserData().get(0).getCardExpirationDate());
+                     preferences.setCardCustomerLocation(model.getUserData().get(0).getCardCustomerLocation());
+                     preferences.setCustomerID(model.getUserData().get(0).getCustomerId());
+
+
+
+                 }else{
+                     Toast.makeText(HomeActivity.this, model.getError(), Toast.LENGTH_SHORT).show();
+                 }
+             }
+
+             @Override
+             public void onFailure(Call<ProfileModel> call, Throwable t) {
+                 Toast.makeText(HomeActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+                 Log.e("Error", "onFailure: "+t.getMessage() );
+             }
+         });
+     }
 
      private void callToken() {
          APIService service= APIClient.getClient().create(APIService.class);

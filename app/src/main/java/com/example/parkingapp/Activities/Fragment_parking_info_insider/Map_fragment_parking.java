@@ -171,6 +171,7 @@ public class Map_fragment_parking extends Fragment {
         String parkingName=preferences.getParkingName();
 
 
+
        /* mLocationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

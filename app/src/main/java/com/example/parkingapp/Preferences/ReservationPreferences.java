@@ -78,4 +78,11 @@ public class ReservationPreferences {
     public String getParkingPrice() {
         return    Prefs.getString("parking_price","");
     }
+
+    public void setParkingOwnerId(String parking_owner_id) {
+        Prefs.putString("owner_id",parking_owner_id);
+    }
+    public String getParkingOwnerId(){
+        return Prefs.getString("owner_id","");
+    }
 }

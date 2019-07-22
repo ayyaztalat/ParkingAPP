@@ -69,6 +69,15 @@ public class ReservationModel {
     @SerializedName("time_stamp")
     @Expose
     private String timeStamp;
+    @SerializedName("amount")
+    @Expose
+    private String amount;
+    @SerializedName("truck_owner_id")
+    @Expose
+    private String truckOwnerId;
+    @SerializedName("parking_owner_id")
+    @Expose
+    private String parkingOwnerId;
 
     public String getReservedParkingId() {
         return reservedParkingId;
@@ -158,6 +167,29 @@ public class ReservationModel {
         this.timeStamp = timeStamp;
     }
 
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
+    public String getTruckOwnerId() {
+        return truckOwnerId;
+    }
+
+    public void setTruckOwnerId(String truckOwnerId) {
+        this.truckOwnerId = truckOwnerId;
+    }
+
+    public String getParkingOwnerId() {
+        return parkingOwnerId;
+    }
+
+    public void setParkingOwnerId(String parkingOwnerId) {
+        this.parkingOwnerId = parkingOwnerId;
+    }
     public String getError() {
         return error;
     }

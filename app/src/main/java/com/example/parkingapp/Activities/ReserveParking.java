@@ -249,7 +249,8 @@ public class ReserveParking extends AppCompatActivity {
 
             APIService service= APIClient.getClient().create(APIService.class);
             Call<AddReservationModel> call=service.addReservation(preferences.getTruckID(),reservationPreferences.getParkingID(),preferences.getName(),reservationPreferences.getParkingOwner()
-                    ,preferences.getTruckNum(),preferences.getTruckColor(),estimate_time,from_date_final,to_date_final);
+                    ,preferences.getTruckNum(),preferences.getTruckColor(),estimate_time,from_date_final,to_date_final,
+                    reservationPreferences.getParkingPrice(),preferences.getUserId(),reservationPreferences.getParkingOwnerId());
 
             call.enqueue(new Callback<AddReservationModel>() {
                 @Override

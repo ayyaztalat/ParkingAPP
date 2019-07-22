@@ -12,8 +12,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.parkingapp.Intefaces.APIClient;
+import com.example.parkingapp.Intefaces.APIService;
+import com.example.parkingapp.Models.SupportModel;
+import com.example.parkingapp.Preferences.Preferences;
 import com.example.parkingapp.R;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class SupportFragment extends Fragment {
@@ -25,6 +34,7 @@ public class SupportFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    Preferences preferences;
 
     private OnFragmentInteractionListener mListener;
 
@@ -60,6 +70,10 @@ public class SupportFragment extends Fragment {
         edit_text_Email=view.findViewById(R.id.edit_text_Email);
         send=view.findViewById(R.id.send);
 
+        preferences=new Preferences(container.getContext());
+
+        edit_text_Email.setText(preferences.getEmail());
+
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,7 +84,7 @@ public class SupportFragment extends Fragment {
         return view;
     }
 
-    private void sendMail(Context context) {
+    private void sendMail(final Context context) {
         String mes=message.getText().toString();
         String email=edit_text_Email.getText().toString();
 
@@ -80,11 +94,24 @@ public class SupportFragment extends Fragment {
             edit_text_Email.setError("Please enter your email");
         }else {
 
-            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                    "mailto","abc@abc.com", null));
-            emailIntent.putExtra(Intent.EXTRA_SUBJECT, email);
-            emailIntent.putExtra(Intent.EXTRA_TEXT, mes);
-            context.startActivity(Intent.createChooser(emailIntent, "Send email..."));
+            APIService service= APIClient.getClient().create(APIService.class);
+            Call<SupportModel> modelCall=service.Support(email,mes);
+            modelCall.enqueue(new Callback<SupportModel>() {
+                @Override
+                public void onResponse(Call<SupportModel> call, Response<SupportModel> response) {
+                    SupportModel model=response.body();
+                    if (model.getStatus().equalsIgnoreCase("success")){
+                        Toast.makeText(context, model.getStatus(), Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(context, model.getError(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SupportModel> call, Throwable t) {
+                    Toast.makeText(context, "network error", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 

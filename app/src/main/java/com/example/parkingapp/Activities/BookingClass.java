@@ -1,6 +1,7 @@
 package com.example.parkingapp.Activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,11 +30,18 @@ public class BookingClass extends AppCompatActivity {
     TextView name_icon,title,price,from_date,to_date,text_days,time_picker;
     Button reserve;
     CalendarView calendarView;
+    ProgressDialog dialog;
     Preferences preferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_class);
+
+        dialog=new ProgressDialog(this);
+        dialog.setTitle("Booking");
+        dialog.setMessage("Please wait we are making a booking");
+        dialog.setCancelable(false);
+
 
         name_icon=findViewById(R.id.name_icon);
         title=findViewById(R.id.title);
@@ -64,28 +72,29 @@ public class BookingClass extends AppCompatActivity {
         Intent intent=getIntent();
         if (intent!=null){
           //  name_icon=getIntent().getStringExtra("")
-          String  titles=getIntent().getStringExtra("parking_owner_name");
-          String truck_name=getIntent().getStringExtra("truck_owner_name");
-          String parking_owner_name=getIntent().getStringExtra("parking_owner_name");
-          String parking_id=getIntent().getStringExtra("parking_id");
-          String truck_number=getIntent().getStringExtra("truck_number");
-          String truck_color=getIntent().getStringExtra("truck_color");
-          String estimate_time=getIntent().getStringExtra("estimate_time");
-          String from_date=getIntent().getStringExtra("from_date");
-          String to_date=getIntent().getStringExtra("to_date");
-          String truck_owner_id=getIntent().getStringExtra("truck_owner_id");
+          titles=getIntent().getStringExtra("parking_owner_name");
+           truck_name=getIntent().getStringExtra("truck_owner_name");
+          parking_owner_name=getIntent().getStringExtra("parking_owner_name");
+          parking_id=getIntent().getStringExtra("parking_id");
+          truck_number=getIntent().getStringExtra("truck_number");
+          truck_color=getIntent().getStringExtra("truck_color");
+          estimate_time=getIntent().getStringExtra("estimate_time");
+          from_dates=getIntent().getStringExtra("from_date");
+          to_dates=getIntent().getStringExtra("to_date");
+          truck_owner_id=getIntent().getStringExtra("truck_owner_id");
+          parking_owner_id=getIntent().getStringExtra("parking_owner_id");
+          amount=getIntent().getStringExtra("amount");
+            truck_id=getIntent().getStringExtra("truck_id");
+            truck_owner_name=getIntent().getStringExtra("truck_owner_name");
 
 
             name_icon.setText(titles);
             title.setText(titles);
 
-            this.from_date.setText(from_date);
-            this.to_date.setText(to_date);
-
-
+            this.from_date.setText(from_dates);
+            this.to_date.setText(to_dates);
 
         }
-
         reserve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,17 +106,12 @@ public class BookingClass extends AppCompatActivity {
 
                     APICall(id);
                 }
-
             }
         });
-
-
-
-
-
-
-
     }
+
+    String titles,truck_name,parking_owner_name,parking_id,truck_number,truck_color,estimate_time,from_dates,to_dates,truck_owner_id,parking_owner_id
+          ,truck_id ,truck_owner_name ,amount;
 
     private void callNonce() {
         DropInRequest dropInRequest=new DropInRequest().clientToken(preferences.getBrainTreeToker());
@@ -140,20 +144,14 @@ public class BookingClass extends AppCompatActivity {
     }
 
     private void callCardSavingApi(String paymentNonce) {
-        Toast.makeText(this, "API pending", Toast.LENGTH_SHORT).show();
-    }
-
-
-    private void APICall(String id) {
-        /*APIService service= APIClient.getClient().create(APIService.class);
-        Call<BookingModel> modelCall=service.booking(truck_id,parking_id,truck_owner_name,parking_owner_name,
-                                                        truck_number,truck_color,estimate_time,from_dates,
-                                                        to_dates,paymonth_nonce,amount,
-                                                        customer_id,truck_owner,total_price);
+        dialog.show();
+        APIService service=APIClient.getClient().create(APIService.class);
+        Call<BookingModel> modelCall=service.booking(truck_id,parking_id,truck_owner_name,parking_owner_name,truck_number,truck_color,estimate_time,from_dates,to_dates,paymentNonce,amount,"",truck_owner_id,amount);
         modelCall.enqueue(new Callback<BookingModel>() {
             @Override
             public void onResponse(Call<BookingModel> call, Response<BookingModel> response) {
                 BookingModel model=response.body();
+                dialog.dismiss();
                 if (model.getStatus().equalsIgnoreCase("success")){
                     Toast.makeText(BookingClass.this, model.getPayment(), Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getApplicationContext(),HomeActivity.class));
@@ -165,9 +163,42 @@ public class BookingClass extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<BookingModel> call, Throwable t) {
+                dialog.dismiss();
                 Toast.makeText(BookingClass.this, "Network error", Toast.LENGTH_SHORT).show();
                 Log.e("error", "onFailure: "+t.getMessage() );
             }
-        });*/
+        });
+
+    }
+
+
+    private void APICall(String id) {
+        dialog.show();
+        APIService service= APIClient.getClient().create(APIService.class);
+        Call<BookingModel> modelCall=service.booking(truck_id,parking_id,truck_owner_name,parking_owner_name,
+                                                        truck_number,truck_color,estimate_time,from_dates,
+                                                        to_dates,"",amount,
+                                                        id,truck_owner_id,amount);
+        modelCall.enqueue(new Callback<BookingModel>() {
+            @Override
+            public void onResponse(Call<BookingModel> call, Response<BookingModel> response) {
+                BookingModel model=response.body();
+                dialog.dismiss();
+                if (model.getStatus().equalsIgnoreCase("success")){
+                    Toast.makeText(BookingClass.this, model.getPayment(), Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getApplicationContext(),HomeActivity.class));
+                    finishAffinity();
+                }else{
+                    Toast.makeText(BookingClass.this, model.getError(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BookingModel> call, Throwable t) {
+                dialog.dismiss();
+                Toast.makeText(BookingClass.this, "Network error", Toast.LENGTH_SHORT).show();
+                Log.e("error", "onFailure: "+t.getMessage() );
+            }
+        });
     }
 }
