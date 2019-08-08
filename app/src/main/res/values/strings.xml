@@ -29,8 +29,8 @@
 
 
 
-    <string name="com.twitter.sdk.android.CONSUMER_KEY">your_consumer_key</string>
-    <string name="com.twitter.sdk.android.CONSUMER_SECRET">your_consumer_secret</string>
+    <string name="com_twitter_sdk_android_CONSUMER_KEY">your_consumer_key</string>
+    <string name="com_twitter_sdk_android_CONSUMER_SECRET">your_consumer_secret</string>
     <string name="custom_log_in_with_twitter">Custom Log in with Twitter</string>
 
 

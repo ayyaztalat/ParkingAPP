@@ -86,6 +86,18 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:padding="10dp" />
+            <CheckBox
+                android:id="@+id/dont_show_free_parking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                android:drawablePadding="10dp"
+                android:textSize="@dimen/_18sdp"
+                android:fontFamily="sans-serif"
+                android:text="Dont Show Free Parking"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="10dp" />
             <Button
                 android:background="@drawable/button_backgrounds"
                 android:layout_gravity="center"
