@@ -720,12 +720,12 @@ public class MapFragmentClass extends Fragment {
   }
 
   ArrayList<FreeParkingModel> freeParkingModels=new ArrayList<>();
-
+  int i;
   private void callSecondFetching(ArrayList<FreeParkingModel> parkingData) {
 
     freeParkingModels=parkingData;
 
-    for (int i=0;i<freeParkingModels.size();i++) {
+    for (i=0;i<freeParkingModels.size();i++) {
 
       final String latitude = freeParkingModels.get(i).getParkingLatitude();
       final String longitude = freeParkingModels.get(i).getParkingLongitude();
@@ -767,11 +767,12 @@ public class MapFragmentClass extends Fragment {
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
           @Override
           public boolean onMarkerClick(Marker marker) {
-            startActivity(new Intent(context, ReservationParkingClass.class).putExtra("latitude", latitude)
-                    .putExtra("longitude", longitude).putExtra("parking_owner", parking_owner_name).putExtra("parking_name", parking_title)
-                    .putExtra("parking_availability", parking_avaibility).putExtra("parking_id", parking_id).putExtra("parking_des", parking_description)
-                    .putExtra("price", parking_price).putExtra("owner_id", parking_owner_id)
-                    .putExtra("remaining_parking_spots", remaining_parking_spots).putExtra("filled_parking_spots", filled_parking_spots));
+
+            startActivity(new Intent(context, ReservationParkingClass.class).putExtra("latitude", arrayList.get(i).getParkingLatitude())
+                    .putExtra("longitude", arrayList.get(i).getParkingLongitude()).putExtra("parking_owner", arrayList.get(i).getParkingOwnerName()).putExtra("parking_name", arrayList.get(i).getParkingName())
+                    .putExtra("parking_availability", arrayList.get(i).getAvailabilityType()).putExtra("parking_id", arrayList.get(i).getParkingId()).putExtra("parking_des", arrayList.get(i).getParkingDescription())
+                    .putExtra("price", arrayList.get(i).getParkingPrice()).putExtra("owner_id", arrayList.get(i).getParkingOwnerId())
+                    .putExtra("remaining_parking_spots", arrayList.get(i).getRemainingParkingSpots()).putExtra("filled_parking_spots", arrayList.get(i).getFilledParkingSpots()));
             return true;
           }
         });
