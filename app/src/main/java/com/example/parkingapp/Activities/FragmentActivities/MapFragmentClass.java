@@ -81,7 +81,7 @@ import retrofit2.Response;
 
 import static android.content.Context.LOCATION_SERVICE;
 import static com.example.parkingapp.Activities.Signup.MY_PERMISSIONS_REQUEST_LOCATION;
-import static com.facebook.FacebookSdk.getApplicationContext;
+
 
 
 public class MapFragmentClass extends Fragment {
@@ -100,6 +100,8 @@ public class MapFragmentClass extends Fragment {
 
   private OnFragmentInteractionListener mListener;
   private LocationManager mLocationManager;
+
+  Boolean filters=false;
 
   public MapFragmentClass() {
     // Required empty public constructor
@@ -305,7 +307,7 @@ public class MapFragmentClass extends Fragment {
   }
 
   private void openDialogue() {
-
+    filters=true;
     LayoutInflater inflater = getLayoutInflater();
     View alertLayout = inflater.inflate(R.layout.pop_map_filter, null);
     final android.app.AlertDialog.Builder alert = new android.app.AlertDialog.Builder(context);
@@ -315,6 +317,7 @@ public class MapFragmentClass extends Fragment {
     final CheckBox parking_areas=alertLayout.findViewById(R.id.parking_areas);
     final Button update=alertLayout.findViewById(R.id.update);
     final CheckBox rest_parking=alertLayout.findViewById(R.id.rest_parking);
+    final CheckBox dont_show_free_parking=alertLayout.findViewById(R.id.dont_show_free_parking);
 
     //  etcode = alertLayout.findViewById(R.id.et_password);
 
@@ -346,12 +349,26 @@ public class MapFragmentClass extends Fragment {
         preference.setRestParking(isChecked);
       }
     });
+      dont_show_free_parking.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+          @Override
+          public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+              preference.setDontShowParking(isChecked);
+          }
+      });
 
 
     truck_stops.setChecked(preference.getTruckCheck());
     weight_stations.setChecked(preference.getWeightCheck());
     parking_areas.setChecked(preference.getPrkingArea());
     rest_parking.setChecked(preference.getPrkingArea());
+
+    dont_show_free_parking.setChecked(preference.getDontShowParking());
+    if (preference.getDontShowParking()){
+        truck_stops.setChecked(false);
+        weight_stations.setChecked(false);
+        parking_areas.setChecked(false);
+        rest_parking.setChecked(false);
+    }
 
 
     // this is set the view from XML inside AlertDialog
@@ -363,39 +380,45 @@ public class MapFragmentClass extends Fragment {
     update.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        String truck,weight,parking_area,rest_parkings;
+          String truck, weight, parking_area, rest_parkings;
 
-        if (truck_stops.isChecked()){
-          truck="truck_stops";
-        }else{
-          truck="";
-        }
+          if (truck_stops.isChecked()) {
+              truck = "truck_stops";
+          } else {
+              truck = "";
+          }
 
-        if (weight_stations.isChecked()){
-          weight="weight_station";
-        }else {
-          weight="";
-        }
+          if (weight_stations.isChecked()) {
+              weight = "weight_station";
+          } else {
+              weight = "";
+          }
 
-        if (parking_areas.isChecked()){
-          parking_area="parking_areas";
-        }
-        else {
-          parking_area="";
-        }
-        if (rest_parking.isChecked()){
-          rest_parkings="rest_areas";
-        }else {
-          rest_parkings="";
-        }
+          if (parking_areas.isChecked()) {
+              parking_area = "parking_areas";
+          } else {
+              parking_area = "";
+          }
+          if (rest_parking.isChecked()) {
+              rest_parkings = "rest_areas";
+          } else {
+              rest_parkings = "";
+          }
 
           dialog.dismiss();
 
+          if (preference.getDontShowParking()) {
+              Toast.makeText(context, "Free Parking Closed", Toast.LENGTH_SHORT).show();
+              googleMap.clear();
 
-          apiCallFilter(truck,weight,parking_area,rest_parkings);
-          //  apiServiceCall();
-          // hide virtual keyboard
-        }
+              callAPIDataFetching();
+
+          } else {
+              apiCallFilter(truck, weight, parking_area, rest_parkings);
+              //  apiServiceCall();
+              // hide virtual keyboard
+          }
+      }
     });
   }
 
@@ -425,16 +448,40 @@ public class MapFragmentClass extends Fragment {
             final String parking_owner_id = arrayListModel.get(i).getParkingOwnerId();
             final String remaining_parking_spots = arrayListModel.get(i).getRemainingParkingSpots();
             final String filled_parking_spots = arrayListModel.get(i).getFilledParkingSpots();
+            final String typeofVehical=arrayList.get(i).getTypeOfVehicle();
+
+            LatLng latLng=new LatLng(Double.parseDouble(latitude),Double.parseDouble(longitude));
 
             try {
-              googleMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)))
+           /*   googleMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)))
                       .title(parking_title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+*/
 
-              callSecondFreeAPI();
+                if (typeofVehical.equalsIgnoreCase("truck_stops")){
+                    googleMap.addMarker(new MarkerOptions().position(latLng)
+                           .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.green_truck_area))).title(arrayListModel.get(i).getParkingName()));
+
+                }else if (typeofVehical.equalsIgnoreCase("rest_areas")){
+                    googleMap.addMarker(new MarkerOptions().position(latLng)
+                           .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.rest_area))).title(arrayListModel.get(i).getParkingName()));
+
+                }else if (typeofVehical.equalsIgnoreCase("weight_station")){
+                    googleMap.addMarker(new MarkerOptions().position(latLng)
+                           .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.weight_station))).title(arrayListModel.get(i).getParkingName()));
+
+                }else {
+                    googleMap.addMarker(new MarkerOptions().position(latLng)
+                           .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.free_parking))).title(arrayListModel.get(i).getParkingName()));
+
+                }
+
+
+            //  callSecondFreeAPI();
 
               googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker) {
+
                   startActivity(new Intent(context, ReservationParkingClass.class).putExtra("latitude", latitude)
                           .putExtra("longitude", longitude).putExtra("parking_owner", parking_owner_name).putExtra("parking_name", parking_title)
                           .putExtra("parking_availability", parking_avaibility).putExtra("parking_id", parking_id).putExtra("parking_des", parking_description)
@@ -662,17 +709,74 @@ public class MapFragmentClass extends Fragment {
       final String parking_owner_id=arrayList.get(i).getParkingOwnerId();
       final String remaining_parking_spots=arrayList.get(i).getRemainingParkingSpots();
       final String filled_parking_spots=arrayList.get(i).getFilledParkingSpots();
+      final String typeofVehical=arrayList.get(i).getTypeOfVehicle();
 
+
+       boolean truckss=preference.getTruckCheck();
+     boolean   weight_stations=preference.getWeightCheck();
+     boolean   parking_areas=preference.getPrkingArea();
+     boolean   rest_parking=preference.getPrkingArea();
+
+
+        String truck,weight,parking_area,rest_parkings;
+
+        if (truckss){
+            truck="truck_stops";
+        }else{
+            truck="";
+        }
+
+        if (weight_stations){
+            weight="weight_station";
+        }else {
+            weight="";
+        }
+
+        if (parking_areas){
+            parking_area="parking_areas";
+        }
+        else {
+            parking_area="";
+        }
+        if (rest_parking){
+            rest_parkings="rest_areas";
+        }else {
+            rest_parkings="";
+        }
 
 
       LatLng latLng=new LatLng(Double.parseDouble(latitude),Double.parseDouble(longitude));
     //  Toast.makeText(context, "latlng "+latLng.latitude+latLng.longitude, Toast.LENGTH_SHORT).show();
       try{
-        googleMap.addMarker(new MarkerOptions().position(latLng)
-        .title(parking_title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
-        callSecondFreeAPI();
+          if (typeofVehical.equalsIgnoreCase("truck_stops")){
+              googleMap.addMarker(new MarkerOptions().position(latLng)
+                      .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.green_truck_area))).title(arrayList.get(i).getParkingName()));
 
+          }else if (typeofVehical.equalsIgnoreCase("rest_areas")){
+              googleMap.addMarker(new MarkerOptions().position(latLng)
+                      .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.rest_area))).title(arrayList.get(i).getParkingName()));
+
+          }else if (typeofVehical.equalsIgnoreCase("weight_station")){
+              googleMap.addMarker(new MarkerOptions().position(latLng)
+                      .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.weight_station))).title(arrayList.get(i).getParkingName()));
+
+          }else {
+              googleMap.addMarker(new MarkerOptions().position(latLng)
+                      .title(parking_title).icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.free_parking))).title(arrayList.get(i).getParkingName()));
+
+          }
+
+          if (preference.getDontShowParking()){
+              Toast.makeText(context, "Free parking Closed", Toast.LENGTH_SHORT).show();
+          }else {
+
+              if (filters) {
+                  apiCallFilter(truck, weight, parking_area, rest_parkings);
+              } else {
+                  callSecondFreeAPI();
+              }
+          }
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
           @Override
           public boolean onMarkerClick(Marker marker) {
@@ -702,7 +806,11 @@ public class MapFragmentClass extends Fragment {
         try {
           FreeParkingModel model = response.body();
           if (model.getStatus().equalsIgnoreCase("success")) {
+            if (preference.getDontShowParking()){
+              Toast.makeText(context, "Free Parking Closed", Toast.LENGTH_SHORT).show();
+            }else {
             callSecondFetching(model.getParkingData());
+               }
           } else {
             Toast.makeText(context, model.getError(), Toast.LENGTH_SHORT).show();
           }
@@ -743,21 +851,21 @@ public class MapFragmentClass extends Fragment {
    //   Toast.makeText(context, "latlng "+latLng.latitude+latLng.longitude, Toast.LENGTH_SHORT).show();
       try {
 
-        if (typeofVehical.equalsIgnoreCase("truck stops")){
+        if (typeofVehical.equalsIgnoreCase("truck_stops")){
           googleMap.addMarker(new MarkerOptions().position(latLng)
-                  .title(parking_title).icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.green_truck_area))).title(freeParkingModels.get(i).getParkingName()));
+                  .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.green_truck_area))).title(freeParkingModels.get(i).getParkingName()));
 
-        }else if (typeofVehical.equalsIgnoreCase("rest areas")){
+        }else if (typeofVehical.equalsIgnoreCase("rest_areas")){
           googleMap.addMarker(new MarkerOptions().position(latLng)
-                  .title(parking_title).icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.rest_area))).title(freeParkingModels.get(i).getParkingName()));
+                  .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.rest_area))).title(freeParkingModels.get(i).getParkingName()));
 
-        }else if (typeofVehical.equalsIgnoreCase("weight station")){
+        }else if (typeofVehical.equalsIgnoreCase("weight_station")){
           googleMap.addMarker(new MarkerOptions().position(latLng)
-                  .title(parking_title).icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.weight_station))).title(freeParkingModels.get(i).getParkingName()));
+                 .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.weight_station))).title(freeParkingModels.get(i).getParkingName()));
 
         }else {
           googleMap.addMarker(new MarkerOptions().position(latLng)
-                  .title(parking_title).icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.free_parking))).title(freeParkingModels.get(i).getParkingName()));
+                  .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.free_parking))).title(freeParkingModels.get(i).getParkingName()));
 
         }
 

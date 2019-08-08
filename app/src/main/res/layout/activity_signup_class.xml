@@ -300,6 +300,6 @@
             android:layout_weight="1"
             android:background="@color/colorPrimary"
             android:padding="@dimen/_10sdp"
-            android:src="@drawable/twitter_shape" />
+            android:src="@drawable/twitter" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

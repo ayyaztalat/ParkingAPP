@@ -123,12 +123,12 @@ public class LoginClass extends AppCompatActivity {
     edit_text_password=findViewById(R.id.edit_text_password);
     forgot_password=findViewById(R.id.forgot_password);
     signup=findViewById(R.id.signup);
-    continue_as_guest=findViewById(R.id.continue_as_guest);
+   // continue_as_guest=findViewById(R.id.continue_as_guest);
     signin=findViewById(R.id.signin);
     google_signup=findViewById(R.id.google_signup);
     facebook_signup=findViewById(R.id.facebook_signup);
     twitter_signup=findViewById(R.id.twitter_signup);
-    login_button=findViewById(R.id.login_button);
+   // login_button=findViewById(R.id.login_button);
       client = new TwitterAuthClient();
 
       if (preferences.getSwitchNightMod()){
@@ -137,7 +137,7 @@ public class LoginClass extends AppCompatActivity {
           edit_text_password.setTextColor(getResources().getColor(R.color.white));
           forgot_password.setTextColor(getResources().getColor(R.color.white));
           signup.setTextColor(getResources().getColor(R.color.white));
-          continue_as_guest.setTextColor(getResources().getColor(R.color.white));
+       //   continue_as_guest.setTextColor(getResources().getColor(R.color.white));
 
       }else {
           abc.setBackgroundColor(getResources().getColor(R.color.white));
@@ -145,7 +145,7 @@ public class LoginClass extends AppCompatActivity {
           edit_text_email.setTextColor(getResources().getColor(R.color.black));
           forgot_password.setTextColor(getResources().getColor(R.color.black));
           signup.setTextColor(getResources().getColor(R.color.black));
-          continue_as_guest.setTextColor(getResources().getColor(R.color.black));
+//          continue_as_guest.setTextColor(getResources().getColor(R.color.black));
 
       }
 
@@ -153,7 +153,7 @@ public class LoginClass extends AppCompatActivity {
     mTwitterAuthClient  = new TwitterAuthClient();
 
 
-
+/*
       login_button.setReadPermissions(Arrays.asList("email", "public_profile"));
       login_button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
           @Override
@@ -168,7 +168,7 @@ public class LoginClass extends AppCompatActivity {
           @Override
           public void onError(FacebookException error) {
           }
-      });
+      });*/
 
     signin.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -177,13 +177,13 @@ public class LoginClass extends AppCompatActivity {
       }
     });
 
-    continue_as_guest.setOnClickListener(new View.OnClickListener() {
+    /*continue_as_guest.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
         preferences.setTypeGuest("guest");
         startActivity(new Intent(getApplicationContext(),HomeActivity.class));
       }
-    });
+    });*/
 
     forgot_password.setOnClickListener(new View.OnClickListener() {
       @Override

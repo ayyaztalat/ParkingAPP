@@ -147,7 +147,9 @@ public interface APIService {
     @FormUrlEncoded
     @POST("delete_reservation.php")
     Call<CancelReservationModel> cancelReservation(@Field("reserved_parking_id") String reserved_parking_id,
-                                                   @Field("parking_id") String parking_id);
+                                                   @Field("parking_id") String parking_id,
+                                                   @Field("filled_parking_spots")String filled_parking_spots,
+                                                   @Field("remaining_parking_spots")String remaining_parking_spots);
 
     @GET("generate_token.php")
     Call<BrainTreeToken> braintree();

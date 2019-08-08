@@ -66,5 +66,6 @@ dependencies {
         exclude group: 'com.google.android.gms'
         exclude module: "play-services-places"
     }
+    implementation 'com.facebook.android:facebook-android-sdk:5.+'
 }
 apply plugin: 'com.google.gms.google-services'

@@ -312,5 +312,11 @@ public class Preferences {
     }
 
 
+    public void setDontShowParking(boolean isChecked) {
+        Prefs.putBoolean("dont_show_parking",isChecked);
+    }
 
+    public Boolean getDontShowParking(){
+        return Prefs.getBoolean("dont_show_parking",false);
+    }
 }

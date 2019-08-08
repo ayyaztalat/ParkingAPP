@@ -143,35 +143,38 @@ try {
     private void CallAPI(String reservedParkingId, String parkingID,
                          String reservedParkingSpots, String filledParkingSpots,
                          String remainingParkingSpots) {
+        try {
+            int reserved_parking = Integer.parseInt(reservedParkingSpots);
+            int remaining_parking = Integer.parseInt(remainingParkingSpots);
+            int filled_parking = Integer.parseInt(filledParkingSpots);
 
-        int reserved_parking= Integer.parseInt(reservedParkingSpots);
-        int remaining_parking= Integer.parseInt(remainingParkingSpots);
-        int filled_parking=Integer.parseInt(filledParkingSpots);
-
-        remaining_parking=remaining_parking+1;
-        filled_parking=filled_parking-1;
+            remaining_parking = remaining_parking + 1;
+            filled_parking = filled_parking - 1;
 
 
-        APIService service= APIClient.getClient().create(APIService.class);
-        Call<CancelReservationModel> modelCall=service.cancelReservation(reservedParkingId,parkingID);
-        modelCall.enqueue(new Callback<CancelReservationModel>() {
-            @Override
-            public void onResponse(Call<CancelReservationModel> call, Response<CancelReservationModel> response) {
-                CancelReservationModel model=response.body();
-                if (model.getStatus().equalsIgnoreCase("success")){
-                    Toast.makeText(context, "Reservation Cancelled", Toast.LENGTH_SHORT).show();
-                    notifyDataSetChanged();
-                }else{
-                    Toast.makeText(context, model.getError(), Toast.LENGTH_SHORT).show();
+            APIService service = APIClient.getClient().create(APIService.class);
+            Call<CancelReservationModel> modelCall = service.cancelReservation(reservedParkingId, parkingID,String.valueOf(filled_parking),String.valueOf(remaining_parking));
+            modelCall.enqueue(new Callback<CancelReservationModel>() {
+                @Override
+                public void onResponse(Call<CancelReservationModel> call, Response<CancelReservationModel> response) {
+                    CancelReservationModel model = response.body();
+                    if (model.getStatus().equalsIgnoreCase("success")) {
+                        Toast.makeText(context, "Reservation Cancelled", Toast.LENGTH_SHORT).show();
+                        notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(context, model.getError(), Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<CancelReservationModel> call, Throwable t) {
-                Toast.makeText(context, "Network Error", Toast.LENGTH_SHORT).show();
-                Log.e("error", "onFailure: "+t );
-            }
-        });
+                @Override
+                public void onFailure(Call<CancelReservationModel> call, Throwable t) {
+                    Toast.makeText(context, "Network Error", Toast.LENGTH_SHORT).show();
+                    Log.e("error", "onFailure: " + t);
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 
