@@ -9,8 +9,11 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.preference.Preference;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +25,7 @@ import com.akexorcist.googledirection.GoogleDirection;
 import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
+import com.example.parkingapp.Preferences.Preferences;
 import com.example.parkingapp.Preferences.ReservationPreferences;
 import com.example.parkingapp.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -81,6 +85,7 @@ public class Map_fragment_parking extends Fragment {
     ReservationPreferences preferences;
     private GoogleMap googleMap;
     double latitude,longitude;
+    Preferences preferenceMain;
 
     private LocationManager mLocationManager;
     private final LocationListener mLocationListener = new LocationListener() {
@@ -151,8 +156,16 @@ public class Map_fragment_parking extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_map_fragment_parking, container, false);
+
         context = container.getContext();
+        preferenceMain=new Preferences(context);
+
+        if (preferenceMain.getSwitchNightMod()){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+            View view = inflater.inflate(R.layout.fragment_map_fragment_parking, container, false);
        //  LayoutInflater.from(container.getContext()).inflate(R.layout.content_home, container, false);
         mMapView = (MapView) view.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
@@ -168,7 +181,8 @@ public class Map_fragment_parking extends Fragment {
         preferences=new ReservationPreferences(context);
          latitude=Double.parseDouble(preferences.getLatitude());
          longitude=Double.parseDouble(preferences.getLongitude());
-        String parkingName=preferences.getParkingName();
+        final String parkingName=preferences.getParkingName();
+
 
 
 
@@ -197,7 +211,7 @@ public class Map_fragment_parking extends Fragment {
             public void onMapReady(GoogleMap googleMaps) {
                 googleMap = googleMaps;
 
-                googleMap.getUiSettings().setZoomControlsEnabled(true);
+           //     googleMap.getUiSettings().setZoomControlsEnabled(true);
                 googleMap.getUiSettings().setRotateGesturesEnabled(true);
                 googleMap.getUiSettings().setScrollGesturesEnabled(true);
                 googleMap.getUiSettings().setTiltGesturesEnabled(true);
@@ -205,7 +219,9 @@ public class Map_fragment_parking extends Fragment {
             }
         });
 
-
+new Handler().postDelayed(new Runnable() {
+    @Override
+    public void run() {
         try {
             LatLng latLng=new LatLng(latitude,longitude);
             googleMap.addMarker(new MarkerOptions().position(latLng).title(parkingName).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).draggable(false).visible(true));
@@ -213,6 +229,9 @@ public class Map_fragment_parking extends Fragment {
         }catch (Exception e){
             e.printStackTrace();
         }
+
+    }
+},5000);
 
         mMapView.onResume();
         return view;

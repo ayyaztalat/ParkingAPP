@@ -33,61 +33,67 @@
 
 
             <EditText
-                android:id="@+id/et_password"
+                android:id="@+id/city"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_8sdp"
                 android:background="@drawable/button_backgrounds"
                 android:drawablePadding="10dp"
                 android:fontFamily="sans-serif"
-                android:inputType="textPassword"
-                android:hint="Enter Password for account"
+                android:inputType="text"
+                android:hint="Enter your city"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:padding="10dp"
                 android:textCursorDrawable="@color/black" />
 
-     <EditText
-                android:id="@+id/number"
+            <EditText
+                android:id="@+id/state"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_8sdp"
                 android:background="@drawable/button_backgrounds"
                 android:drawablePadding="10dp"
                 android:fontFamily="sans-serif"
-                android:inputType="number"
-                android:hint="Enter phone umber"
+                android:inputType="textPostalAddress"
+                android:hint="Enter your state"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textCursorDrawable="@color/black" />
+
+            <EditText
+                android:id="@+id/company_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                android:background="@drawable/button_backgrounds"
+                android:drawablePadding="10dp"
+                android:fontFamily="sans-serif"
+                android:inputType="text"
+                android:hint="Enter your Company Name"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textCursorDrawable="@color/black" />
+
+            <EditText
+                android:id="@+id/tac_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                android:background="@drawable/button_backgrounds"
+                android:drawablePadding="10dp"
+                android:fontFamily="sans-serif"
+                android:inputType="text"
+                android:hint="Enter your Tac ID"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:padding="10dp"
                 android:textCursorDrawable="@color/black" />
 
 
-            <Spinner
-                android:id="@+id/gender_spinner"
-                android:layout_width="match_parent"
-                android:background="@drawable/button_backgrounds"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:paddingStart="@dimen/_15sdp"
-                android:layout_margin="@dimen/_8sdp"
-                android:gravity="center"
-                android:entries="@array/array_name"
-                android:textColor="@color/black" />
 
-            <TextView
-                android:id="@+id/add_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:gravity="center"
-                android:text="CLick to enter location"
-                android:textAllCaps="true"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_15sdp"
-                android:textStyle="bold"
-               />
             <Button
                 android:background="@drawable/button_backgrounds"
                 android:layout_gravity="center"

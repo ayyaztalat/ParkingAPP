@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import com.example.parkingapp.Adapters.MyReservationAdapter;
 import com.example.parkingapp.Intefaces.APIClient;
 import com.example.parkingapp.Intefaces.APIService;
 import com.example.parkingapp.Models.ReservationModel;
+import com.example.parkingapp.Preferences.Preferences;
 import com.example.parkingapp.R;
 
 import java.util.ArrayList;
@@ -62,12 +64,23 @@ public class MyReservation extends Fragment {
     ArrayList<ReservationModel> modelArrayList;
     LinearLayoutManager linearLayoutManager;
     ProgressDialog dialog;
+    Context context;
+    Preferences preferenceMain;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        context = container.getContext();
+        preferenceMain=new Preferences(context);
+
+        if (preferenceMain.getSwitchNightMod()){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
         View view= inflater.inflate(R.layout.fragment_my_reservation, container, false);
         dialog=new ProgressDialog(container.getContext());
         dialog.setMessage("Please wait while we are loading information");

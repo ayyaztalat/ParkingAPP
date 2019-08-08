@@ -4,15 +4,26 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.example.parkingapp.Adapters.HistoryAdapter;
+import com.example.parkingapp.Intefaces.APIClient;
+import com.example.parkingapp.Intefaces.APIService;
+import com.example.parkingapp.Models.HistoryModel;
+import com.example.parkingapp.Preferences.Preferences;
 import com.example.parkingapp.R;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class HistoryFragment extends Fragment {
@@ -54,11 +65,25 @@ public class HistoryFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+    Context context;
+    Preferences preferenceMain;
+    ArrayList<HistoryModel> arrayList;
+    HistoryAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        context = container.getContext();
+        preferenceMain=new Preferences(context);
+
+        if (preferenceMain.getSwitchNightMod()){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
         View view= inflater.inflate(R.layout.fragment_history, container, false);
 
         history_payment=view.findViewById(R.id.history_payment);
@@ -72,6 +97,32 @@ public class HistoryFragment extends Fragment {
 
     private void callDataLoading() {
 
+        APIService service= APIClient.getClient().create(APIService.class);
+        Call<HistoryModel> modelCall=service.History(preferenceMain.getUserId());
+        modelCall.enqueue(new Callback<HistoryModel>() {
+            @Override
+            public void onResponse(Call<HistoryModel> call, Response<HistoryModel> response) {
+                HistoryModel model=response.body();
+                if (model.getStatus().equalsIgnoreCase("success")){
+                    arrayList=new ArrayList<>();
+                    arrayList=model.getParkingData();
+
+                    adapter=new HistoryAdapter(context,arrayList);
+                    history_payment.setAdapter(adapter);
+
+
+
+                }else {
+                    Toast.makeText(context, model.getError(), Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<HistoryModel> call, Throwable t) {
+                Toast.makeText(context, "Network Error", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 

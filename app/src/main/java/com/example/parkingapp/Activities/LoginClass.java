@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -37,7 +38,6 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.login.LoginBehavior;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -52,8 +52,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FacebookAuthCredential;
-import com.google.firebase.auth.FacebookAuthProvider;
 import com.twitter.sdk.android.core.DefaultLogger;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.Twitter;
@@ -88,12 +86,32 @@ public class LoginClass extends AppCompatActivity {
   LoginButton login_button;
     private CallbackManager callbackManager;
     TwitterAuthClient mTwitterAuthClient;
+    ConstraintLayout abc;
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_login_class);
+      setContentView(R.layout.activity_login_class);
+      preferences=new Preferences(this);
 
-    preferences=new Preferences(this);
+      abc=findViewById(R.id.abc);
+    /*  if (preferences.getSwitchNightMod()){
+          abc.setBackgroundColor(getResources().getColor(R.color.black));
+      }else {
+          abc.setBackgroundColor(getResources().getColor(R.color.white));
+      }*/
+
+
+
+
+      TwitterConfig config = new TwitterConfig.Builder(this)
+              .logger(new DefaultLogger(Log.DEBUG))//enable logging when app is in debug mode
+              .twitterAuthConfig(new TwitterAuthConfig(getResources().getString(R.string.com_twitter_sdk_android_CONSUMER_KEY), getResources().getString(R.string.com_twitter_sdk_android_CONSUMER_SECRET)))//pass the created app Consumer KEY and Secret also called API Key and Secret
+              .debug(true)//enable debug mode
+              .build();
+
+      //finally initialize twitter_shape with created configs
+      Twitter.initialize(config);
+
     progressDialog=new ProgressDialog(this);
     progressDialog.setMessage("Please Wait while we are loading");
     progressDialog.setTitle("Signing In");
@@ -113,14 +131,25 @@ public class LoginClass extends AppCompatActivity {
     login_button=findViewById(R.id.login_button);
       client = new TwitterAuthClient();
 
-    TwitterConfig config = new TwitterConfig.Builder(this)
-            .logger(new DefaultLogger(Log.DEBUG))//enable logging when app is in debug mode
-            .twitterAuthConfig(new TwitterAuthConfig(getResources().getString(R.string.com_twitter_sdk_android_CONSUMER_KEY), getResources().getString(R.string.com_twitter_sdk_android_CONSUMER_SECRET)))//pass the created app Consumer KEY and Secret also called API Key and Secret
-            .debug(true)//enable debug mode
-            .build();
+      if (preferences.getSwitchNightMod()){
+          abc.setBackgroundColor(getResources().getColor(R.color.black));
+          edit_text_email.setTextColor(getResources().getColor(R.color.white));
+          edit_text_password.setTextColor(getResources().getColor(R.color.white));
+          forgot_password.setTextColor(getResources().getColor(R.color.white));
+          signup.setTextColor(getResources().getColor(R.color.white));
+          continue_as_guest.setTextColor(getResources().getColor(R.color.white));
 
-    //finally initialize twitter_shape with created configs
-    Twitter.initialize(config);
+      }else {
+          abc.setBackgroundColor(getResources().getColor(R.color.white));
+          edit_text_password.setTextColor(getResources().getColor(R.color.black));
+          edit_text_email.setTextColor(getResources().getColor(R.color.black));
+          forgot_password.setTextColor(getResources().getColor(R.color.black));
+          signup.setTextColor(getResources().getColor(R.color.black));
+          continue_as_guest.setTextColor(getResources().getColor(R.color.black));
+
+      }
+
+
     mTwitterAuthClient  = new TwitterAuthClient();
 
 
@@ -454,6 +483,7 @@ public class LoginClass extends AppCompatActivity {
     final EditText number=alertLayout.findViewById(R.id.number);
     final Spinner gender_spinner=alertLayout.findViewById(R.id.gender_spinner);
     final Button signup=alertLayout.findViewById(R.id.signupsss);
+    final TextView add_location=alertLayout.findViewById(R.id.add_location);
 
   //  etcode = alertLayout.findViewById(R.id.et_password);
 
@@ -469,6 +499,7 @@ public class LoginClass extends AppCompatActivity {
 
         String password=et_password.getText().toString();
         String numbers=number.getText().toString();
+        String add_locations=add_location.getText().toString();
 
         String spinner=gender_spinner.getSelectedItem().toString();
 
@@ -480,12 +511,20 @@ public class LoginClass extends AppCompatActivity {
 
         }else if (TextUtils.isEmpty(spinner)){
           Toast.makeText(LoginClass.this, "please enter type", Toast.LENGTH_SHORT).show();
+        }else if (TextUtils.isEmpty(add_locations)){
+          Toast.makeText(LoginClass.this, "Please enter location", Toast.LENGTH_SHORT).show();
         }else{
 
           dialog.dismiss();
           progressDialog.show();
 
-          apiReferalCodeCall(name,email,password,numbers,spinner);
+          if (spinner.equalsIgnoreCase("truck_owner")){
+              popupOwnerRemainingDetails(name,email,password,numbers,spinner,add_locations);
+          }else{
+              apiReferalCodeCall(name,email,password,numbers,spinner,add_locations, "", "", "","");
+          }
+
+
           //  apiServiceCall();
           // hide virtual keyboard
         }
@@ -498,9 +537,66 @@ public class LoginClass extends AppCompatActivity {
 
   }
 
-  private void apiReferalCodeCall(String name, String email, String password, String numbers, String spinner) {
+    private void popupOwnerRemainingDetails(final String name, final String email, final String password, final String numbers, final String spinner, final String add_locations) {
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.popup_signup_remaining_part, null);
+        final AlertDialog.Builder alert = new AlertDialog.Builder(LoginClass.this);
+
+        final EditText city = alertLayout.findViewById(R.id.city);
+        final EditText state = alertLayout.findViewById(R.id.state);
+        final EditText company_name = alertLayout.findViewById(R.id.company_name);
+        final Button signupsss = alertLayout.findViewById(R.id.signupsss);
+        final EditText tac_id = alertLayout.findViewById(R.id.tac_id);
+
+        //  etcode = alertLayout.findViewById(R.id.et_password);
+
+        // this is set the view from XML inside AlertDialog
+        alert.setView(alertLayout);
+        // disallow cancel of AlertDialog on click of back button and outside touch
+        alert.setCancelable(false);
+        final AlertDialog dialog = alert.create();
+        dialog.show();
+        signupsss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String citys = city.getText().toString();
+                String states = state.getText().toString();
+                String company_names = company_name.getText().toString();
+                String tacID = tac_id.getText().toString();
+
+                if (TextUtils.isEmpty(citys)) {
+                    city.setError("enter city");
+
+                } else if (TextUtils.isEmpty(states)) {
+                    state.setError("Please enter state");
+
+                } else if (TextUtils.isEmpty(company_names)) {
+                    company_name.setError("please enter company name");
+                } else if (TextUtils.isEmpty(tacID)) {
+                    tac_id.setError("please enter tac id");
+                } else {
+
+                    dialog.dismiss();
+                    progressDialog.show();
+
+                    apiReferalCodeCall(name,email,password,numbers,spinner,add_locations,citys,states,company_names,tacID);
+                    //  apiServiceCall();
+                    // hide virtual keyboard
+                }
+
+
+            }
+        });
+
+
+    }
+
+
+
+        private void apiReferalCodeCall(String name, String email, String password, String numbers, String spinner, String add_locations, String citys, String states, String company_names, String tacID) {
     APIService service=APIClient.getClient().create(APIService.class);
-    Call<SignupModel> modelCall=service.signup(name,email,password,numbers,spinner,latitude,longitude,preferences.getFcmToken());
+    Call<SignupModel> modelCall=service.signup(name,email,password,numbers,spinner,latitude,longitude,preferences.getFcmToken(),add_locations, citys, states, company_names, tacID);
     modelCall.enqueue(new Callback<SignupModel>() {
       @Override
       public void onResponse(Call<SignupModel> call, Response<SignupModel> response) {
@@ -518,6 +614,7 @@ public class LoginClass extends AppCompatActivity {
             preferences.setStatusValue(model.getUserData().get(0).getStatus_value());
             preferences.setLatitude(model.getUserData().get(0).getLatitude());
             preferences.setLongitude(model.getUserData().get(0).getLongitude());
+            preferences.setAddress(model.getUserData().get(0).getAddress());
 
 
             preferences.setSession(true);

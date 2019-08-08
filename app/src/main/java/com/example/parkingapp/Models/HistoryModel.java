@@ -5,14 +5,18 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public class ReservationModel {
-
+public class HistoryModel {
     @SerializedName("status")
     @Expose
     private String status;
-    @SerializedName("reserved_data")
+    @SerializedName("parking_data")
     @Expose
-    private ArrayList<ReservationModel> reservedData = null;
+    private ArrayList<HistoryModel> parkingData = null;
+    private String error;
+
+    public void setError(String error) {
+        this.error = error;
+    }
 
     public String getStatus() {
         return status;
@@ -22,27 +26,23 @@ public class ReservationModel {
         this.status = status;
     }
 
-    public ArrayList<ReservationModel> getReservedData() {
-        return reservedData;
+    public ArrayList<HistoryModel> getParkingData() {
+        return parkingData;
     }
 
-    public void setReservedData(ArrayList<ReservationModel> reservedData) {
-        this.reservedData = reservedData;
+    public void setParkingData(ArrayList<HistoryModel> parkingData) {
+        this.parkingData = parkingData;
     }
 
 
-    @SerializedName("error")
-    @Expose
-    private String error;
 
-
-    @SerializedName("reserved_parking_id")
+    @SerializedName("booked_parking_id")
     @Expose
-    private String reservedParkingId;
+    private String bookedParkingId;
     @SerializedName("truck_id")
     @Expose
     private String truckId;
-    @SerializedName("parking_id ")
+    @SerializedName("parking_id")
     @Expose
     private String parkingId;
     @SerializedName("truck_owner_name")
@@ -66,34 +66,19 @@ public class ReservationModel {
     @SerializedName("to_date")
     @Expose
     private String toDate;
-    @SerializedName("amount")
+    @SerializedName("total_price")
     @Expose
-    private String amount;
-    @SerializedName("truck_owner_id")
-    @Expose
-    private String truckOwnerId;
-    @SerializedName("parking_owner_id")
-    @Expose
-    private String parkingOwnerId;
+    private String totalPrice;
     @SerializedName("time_stamp")
     @Expose
     private String timeStamp;
-    @SerializedName("reserved_parking_spots")
-    @Expose
-    private String reservedParkingSpots;
-    @SerializedName("remaining_parking_spots")
-    @Expose
-    private String remainingParkingSpots;
-    @SerializedName("filled_parking_spots")
-    @Expose
-    private String filledParkingSpots;
 
-    public String getReservedParkingId() {
-        return reservedParkingId;
+    public String getBookedParkingId() {
+        return bookedParkingId;
     }
 
-    public void setReservedParkingId(String reservedParkingId) {
-        this.reservedParkingId = reservedParkingId;
+    public void setBookedParkingId(String bookedParkingId) {
+        this.bookedParkingId = bookedParkingId;
     }
 
     public String getTruckId() {
@@ -168,28 +153,12 @@ public class ReservationModel {
         this.toDate = toDate;
     }
 
-    public String getAmount() {
-        return amount;
+    public String getTotalPrice() {
+        return totalPrice;
     }
 
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
-
-    public String getTruckOwnerId() {
-        return truckOwnerId;
-    }
-
-    public void setTruckOwnerId(String truckOwnerId) {
-        this.truckOwnerId = truckOwnerId;
-    }
-
-    public String getParkingOwnerId() {
-        return parkingOwnerId;
-    }
-
-    public void setParkingOwnerId(String parkingOwnerId) {
-        this.parkingOwnerId = parkingOwnerId;
+    public void setTotalPrice(String totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public String getTimeStamp() {
@@ -200,35 +169,7 @@ public class ReservationModel {
         this.timeStamp = timeStamp;
     }
 
-    public String getReservedParkingSpots() {
-        return reservedParkingSpots;
-    }
-
-    public void setReservedParkingSpots(String reservedParkingSpots) {
-        this.reservedParkingSpots = reservedParkingSpots;
-    }
-
-    public String getRemainingParkingSpots() {
-        return remainingParkingSpots;
-    }
-
-    public void setRemainingParkingSpots(String remainingParkingSpots) {
-        this.remainingParkingSpots = remainingParkingSpots;
-    }
-
-    public String getFilledParkingSpots() {
-        return filledParkingSpots;
-    }
-
-    public void setFilledParkingSpots(String filledParkingSpots) {
-        this.filledParkingSpots = filledParkingSpots;
-    }
-
-    public void setError(String error) {
-        this.error = error;
-    }
-
-    public String getError() {
+    public String  getError() {
         return error;
     }
 }

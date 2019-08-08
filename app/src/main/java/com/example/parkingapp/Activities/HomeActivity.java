@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
@@ -75,23 +76,36 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_home);
+
+        preferences=new Preferences(this);
+
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        callToken();
+      callToken();
 
     callProfileLoading();
 
 
 
-        preferences=new Preferences(this);
+
         guest=preferences.getTypeGuest();
         status_value=preferences.getStatusVaalue();
 
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-         navigationView= findViewById(R.id.nav_view);
+
+
+        if (preferences.getSwitchNightMod()){
+            drawer.setBackgroundColor(getResources().getColor(R.color.black));
+        }else {
+            drawer.setBackgroundColor(getResources().getColor(R.color.white));
+        }
+
+        navigationView= findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -156,7 +170,7 @@ public class HomeActivity extends AppCompatActivity
         if (status_value.equalsIgnoreCase("truck_owner")){
             myParking.setVisible(false);
             myReservations.setVisible(true);
-            myBooking.setVisible(true);
+            myBooking.setVisible(false);
             history.setVisible(false);
         }else{
             myParking.setVisible(true);
@@ -249,6 +263,7 @@ public class HomeActivity extends AppCompatActivity
                      preferences.setCardCustomerLocation(model.getUserData().get(0).getCardCustomerLocation());
                      preferences.setCustomerID(model.getUserData().get(0).getCustomerId());
 
+                     Toast.makeText(HomeActivity.this, model.getUserData().get(0).getName(), Toast.LENGTH_SHORT).show();
 
 
                  }else{
@@ -265,25 +280,29 @@ public class HomeActivity extends AppCompatActivity
      }
 
      private void callToken() {
-         APIService service= APIClient.getClient().create(APIService.class);
-         Call<BrainTreeToken> tokenCall=service.braintree();
-         tokenCall.enqueue(new Callback<BrainTreeToken>() {
-             @Override
-             public void onResponse(Call<BrainTreeToken> call, Response<BrainTreeToken> response) {
-                 BrainTreeToken treeToken=response.body();
-                 assert treeToken != null;
-                 if (treeToken.status.equalsIgnoreCase("success")){
-                     preferences.setBraintreeToken(treeToken.getToken());
-                 }else {
-                     Toast.makeText(HomeActivity.this, treeToken.getError(), Toast.LENGTH_SHORT).show();
-                 }
-             }
+        try {
+            APIService service = APIClient.getClient().create(APIService.class);
+            Call<BrainTreeToken> tokenCall = service.braintree();
+            tokenCall.enqueue(new Callback<BrainTreeToken>() {
+                @Override
+                public void onResponse(Call<BrainTreeToken> call, Response<BrainTreeToken> response) {
+                    BrainTreeToken treeToken = response.body();
+                    assert treeToken != null;
+                    if (treeToken.status.equalsIgnoreCase("success")) {
+                        preferences.setBraintreeToken(treeToken.getToken());
+                    } else {
+                        Toast.makeText(HomeActivity.this, treeToken.getError(), Toast.LENGTH_SHORT).show();
+                    }
+                }
 
-             @Override
-             public void onFailure(Call<BrainTreeToken> call, Throwable t) {
-                 Toast.makeText(HomeActivity.this, "No Network", Toast.LENGTH_SHORT).show();
-             }
-         });
+                @Override
+                public void onFailure(Call<BrainTreeToken> call, Throwable t) {
+                    Toast.makeText(HomeActivity.this, "No Network", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
      @Override
@@ -367,8 +386,7 @@ public class HomeActivity extends AppCompatActivity
             if (guest.equalsIgnoreCase("guest")) {
                 callToast();
             } else {
-                fragmentClass = MyBookingClass.class;
-                change();
+              startActivity(new Intent(getApplicationContext(),BookingClass.class));
             }
         }
         else if (id==R.id.night_mood){
@@ -383,7 +401,7 @@ public class HomeActivity extends AppCompatActivity
                 fragmentClass = MapFragmentClass.class;
                 change();
 
-        }  else if (id == R.id.payments) {
+        }  else if (id == R.id.history) {
             if (guest.equalsIgnoreCase("guest")) {
                 callToast();
             }else {
@@ -404,7 +422,8 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.sign_out) {
             if (guest.equalsIgnoreCase("guest")) {
                 preferences.setTypeGuest("");
-                    startActivity(new Intent(getApplicationContext(),LoginClass.class));
+                    startActivity(new Intent(getApplicationContext(),LoginClass.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    finish();
                     finishAffinity();
             }else{
                 CallSignOutAPI();
@@ -490,7 +509,7 @@ public class HomeActivity extends AppCompatActivity
              switcher.setChecked(true);
              night=true;
              startActivity(new Intent(getApplicationContext(),tempClass.class));
-            finish();
+             finish();
              preferences.setSwitchNightMod(true);
 
          }
@@ -499,10 +518,10 @@ public class HomeActivity extends AppCompatActivity
     }
 
      private void CallSignOutAPI() {
-        startActivity(new Intent(getApplicationContext(),LoginClass.class));
+        startActivity(new Intent(getApplicationContext(),LoginClass.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         preferences.setSession(false);
         preferences.clear();
-        finish();
+        finishAffinity();
 
     }
 

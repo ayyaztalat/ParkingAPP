@@ -11,8 +11,10 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_gravity="center"
-        android:gravity="center"
+        android:gravity="top"
         android:layout_height="match_parent">
+
+
 
         <TextView
             android:textColor="@color/black"
@@ -25,6 +27,60 @@
             android:padding="@dimen/_15sdp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+
+        <LinearLayout
+            android:id="@+id/availablity_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <TextView
+                android:id="@+id/high"
+                android:textSize="@dimen/_15sdp"
+                android:text="HIGH"
+                android:layout_margin="@dimen/_8sdp"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:layout_width="0dp"
+                android:padding="@dimen/_8sdp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:background="@color/green"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/Medium"
+                android:textSize="@dimen/_15sdp"
+                android:text="Medium"
+                android:layout_margin="@dimen/_8sdp"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:layout_width="0dp"
+                android:padding="@dimen/_8sdp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:background="@color/quantum_orange"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/low"
+                android:textSize="@dimen/_15sdp"
+                android:text="LOW"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:layout_width="0dp"
+                android:padding="@dimen/_8sdp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:background="@color/quantum_error_light"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
 
         <TextView
             android:textColor="@color/black"
@@ -71,6 +127,19 @@
             android:textAllCaps="false"
             android:id="@+id/Owner_name"
             android:text="Parking Owner name"
+            android:layout_gravity="start"
+            android:gravity="start"
+            android:padding="@dimen/_15sdp"
+            android:drawablePadding="@dimen/_15sdp"
+            android:drawableLeft="@drawable/reserve"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:textColor="@color/black"
+            android:textSize="@dimen/_15sdp"
+            android:textAllCaps="false"
+            android:id="@+id/parking_spots"
+            android:text="Parking Spots available"
             android:layout_gravity="start"
             android:gravity="start"
             android:padding="@dimen/_15sdp"

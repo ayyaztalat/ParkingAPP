@@ -17,6 +17,7 @@
 
         <item
             android:id="@+id/booked_parking"
+            android:visible="false"
             android:icon="@drawable/reserve"
             android:title="My Bookings"/>
         <item

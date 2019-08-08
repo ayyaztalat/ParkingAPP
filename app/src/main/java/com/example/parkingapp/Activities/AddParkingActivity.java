@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +42,7 @@ public class AddParkingActivity extends AppCompatActivity {
     Button save_parking;
     String days="";
     ProgressDialog dialog;
+    RelativeLayout abc;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +54,9 @@ public class AddParkingActivity extends AppCompatActivity {
         dialog.setMessage("Please wait while we are adding parking");
         dialog.setCancelable(false);
 
+        abc=findViewById(R.id.abc);
+
+
         location_parking=findViewById(R.id.location_parking);
         edit_parking_price=findViewById(R.id.edit_parking_price);
         edit_parking_car_type=findViewById(R.id.edit_parking_car_type);
@@ -60,12 +65,31 @@ public class AddParkingActivity extends AppCompatActivity {
         edit_parking_status=findViewById(R.id.edit_parking_status);
 
         save_parking=findViewById(R.id.save_parking);
+
         location_parking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LocationGettingMechanism();
             }
         });
+        if (preference.getSwitchNightMod()){
+            abc.setBackgroundColor(getResources().getColor(R.color.black));
+            location_parking.setTextColor(getResources().getColor(R.color.white));
+            edit_parking_price.setTextColor(getResources().getColor(R.color.white));
+            edit_parking_description.setTextColor(getResources().getColor(R.color.white));
+            edit_parking_car_type.setTextColor(getResources().getColor(R.color.white));
+            edit_parking_status.setTextColor(getResources().getColor(R.color.white));
+            edit_parking_name.setTextColor(getResources().getColor(R.color.white));
+        }else {
+            abc.setBackgroundColor(getResources().getColor(R.color.black));
+            location_parking.setTextColor(getResources().getColor(R.color.black));
+            edit_parking_price.setTextColor(getResources().getColor(R.color.black));
+            edit_parking_description.setTextColor(getResources().getColor(R.color.black));
+            edit_parking_car_type.setTextColor(getResources().getColor(R.color.black));
+            edit_parking_status.setTextColor(getResources().getColor(R.color.black));
+            edit_parking_name.setTextColor(getResources().getColor(R.color.black));
+        }
+
 
         monday=findViewById(R.id.monday);
         tuesday=findViewById(R.id.Tuesday);

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/abc"
     android:layout_height="match_parent"
     tools:context=".Activities.ReserveParking">
 
@@ -109,7 +110,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="1.3"
+                    android:layout_weight="1.9"
                     android:gravity="center"
                     android:hint="Start Date"
                     android:padding="@dimen/_5sdp"
@@ -154,7 +155,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="1.3"
+                    android:layout_weight="1.9"
                     android:gravity="center"
                     android:hint="End Date"
                     android:padding="@dimen/_5sdp"
@@ -180,6 +181,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:gravity="end"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <TextView

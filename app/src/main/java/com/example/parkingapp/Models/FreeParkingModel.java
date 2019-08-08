@@ -5,13 +5,21 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public class ParkingModel {
+public class FreeParkingModel {
     @SerializedName("status")
     @Expose
     private String status;
     @SerializedName("parking_data")
     @Expose
-    private ArrayList<ParkingModel> parkingData = null;
+    private ArrayList<FreeParkingModel> parkingData = null;
+    @SerializedName("error")
+    @Expose
+    private String error;
+
+
+    public void setError(String error) {
+        this.error = error;
+    }
 
     public String getStatus() {
         return status;
@@ -21,21 +29,12 @@ public class ParkingModel {
         this.status = status;
     }
 
-    public ArrayList<ParkingModel> getParkingData() {
+    public ArrayList<FreeParkingModel> getParkingData() {
         return parkingData;
     }
 
-    public void setParkingData(ArrayList<ParkingModel> parkingData) {
+    public void setParkingData(ArrayList<FreeParkingModel> parkingData) {
         this.parkingData = parkingData;
-    }
-
-
-    @SerializedName("error")
-    @Expose
-    private String error;
-
-    public void setError(String error) {
-        this.error = error;
     }
 
     @SerializedName("parking_id")
@@ -44,7 +43,7 @@ public class ParkingModel {
     @SerializedName("parking_owner_id")
     @Expose
     private String parkingOwnerId;
-    @SerializedName("parking_latitude ")
+    @SerializedName("parking_latitude")
     @Expose
     private String parkingLatitude;
     @SerializedName("parking_longitude")
@@ -65,9 +64,6 @@ public class ParkingModel {
     @SerializedName("parking_status")
     @Expose
     private String parkingStatus;
-    @SerializedName("availability_type")
-    @Expose
-    private String availabilityType;
     @SerializedName("parking_price")
     @Expose
     private String parkingPrice;
@@ -77,18 +73,18 @@ public class ParkingModel {
     @SerializedName("type_of_vehicle")
     @Expose
     private String typeOfVehicle;
-    @SerializedName("total_parking_spots")
-    @Expose
-    private String totalParkingSpots;
-    @SerializedName("remaining_parking_spots")
-    @Expose
-    private String remainingParkingSpots;
-    @SerializedName("filled_parking_spots")
-    @Expose
-    private String filledParkingSpots;
     @SerializedName("time_stamp")
     @Expose
     private String timeStamp;
+    @SerializedName("total_parking_spots")
+    @Expose
+    private String totalParkingSpots;
+    @SerializedName("filled_parking_spots")
+    @Expose
+    private String filledParkingSpots;
+    @SerializedName("remaining_parking_spots")
+    @Expose
+    private String remainingParkingSpots;
 
     public String getParkingId() {
         return parkingId;
@@ -162,14 +158,6 @@ public class ParkingModel {
         this.parkingStatus = parkingStatus;
     }
 
-    public String getAvailabilityType() {
-        return availabilityType;
-    }
-
-    public void setAvailabilityType(String availabilityType) {
-        this.availabilityType = availabilityType;
-    }
-
     public String getParkingPrice() {
         return parkingPrice;
     }
@@ -194,20 +182,20 @@ public class ParkingModel {
         this.typeOfVehicle = typeOfVehicle;
     }
 
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
     public String getTotalParkingSpots() {
         return totalParkingSpots;
     }
 
     public void setTotalParkingSpots(String totalParkingSpots) {
         this.totalParkingSpots = totalParkingSpots;
-    }
-
-    public String getRemainingParkingSpots() {
-        return remainingParkingSpots;
-    }
-
-    public void setRemainingParkingSpots(String remainingParkingSpots) {
-        this.remainingParkingSpots = remainingParkingSpots;
     }
 
     public String getFilledParkingSpots() {
@@ -218,13 +206,14 @@ public class ParkingModel {
         this.filledParkingSpots = filledParkingSpots;
     }
 
-    public String getTimeStamp() {
-        return timeStamp;
+    public String getRemainingParkingSpots() {
+        return remainingParkingSpots;
     }
 
-    public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
+    public void setRemainingParkingSpots(String remainingParkingSpots) {
+        this.remainingParkingSpots = remainingParkingSpots;
     }
+
     public String  getError() {
         return error;
     }

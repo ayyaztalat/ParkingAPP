@@ -2,10 +2,12 @@ package com.example.parkingapp.Activities;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,13 +23,27 @@ import com.example.parkingapp.R;
 
 public class ReservationParkingClass extends AppCompatActivity implements Map_fragment_parking.OnFragmentInteractionListener, Parking_info_fragment.OnFragmentInteractionListener, Photos_parking.OnFragmentInteractionListener {
 
-    String latitude,longitude,parking_owner,parking_name,parking_availablity,parking_id,parking_des,parking_price,parking_owner_id;
+    String latitude,longitude,parking_owner,parking_name,parking_availablity,parking_id,parking_des,parking_price,parking_owner_id,remaining_parking_spots,filled_parking_spots;
  //   Preferences preferences;
     ReservationPreferences reservationPreferences;
+    Preferences preferenceMain;
+    ConstraintLayout abc;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reservation_parking_class);
+
+        preferenceMain=new Preferences(this);
+        abc=findViewById(R.id.abc);
+        if (preferenceMain.getSwitchNightMod()){
+            abc.setBackgroundColor(getResources().getColor(R.color.black));
+        }else {
+            abc.setBackgroundColor(getResources().getColor(R.color.white));
+        }
+
+
 
         Intent intent=getIntent();
         if (intent!=null){
@@ -40,7 +56,10 @@ public class ReservationParkingClass extends AppCompatActivity implements Map_fr
             parking_des=intent.getStringExtra("parking_des");
             parking_price=intent.getStringExtra("price");
             parking_owner_id=intent.getStringExtra("owner_id");
+            remaining_parking_spots=intent.getStringExtra("remaining_parking_spots");
+            filled_parking_spots=intent.getStringExtra("filled_parking_spots");
         }
+      //  .putExtra("remaining_parking_spots",remaining_parking_spots).putExtra("filled_parking_spots",filled_parking_spots)
 
 
        reservationPreferences=new ReservationPreferences(this);
@@ -54,6 +73,8 @@ public class ReservationParkingClass extends AppCompatActivity implements Map_fr
         reservationPreferences.setParkingDes(parking_des);
         reservationPreferences.setParkingPrice(parking_price);
         reservationPreferences.setParkingOwnerId(parking_owner_id);
+        reservationPreferences.setRemainingParkingSpots(remaining_parking_spots);
+        reservationPreferences.setFilledParkingSpots(filled_parking_spots);
 
         Toolbar toolbar = findViewById(R.id.top_bar);
         setSupportActionBar(toolbar);

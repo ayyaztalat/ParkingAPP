@@ -18,11 +18,12 @@
         <item
             android:id="@+id/booked_parking"
             android:icon="@drawable/reserve"
+            android:visible="false"
             android:title="My Bookings"/>
         <item
             android:id="@+id/history"
             android:icon="@drawable/reserve"
-            android:visible="false"
+            android:visible="true"
             android:title="My History"/>
 
         <item

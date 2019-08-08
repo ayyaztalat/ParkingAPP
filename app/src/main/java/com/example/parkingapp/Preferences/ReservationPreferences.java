@@ -85,4 +85,22 @@ public class ReservationPreferences {
     public String getParkingOwnerId(){
         return Prefs.getString("owner_id","");
     }
+
+    public void setRemainingParkingSpots(String RemainingParkingSpots){
+         Prefs.putString("RemainingParkingSpots",RemainingParkingSpots);
+    }
+
+    public String getRemainingParkingSpots(){
+        return Prefs.getString("RemainingParkingSpots","");
+    }
+
+    public void setFilledParkingSpots(String filled_parking_spots) {
+        Prefs.putString("filled_parking_spots",filled_parking_spots);
+    }
+
+    public String getFilled_parking_spots() {
+      return  Prefs.getString("filled_parking_spots","");
+    }
+
+
 }

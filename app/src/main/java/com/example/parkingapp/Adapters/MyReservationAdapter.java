@@ -51,48 +51,60 @@ public class MyReservationAdapter extends RecyclerView.Adapter<MyReservationAdap
 
         String fullname=preferences.getName();
 
+try {
 
-        StringBuilder initials = new StringBuilder();
-        for (String s : fullname.split("")) {
-            initials.append(s.charAt(0));
+
+   /* StringBuilder initials = new StringBuilder();
+    for (String s : fullname.split("")) {
+        initials.append(s.charAt(0));
+    }*/
+  //  holder.image_name.setText(initials.toString());
+
+    holder.name_user.setText(preferences.getName());
+    holder.time_from.setText(arrayList.get(i).getFromDate());
+    holder.time_to.setText(arrayList.get(i).getToDate());
+
+
+    final String reservedParkingId = arrayList.get(i).getReservedParkingId();
+    final String parkingID = arrayList.get(i).getParkingId();
+    holder.main_view.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            context.startActivity(new Intent(context, BookingClass.class)
+                    .putExtra("truck_id", arrayList.get(i).getTruckId())
+                    .putExtra("parking_id", arrayList.get(i).getParkingId())
+                    .putExtra("truck_owner_name", arrayList.get(i).getTruckOwnerName())
+                    .putExtra("parking_owner_name", arrayList.get(i).getParkingOwnerName())
+                    .putExtra("truck_number", arrayList.get(i).getTruckNumber())
+                    .putExtra("truck_color", arrayList.get(i).getTruckColor())
+                    .putExtra("estimated_time", arrayList.get(i).getEstimatedTime())
+                    .putExtra("from_date", arrayList.get(i).getFromDate())
+                    .putExtra("to_date", arrayList.get(i).getToDate())
+                    .putExtra("truck_owner_id", arrayList.get(i).getTruckOwnerId())
+                    .putExtra("amount", arrayList.get(i).getAmount())
+                    .putExtra("parking_owner_id", arrayList.get(i).getParkingOwnerId())
+                    .putExtra("parking_remaining_spots",arrayList.get(i).getReservedParkingSpots())
+                    .putExtra("parking_filled_spots",arrayList.get(i).getFilledParkingSpots())
+                    .putExtra("parking_reserved_spots",arrayList.get(i).getReservedParkingSpots())
+            );
         }
-        holder.image_name.setText(initials.toString());
-
-        holder.name_user.setText(preferences.getName());
-        holder.time_from.setText(arrayList.get(i).getFromDate());
-        holder.time_to.setText(arrayList.get(i).getToDate());
+    });
 
 
-        final String reservedParkingId=arrayList.get(i).getReservedParkingId();
-        final String parkingID=arrayList.get(i).getParkingId();
-        holder.main_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                context.startActivity(new Intent(context, BookingClass.class)
-                .putExtra("truck_id",arrayList.get(i).getTruckId())
-                .putExtra("parking_id",arrayList.get(i).getParkingId())
-                .putExtra("truck_owner_name",arrayList.get(i).getTruckOwnerName())
-                .putExtra("parking_owner_name",arrayList.get(i).getParkingOwnerName())
-                .putExtra("truck_number",arrayList.get(i).getTruckNumber())
-                .putExtra("truck_color",arrayList.get(i).getTruckColor())
-                .putExtra("estimated_time",arrayList.get(i).getEstimatedTime())
-                .putExtra("from_date",arrayList.get(i).getFromDate())
-                .putExtra("to_date",arrayList.get(i).getToDate())
-                .putExtra("truck_owner_id",arrayList.get(i).getTruckOwnerId())
-                        .putExtra("amount",arrayList.get(i).getAmount())
-                        .putExtra("parking_owner_id",arrayList.get(i).getParkingOwnerId())
-                );
-            }
-        });
-        holder.cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                callCancelReservationAPI(reservedParkingId,parkingID);
-            }
-        });
+    holder.cancel.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            callCancelReservationAPI(reservedParkingId, parkingID,arrayList.get(i).getReservedParkingSpots(),arrayList.get(i).getFilledParkingSpots(),arrayList.get(i).getRemainingParkingSpots());
+        }
+    });
+}catch (Exception e){
+    e.printStackTrace();
+}
     }
 
-    private void callCancelReservationAPI(final String reservedParkingId, final String parkingID) {
+    private void callCancelReservationAPI(final String reservedParkingId, final String parkingID,
+                                          final String reservedParkingSpots, final String filledParkingSpots,
+                                          final String remainingParkingSpots) {
 
         LayoutInflater inflater = ((HomeActivity)context).getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.pop_cancel_dialogue, null);
@@ -111,7 +123,7 @@ public class MyReservationAdapter extends RecyclerView.Adapter<MyReservationAdap
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CallAPI(reservedParkingId,parkingID);
+                CallAPI(reservedParkingId,parkingID,reservedParkingSpots,filledParkingSpots,remainingParkingSpots);
                 dialog.dismiss();
             }
         });
@@ -128,7 +140,18 @@ public class MyReservationAdapter extends RecyclerView.Adapter<MyReservationAdap
 
     }
 
-    private void CallAPI(String reservedParkingId, String parkingID) {
+    private void CallAPI(String reservedParkingId, String parkingID,
+                         String reservedParkingSpots, String filledParkingSpots,
+                         String remainingParkingSpots) {
+
+        int reserved_parking= Integer.parseInt(reservedParkingSpots);
+        int remaining_parking= Integer.parseInt(remainingParkingSpots);
+        int filled_parking=Integer.parseInt(filledParkingSpots);
+
+        remaining_parking=remaining_parking+1;
+        filled_parking=filled_parking-1;
+
+
         APIService service= APIClient.getClient().create(APIService.class);
         Call<CancelReservationModel> modelCall=service.cancelReservation(reservedParkingId,parkingID);
         modelCall.enqueue(new Callback<CancelReservationModel>() {
@@ -159,7 +182,7 @@ public class MyReservationAdapter extends RecyclerView.Adapter<MyReservationAdap
 
     public class Holder extends RecyclerView.ViewHolder {
         TextView image_name,name_user,time_from,time_to,cancel;
-        LinearLayout main_view;
+        LinearLayout main_view,second_View;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
@@ -169,6 +192,7 @@ public class MyReservationAdapter extends RecyclerView.Adapter<MyReservationAdap
             time_to=itemView.findViewById(R.id.time_to);
             cancel=itemView.findViewById(R.id.cancel);
             main_view=itemView.findViewById(R.id.main_view);
+            second_View=itemView.findViewById(R.id.second_View);
         }
     }
 }

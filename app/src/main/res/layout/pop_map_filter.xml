@@ -5,12 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        card_view:cardBackgroundColor="@color/grey"
         android:layout_gravity="center">
 
         <LinearLayout
@@ -26,75 +28,72 @@
                 android:layout_margin="@dimen/_5sdp"
                 android:gravity="center"
                 android:textStyle="bold"
-                android:text="Please provide remaining information to complete signup sequence"
+                android:text="Change Parking Filter"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="@dimen/_18sdp" />
 
 
-            <EditText
-                android:id="@+id/et_password"
+            <CheckBox
+                android:id="@+id/truck_stop"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_8sdp"
-                android:background="@drawable/button_backgrounds"
                 android:drawablePadding="10dp"
+                android:textSize="@dimen/_18sdp"
                 android:fontFamily="sans-serif"
-                android:inputType="textPassword"
-                android:hint="Enter Password for account"
+                android:text="Truck Stops"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:padding="10dp"
-                android:textCursorDrawable="@color/black" />
+                android:padding="10dp" />
 
-     <EditText
-                android:id="@+id/number"
+            <CheckBox
+                android:id="@+id/weight_station"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_8sdp"
-                android:background="@drawable/button_backgrounds"
                 android:drawablePadding="10dp"
+                android:textSize="@dimen/_18sdp"
                 android:fontFamily="sans-serif"
-                android:inputType="number"
-                android:hint="Enter phone umber"
+                android:text="Weight Stations"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:padding="10dp"
-                android:textCursorDrawable="@color/black" />
+                android:padding="10dp" />
 
 
-            <Spinner
-                android:id="@+id/gender_spinner"
+            <CheckBox
+                android:id="@+id/parking_areas"
                 android:layout_width="match_parent"
-                android:background="@drawable/button_backgrounds"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:paddingStart="@dimen/_15sdp"
                 android:layout_margin="@dimen/_8sdp"
+                android:drawablePadding="10dp"
+                android:textSize="@dimen/_18sdp"
+                android:fontFamily="sans-serif"
+                android:text="Parking Area"
+                android:layout_gravity="center"
                 android:gravity="center"
-                android:entries="@array/array_name"
-                android:textColor="@color/black" />
+                android:padding="10dp" />
 
-            <TextView
-                android:id="@+id/add_location"
+            <CheckBox
+                android:id="@+id/rest_parking"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_margin="@dimen/_8sdp"
+                android:drawablePadding="10dp"
+                android:textSize="@dimen/_18sdp"
+                android:fontFamily="sans-serif"
+                android:text="Rest Parking"
+                android:layout_gravity="center"
                 android:gravity="center"
-                android:text="CLick to enter location"
-                android:textAllCaps="true"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_15sdp"
-                android:textStyle="bold"
-               />
+                android:padding="10dp" />
             <Button
                 android:background="@drawable/button_backgrounds"
                 android:layout_gravity="center"
-                android:layout_margin="@dimen/_8sdp"
-                android:text="Signup"
-                android:id="@+id/signupsss"
+                android:layout_margin="@dimen/_6sdp"
+                android:text="Update Map"
+                android:id="@+id/update"
                 android:textColor="@color/black"
+                android:textSize="@dimen/_15sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

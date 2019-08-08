@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatDelegate;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,10 +62,20 @@ public class SupportFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
+Context context;
+    Preferences preferenceMain;
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
+        context = container.getContext();
+        preferenceMain=new Preferences(context);
+
+        if (preferenceMain.getSwitchNightMod()){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
         View view=LayoutInflater.from(container.getContext()).inflate(R.layout.activity_support,container,false);
         message=view.findViewById(R.id.message);
         edit_text_Email=view.findViewById(R.id.edit_text_Email);

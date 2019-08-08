@@ -244,6 +244,38 @@ public class Preferences {
     }
 
 
+    public void setTruckCheck(Boolean check){
+        Prefs.putBoolean("truck_stop",check);
+    }
+
+    public void setWeightStop(boolean isChecked) {
+        Prefs.putBoolean("weight_stop",isChecked);
+    }
+
+    public void setParkingArea(boolean isChecked) {
+        Prefs.putBoolean("parking_area",isChecked);
+    }
+    public void setRestParking(boolean isChecked) {
+        Prefs.putBoolean("rest_check",isChecked);
+    }
+
+
+    public Boolean getTruckCheck(){
+        return  Prefs.getBoolean("truck_stop",false);
+    }
+
+    public Boolean getWeightCheck() {
+        return Prefs.getBoolean("weight_stop",false);
+    }
+
+    public Boolean getPrkingArea() {
+        return Prefs.getBoolean("parking_area",false);
+    }
+    public Boolean getRestCheck() {
+        return Prefs.getBoolean("rest_check",false);
+    }
+
+
     public String getCardToken() {
        return Prefs.getString("cardToken","");
     }
@@ -271,4 +303,14 @@ public class Preferences {
     public String getCardCustomerLocation() {
       return   Prefs.getString("CustomerLocation","");
     }
+
+    public void setAddress(String address) {
+        Prefs.putString("address",address);
+    }
+    public String getAddress(){
+        return Prefs.getString("address","");
+    }
+
+
+
 }

@@ -4,8 +4,10 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -47,15 +50,28 @@ public class ReserveParking extends AppCompatActivity {
     LinearLayout calender;
     CalendarView calendarView;
     String time_from_1,time_to_1;
-
+    TextView price;
+    EditText Spots;
+    ConstraintLayout abc;
     Preferences preferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reserve_parking);
+        preferences=new Preferences(this);
+
+
+        abc=findViewById(R.id.abc);
+     /*   if (preferences.getSwitchNightMod()){
+            abc.setBackgroundColor(getResources().getColor(R.color.black));
+        }else {
+            abc.setBackgroundColor(getResources().getColor(R.color.white));
+        }*/
+
+
 
         reservationPreferences=new ReservationPreferences(this);
-        preferences=new Preferences(this);
+
 
         toolbar=findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -71,18 +87,50 @@ public class ReserveParking extends AppCompatActivity {
         text_days=findViewById(R.id.text_days);
         time_picker=findViewById(R.id.time_picker);
         reserve=findViewById(R.id.reserve);
+        price=findViewById(R.id.price);
+        Spots=findViewById(R.id.Spots);
+
+        if (preferences.getSwitchNightMod()){
+            abc.setBackgroundColor(getResources().getColor(R.color.black));
+            title.setTextColor(getResources().getColor(R.color.white));
+            from_date.setTextColor(getResources().getColor(R.color.white));
+            to_date.setTextColor(getResources().getColor(R.color.white));
+            time_from.setTextColor(getResources().getColor(R.color.white));
+            time_to.setTextColor(getResources().getColor(R.color.white));
+            text_days.setTextColor(getResources().getColor(R.color.white));
+            time_picker.setTextColor(getResources().getColor(R.color.white));
+            price.setTextColor(getResources().getColor(R.color.white));
+            Spots.setTextColor(getResources().getColor(R.color.white));
+        }else {
+            abc.setBackgroundColor(getResources().getColor(R.color.black));
+            title.setTextColor(getResources().getColor(R.color.black));
+            from_date.setTextColor(getResources().getColor(R.color.black));
+            to_date.setTextColor(getResources().getColor(R.color.black));
+            time_from.setTextColor(getResources().getColor(R.color.black));
+            time_to.setTextColor(getResources().getColor(R.color.black));
+            text_days.setTextColor(getResources().getColor(R.color.black));
+            time_picker.setTextColor(getResources().getColor(R.color.black));
+            price.setTextColor(getResources().getColor(R.color.black));
+            Spots.setTextColor(getResources().getColor(R.color.black));
+        }
 
         main_card=findViewById(R.id.main_card);
         calender=findViewById(R.id.calender);
-
+        calender.setVisibility(View.GONE);
          calendarView = findViewById(R.id.calendarView);
 
         title.setText(reservationPreferences.getParkingName());
-
+        price.setText(reservationPreferences.getParkingPrice());
         reserve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callReserveApi();
+
+                try {
+                    calculate();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
             }
         });
 
@@ -238,19 +286,41 @@ public class ReserveParking extends AppCompatActivity {
         String estimate_time=time_picker.getText().toString().trim();
         String from_date_final=from_date.getText().toString()+time_from.getText().toString();
         String to_date_final=to_date.getText().toString()+time_to.getText().toString();
+        String Spotss=Spots.getText().toString();
+
+        String remaining_parking=reservationPreferences.getRemainingParkingSpots();
+        String filled_spots=reservationPreferences.getFilled_parking_spots();
 
         if (TextUtils.isEmpty(estimate_time)){
             time_picker.setError("Please enter estimate time");
         }else if (TextUtils.isEmpty(from_date_final)){
             from_date.setError("please enter date and time");
+        }else if (TextUtils.isEmpty(Spotss)){
+            Spots.setError("please enter Spots");
         }else if (TextUtils.isEmpty(to_date_final)){{
                 to_date.setError("Please enter date and time");
-        }}else{
+        }}
+        else if (preferences.getTruckID().equalsIgnoreCase("")){
+            Toast.makeText(this, "Please Add truck from profile first", Toast.LENGTH_LONG).show();
+        }else if (TextUtils.isEmpty(remaining_parking)){
+            Toast.makeText(this, "Remaining spots are empty", Toast.LENGTH_SHORT).show();
+        }else if (TextUtils.isEmpty(filled_spots)){
+            Toast.makeText(this, "Filled Spots", Toast.LENGTH_SHORT).show();
+        }
+        else{
+
+            int rem_park= Integer.parseInt(remaining_parking);
+            int filled= Integer.parseInt(filled_spots);
+            int spot= Integer.parseInt(Spotss);
+
+            int remaining_parking_value=rem_park-spot;
+            int filled_parking_value=filled+spot;
 
             APIService service= APIClient.getClient().create(APIService.class);
             Call<AddReservationModel> call=service.addReservation(preferences.getTruckID(),reservationPreferences.getParkingID(),preferences.getName(),reservationPreferences.getParkingOwner()
                     ,preferences.getTruckNum(),preferences.getTruckColor(),estimate_time,from_date_final,to_date_final,
-                    reservationPreferences.getParkingPrice(),preferences.getUserId(),reservationPreferences.getParkingOwnerId());
+                    reservationPreferences.getParkingPrice(),preferences.getUserId(),reservationPreferences.getParkingOwnerId()
+            ,String.valueOf(remaining_parking_value),String.valueOf(filled_parking_value),Spotss);
 
             call.enqueue(new Callback<AddReservationModel>() {
                 @Override
@@ -293,27 +363,35 @@ public class ReserveParking extends AppCompatActivity {
 
     private void callToDate() {
 
-        days();
+        days2();
     }
 
     private void callFromDate() {
 
-        days2();
+        days();
 }
 
     public void calculate() throws ParseException {
-        Calendar cal1 = new GregorianCalendar();
-        Calendar cal2 = new GregorianCalendar();
+      /*  Calendar cal1 = new GregorianCalendar();
+        Calendar cal2 = new GregorianCalendar();*/
 
-        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+        //    Date date = sdf.parse(date_start);
+            to_date.setText(date_end);
+            from_date.setText(date_start);
 
-        Date date = sdf.parse(date_start);
-        cal1.setTime(date);
-        date = sdf.parse(date_end);
-        cal2.setTime(date);
+            Date date1=sdf.parse(date_start);
+            Date date2=sdf.parse(date_end);
 
-        text_days.setText(daysBetween(cal1.getTime(),cal2.getTime())+"days");
-       // System.out.println("Days= "+daysBetween(cal1.getTime(),cal2.getTime()));
+            text_days.setText(daysBetween(date1, date2) + "days");
+
+            callReserveApi();
+
+            // System.out.println("Days= "+daysBetween(cal1.getTime(),cal2.getTime()));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public int daysBetween(Date d1, Date d2){
@@ -330,10 +408,11 @@ public class ReserveParking extends AppCompatActivity {
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
 
 
-                date_start = dayOfMonth + "/" + month + "/"+ year;
+                date_start = dayOfMonth + "-" + month + "-"+ year;
                // popUpMethodology(date);
                 main_card.setVisibility(View.VISIBLE);
                 calender.setVisibility(View.GONE);
+                from_date.setText(date_start);
 
 
             }
@@ -349,17 +428,17 @@ public class ReserveParking extends AppCompatActivity {
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
 
 
-                date_end = dayOfMonth + "/" + month + "/"+ year;
+                date_end = dayOfMonth + "-" + month + "-"+ year;
                // popUpMethodology(date);
                 main_card.setVisibility(View.VISIBLE);
                 calender.setVisibility(View.GONE);
-
-                try {
+                to_date.setText(date_end);
+                /*try {
                     calculate();
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
+*/
             }
         });
     }

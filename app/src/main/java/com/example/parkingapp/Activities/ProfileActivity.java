@@ -1,24 +1,39 @@
 package com.example.parkingapp.Activities;
 
 import android.net.Uri;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 
 import com.example.parkingapp.Adapters.TabsAdapters;
 import com.example.parkingapp.Fragments.PaymentFragment;
 import com.example.parkingapp.Fragments.PersonalFragment;
 import com.example.parkingapp.Fragments.SecurityFragment;
+import com.example.parkingapp.Preferences.Preferences;
 import com.example.parkingapp.R;
 
 public class ProfileActivity extends AppCompatActivity implements PersonalFragment.OnFragmentInteractionListener, PaymentFragment.OnFragmentInteractionListener, SecurityFragment.OnFragmentInteractionListener {
 
+    Preferences preferenceMain;
+    ConstraintLayout abc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        preferenceMain=new Preferences(this);
+        abc=findViewById(R.id.abc);
+
+        if (preferenceMain.getSwitchNightMod()){
+            abc.setBackgroundColor(getResources().getColor(R.color.black));
+        }else {
+            abc.setBackgroundColor(getResources().getColor(R.color.white));        }
+
+
         Toolbar toolbar = findViewById(R.id.top_bar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));

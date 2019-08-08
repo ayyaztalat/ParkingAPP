@@ -8,8 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
-import android.location.Location;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -24,21 +22,22 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationListener;
+
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,8 +48,6 @@ import com.example.parkingapp.Models.SignupModel;
 import com.example.parkingapp.Preferences.Preferences;
 import com.example.parkingapp.R;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Task;
 import com.schibstedspain.leku.LocationPickerActivity;
@@ -96,12 +93,23 @@ public class Signup extends AppCompatActivity {
     private CallbackManager callbackManager;
     TwitterAuthClient mTwitterAuthClient;
     private GoogleSignInClient googleSignInClient;
+    private ConstraintLayout abc;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup_class);
+
         preferences = new Preferences(this);
+        setContentView(R.layout.activity_signup_class);
+
+        abc=findViewById(R.id.abc);
+
+       /* if (preferences.getSwitchNightMod()){
+            abc.setBackgroundColor(getResources().getColor(R.color.black));
+        }else {
+            abc.setBackgroundColor(getResources().getColor(R.color.white));
+        }*/
+
         progressDialog=new ProgressDialog(this);
         progressDialog.setTitle("Signing up");
         progressDialog.setMessage("Please wait...");
@@ -175,6 +183,22 @@ public class Signup extends AppCompatActivity {
         i_have_parking = findViewById(R.id.i_have_parking);
 
         status_value = "truck_owner";
+
+        if (preferences.getSwitchNightMod()){
+            abc.setBackgroundColor(getResources().getColor(R.color.black));
+            edit_text_email.setTextColor(getResources().getColor(R.color.white));
+            edit_text_password.setTextColor(getResources().getColor(R.color.white));
+            edit_text_name.setTextColor(getResources().getColor(R.color.white));
+            edit_text_number.setTextColor(getResources().getColor(R.color.white));
+            add_location.setTextColor(getResources().getColor(R.color.white));
+        }else {
+            abc.setBackgroundColor(getResources().getColor(R.color.white));
+            edit_text_email.setTextColor(getResources().getColor(R.color.black));
+            edit_text_password.setTextColor(getResources().getColor(R.color.black));
+            edit_text_name.setTextColor(getResources().getColor(R.color.black));
+            edit_text_number.setTextColor(getResources().getColor(R.color.black));
+            add_location.setTextColor(getResources().getColor(R.color.black));
+        }
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -274,6 +298,8 @@ public class Signup extends AppCompatActivity {
                 Double latitudes = data.getDoubleExtra(LATITUDE, 0.0);
                 Double longitudes = data.getDoubleExtra(LONGITUDE, 0.0);
                 String Address = data.getStringExtra(LOCATION_ADDRESS);
+
+                add_location.setText(Address);
 
              //   location_parking.setText(Address);
                 latitude = String.valueOf(latitudes);
@@ -483,6 +509,7 @@ public class Signup extends AppCompatActivity {
         String password = edit_text_password.getText().toString();
         String name = edit_text_name.getText().toString();
         String phone = edit_text_number.getText().toString();
+        String address=add_location.getText().toString().trim();
 
 
         if (TextUtils.isEmpty(email)) {
@@ -499,19 +526,84 @@ public class Signup extends AppCompatActivity {
         } else if (TextUtils.isEmpty(status_value)) {
             Toast.makeText(this, "Please Select type of client", Toast.LENGTH_SHORT).show();
             ;
-        } else if (TextUtils.isEmpty(latitude)) {
+
+        } else if (TextUtils.isEmpty(address)){
+            add_location.setError("Please provide proper location");
+        }else if (TextUtils.isEmpty(latitude)) {
             Toast.makeText(this, "Location Missing Please provide permission and try again", Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(longitude)) {
             Toast.makeText(this, "Location Missing Please provide permission and try again", Toast.LENGTH_SHORT).show();
         } else {
-            CallApiServiceSignup(email, password, name, phone);
+
+            if (status_value.equalsIgnoreCase("parking_owner")){
+                popupOwnerRemainingDetails(email, password, name, phone,address);
+            }else{
+                CallApiServiceSignup(email, password, name, phone,address, "", "", "", "");
+            }
+
+
         }
     }
 
-    private void CallApiServiceSignup(String email, String password, String name, String phone) {
+    private void popupOwnerRemainingDetails(final String email, final String password, final String name, final String phone, final String address) {
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.popup_signup_remaining_part, null);
+        final AlertDialog.Builder alert = new AlertDialog.Builder(Signup.this);
+
+        final EditText city=alertLayout.findViewById(R.id.city);
+        final EditText state=alertLayout.findViewById(R.id.state);
+        final EditText company_name=alertLayout.findViewById(R.id.company_name);
+        final Button signupsss=alertLayout.findViewById(R.id.signupsss);
+        final EditText tac_id=alertLayout.findViewById(R.id.tac_id);
+
+        //  etcode = alertLayout.findViewById(R.id.et_password);
+
+        // this is set the view from XML inside AlertDialog
+        alert.setView(alertLayout);
+        // disallow cancel of AlertDialog on click of back button and outside touch
+        alert.setCancelable(false);
+        final AlertDialog dialog = alert.create();
+        dialog.show();
+        signupsss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String citys=city.getText().toString();
+                String states=state.getText().toString();
+                String company_names=company_name.getText().toString();
+                String tacID=tac_id.getText().toString();
+
+                if (TextUtils.isEmpty(citys)) {
+                    city.setError("enter city");
+
+                }else if (TextUtils.isEmpty(states)){
+                    state.setError("Please enter state");
+
+                }else if (TextUtils.isEmpty(company_names)){
+                   company_name.setError("please enter company name");
+                }else if (TextUtils.isEmpty(tacID)){
+                    tac_id.setError("please enter tac id");
+                }else{
+
+                    dialog.dismiss();
+                    progressDialog.show();
+
+                    CallApiServiceSignup(email, password, name, phone,address,citys,states,company_names,tacID);
+                    //  apiServiceCall();
+                    // hide virtual keyboard
+                }
+
+
+            }
+        });
+
+
+    }
+
+    private void CallApiServiceSignup(String email, String password, String name, String phone, String address, String citys, String states, String company_names, String tacID) {
         progressDialog.show();
         APIService service = APIClient.getClient().create(APIService.class);
-        Call<SignupModel> modelCall = service.signup(name, email, password, phone, status_value, latitude, longitude, preferences.getFcmToken());
+        Call<SignupModel> modelCall = service.signup(name, email, password, phone, status_value, latitude, longitude, preferences.getFcmToken(),address,citys,states,company_names,tacID);
         Log.e("data", "CallApiServiceSignup: "+name+email+password+phone+status_value+latitude+longitude+preferences.getFcmToken() );
         modelCall.enqueue(new Callback<SignupModel>() {
             @Override
@@ -531,6 +623,7 @@ public class Signup extends AppCompatActivity {
                         preferences.setStatusValue(model.getUserData().get(0).getStatus_value());
                         preferences.setLatitude(model.getUserData().get(0).getLatitude());
                         preferences.setLongitude(model.getUserData().get(0).getLongitude());
+                        preferences.setAddress(model.getUserData().get(0).getAddress());
 
 
                         preferences.setSession(true);

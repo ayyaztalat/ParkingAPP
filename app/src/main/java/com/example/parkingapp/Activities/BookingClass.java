@@ -3,8 +3,10 @@ package com.example.parkingapp.Activities;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -31,11 +33,18 @@ public class BookingClass extends AppCompatActivity {
     Button reserve;
     CalendarView calendarView;
     ProgressDialog dialog;
+    String parking_reserved_spots,parking_filled_spots,parking_remaining_spots;
     Preferences preferences;
+    ConstraintLayout abc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_class);
+
+        preferences=new Preferences(this);
+        abc=findViewById(R.id.abc);
+
+
 
         dialog=new ProgressDialog(this);
         dialog.setTitle("Booking");
@@ -56,7 +65,25 @@ public class BookingClass extends AppCompatActivity {
 
         calendarView.setVisibility(View.GONE);
 
-        preferences=new Preferences(this);
+        if (preferences.getSwitchNightMod()){
+            abc.setBackgroundColor(getResources().getColor(R.color.black));
+            name_icon.setTextColor(getResources().getColor(R.color.white));
+            title.setTextColor(getResources().getColor(R.color.white));
+            price.setTextColor(getResources().getColor(R.color.white));
+            from_date.setTextColor(getResources().getColor(R.color.white));
+            to_date.setTextColor(getResources().getColor(R.color.white));
+            text_days.setTextColor(getResources().getColor(R.color.white));
+            time_picker.setTextColor(getResources().getColor(R.color.white));
+        }else {
+            abc.setBackgroundColor(getResources().getColor(R.color.black));
+            name_icon.setTextColor(getResources().getColor(R.color.black));
+            title.setTextColor(getResources().getColor(R.color.black));
+            price.setTextColor(getResources().getColor(R.color.black));
+            from_date.setTextColor(getResources().getColor(R.color.black));
+            to_date.setTextColor(getResources().getColor(R.color.black));
+            text_days.setTextColor(getResources().getColor(R.color.black));
+            time_picker.setTextColor(getResources().getColor(R.color.black));
+        }
 
         /*.putExtra("truck_id",arrayList.get(i).getTruckId())
                 .putExtra("parking_id",arrayList.get(i).getParkingId())
@@ -67,7 +94,15 @@ public class BookingClass extends AppCompatActivity {
                 .putExtra("estimated_time",arrayList.get(i).getEstimatedTime())
                 .putExtra("from_date",arrayList.get(i).getFromDate())
                 .putExtra("to_date",arrayList.get(i).getToDate())
-                .putExtra("truck_owner_id",preferences.getUserId())*/
+                .putExtra("truck_owner_id",preferences.getUserId())
+
+
+                putExtra(",",arrayList.get(i).getReservedParkingSpots())
+                    .putExtra("parking_filled_spots",arrayList.get(i).getFilledParkingSpots())
+                    .putExtra("parking_reserved_spots",arrayList.get(i).getReservedParkingSpots())
+                    */
+
+
 
         Intent intent=getIntent();
         if (intent!=null){
@@ -87,6 +122,10 @@ public class BookingClass extends AppCompatActivity {
             truck_id=getIntent().getStringExtra("truck_id");
             truck_owner_name=getIntent().getStringExtra("truck_owner_name");
 
+            truck_owner_name=getIntent().getStringExtra("parking_remaining_spots");
+            truck_owner_name=getIntent().getStringExtra("parking_filled_spots");
+            truck_owner_name=getIntent().getStringExtra("parking_reserved_spots");
+
 
             name_icon.setText(titles);
             title.setText(titles);
@@ -95,6 +134,11 @@ public class BookingClass extends AppCompatActivity {
             this.to_date.setText(to_dates);
 
         }
+
+       // name_icon.setText();
+        title.setText(parking_owner_name);
+        price.setText(amount);
+
         reserve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,7 +190,7 @@ public class BookingClass extends AppCompatActivity {
     private void callCardSavingApi(String paymentNonce) {
         dialog.show();
         APIService service=APIClient.getClient().create(APIService.class);
-        Call<BookingModel> modelCall=service.booking(truck_id,parking_id,truck_owner_name,parking_owner_name,truck_number,truck_color,estimate_time,from_dates,to_dates,paymentNonce,amount,"",truck_owner_id,amount);
+        Call<BookingModel> modelCall=service.booking(truck_id,parking_id,truck_owner_name,parking_owner_name,truck_number,truck_color,estimate_time,from_dates,to_dates,paymentNonce,amount,"",truck_owner_id,amount,parking_filled_spots,parking_remaining_spots,parking_reserved_spots);
         modelCall.enqueue(new Callback<BookingModel>() {
             @Override
             public void onResponse(Call<BookingModel> call, Response<BookingModel> response) {
@@ -178,7 +222,7 @@ public class BookingClass extends AppCompatActivity {
         Call<BookingModel> modelCall=service.booking(truck_id,parking_id,truck_owner_name,parking_owner_name,
                                                         truck_number,truck_color,estimate_time,from_dates,
                                                         to_dates,"",amount,
-                                                        id,truck_owner_id,amount);
+                                                        id,truck_owner_id,amount,parking_filled_spots,parking_remaining_spots,parking_reserved_spots);
         modelCall.enqueue(new Callback<BookingModel>() {
             @Override
             public void onResponse(Call<BookingModel> call, Response<BookingModel> response) {

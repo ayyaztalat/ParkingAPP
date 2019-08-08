@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,7 @@ import com.example.parkingapp.Adapters.ImageParkingAdapter;
 import com.example.parkingapp.Intefaces.APIClient;
 import com.example.parkingapp.Intefaces.APIService;
 import com.example.parkingapp.Models.ImageParkingModel;
+import com.example.parkingapp.Preferences.Preferences;
 import com.example.parkingapp.Preferences.ReservationPreferences;
 import com.example.parkingapp.R;
 
@@ -67,6 +69,7 @@ public class Photos_parking extends Fragment {
     Context context;
     ReservationPreferences preferences;
     ImageParkingAdapter adapter;
+    Preferences preferenceMain;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,6 +77,15 @@ public class Photos_parking extends Fragment {
         // Inflate the layout for this fragment
         context=container.getContext();
         preferences=new ReservationPreferences(context);
+
+
+        preferenceMain=new Preferences(context);
+
+        if (preferenceMain.getSwitchNightMod()){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
 
         View view= inflater.inflate(R.layout.fragment_photos_parking, container, false);
         recyclerMain=view.findViewById(R.id.recyclerMain);

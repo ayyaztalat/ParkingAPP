@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import com.example.parkingapp.Intefaces.APIClient;
 import com.example.parkingapp.Intefaces.APIService;
 import com.example.parkingapp.Models.ParkingModel;
 import com.example.parkingapp.Models.ReservationModel;
+import com.example.parkingapp.Preferences.Preferences;
 import com.example.parkingapp.R;
 
 import java.util.ArrayList;
@@ -66,6 +68,7 @@ public class MyParking extends Fragment {
     ProgressDialog dialog;
     Context context;
     Button add_parking;
+    Preferences preferenceMain;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,17 +83,28 @@ public class MyParking extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        context = container.getContext();
+        preferenceMain=new Preferences(context);
+
+        if (preferenceMain.getSwitchNightMod()){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
         View view= inflater.inflate(R.layout.fragment_my_parking, container, false);
 
         dialog=new ProgressDialog(container.getContext());
         dialog.setMessage("Please wait while we are loading information");
         dialog.setTitle("Loading Parking");
         dialog.setCancelable(false);
-        context=container.getContext();
+     //   context=container.getContext();
         recycler_my_parking=view.findViewById(R.id.recycler_my_parking);
         recycler_my_parking.setHasFixedSize(true);
         linearLayoutManager=new LinearLayoutManager(container.getContext(),LinearLayoutManager.VERTICAL,false);
         add_parking=view.findViewById(R.id.add_parking);
+        add_parking.setVisibility(View.GONE);
         add_parking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

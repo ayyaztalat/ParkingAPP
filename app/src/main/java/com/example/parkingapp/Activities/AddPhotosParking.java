@@ -17,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +25,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.parkingapp.Adapters.ImageParkingAdapter;
@@ -31,6 +33,7 @@ import com.example.parkingapp.Intefaces.APIClient;
 import com.example.parkingapp.Intefaces.APIService;
 import com.example.parkingapp.Models.AddImageParking;
 import com.example.parkingapp.Models.ImageParkingModel;
+import com.example.parkingapp.Preferences.Preferences;
 import com.example.parkingapp.R;
 
 import java.io.ByteArrayOutputStream;
@@ -63,10 +66,22 @@ public class AddPhotosParking extends AppCompatActivity {
     private static int RESULT_LOAD_IMAGE = 2;
     String picturePath, pictureName;
     ProgressDialog dialog;
+    Preferences preferenceMain;
+    RelativeLayout abc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_photos_parking);
+
+        preferenceMain=new Preferences(this);
+
+        abc=findViewById(R.id.abc);
+        if (preferenceMain.getSwitchNightMod()){
+            abc.setBackgroundColor(getResources().getColor(R.color.black));
+        }else {
+            abc.setBackgroundColor(getResources().getColor(R.color.white));
+        }
+
 
         dialog=new ProgressDialog(this);
         dialog.setCancelable(false);

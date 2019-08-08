@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -42,15 +43,26 @@ public class GuestMapFragment extends AppCompatActivity   implements NavigationV
     NavigationView navigationView;
     Preferences preferences;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_guest_map_fragment);
+
+        preferences=new Preferences(this);
+
+        /*if (preferences.getSwitchNightMod()){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+*/
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        preferences = new Preferences(this);
+       // preferences = new Preferences(this);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -224,7 +236,9 @@ public class GuestMapFragment extends AppCompatActivity   implements NavigationV
         } else if (id == R.id.sign_out) {
 
                 preferences.setTypeGuest("");
-                startActivity(new Intent(getApplicationContext(), LoginClass.class));
+                startActivity(new Intent(getApplicationContext(), LoginClass.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+
                 finishAffinity();
 
 

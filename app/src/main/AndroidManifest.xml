@@ -25,9 +25,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
@@ -36,7 +36,7 @@
         <activity android:name=".Activities.BookingClass" />
         <activity android:name=".Activities.ReserveParking" />
         <activity android:name=".Activities.EditParkingClass" />
-        <activity android:name=".Activities.ReservationParkingClass" />
+        <activity android:name=".Activities.ReservationParkingClass" android:parentActivityName=".Activities.HomeActivity"/>
         <activity android:name=".Activities.AddPhotosParking" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

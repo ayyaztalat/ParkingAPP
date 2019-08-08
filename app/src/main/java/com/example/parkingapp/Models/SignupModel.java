@@ -149,4 +149,16 @@ public class SignupModel {
     public String getError() {
         return error;
     }
+
+    public String getAddress() {
+        return address;
+    }
+
+    @SerializedName("address")
+    @Expose
+    private String address;
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 }
