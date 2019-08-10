@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".Activities.Fragment_parking_info_insider.Parking_info_fragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
-        android:id="@+id/main_linear"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_gravity="center"
-        android:gravity="top"
-        android:layout_height="match_parent">
 
 
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
         <TextView
             android:textColor="@color/black"
@@ -24,7 +23,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:textStyle="bold"
-            android:padding="@dimen/_15sdp"
+            android:padding="@dimen/_8sdp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -40,11 +39,11 @@
                 android:id="@+id/high"
                 android:textSize="@dimen/_15sdp"
                 android:text="HIGH"
-                android:layout_margin="@dimen/_8sdp"
+                android:layout_margin="@dimen/_6sdp"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
                 android:layout_width="0dp"
-                android:padding="@dimen/_8sdp"
+                android:padding="@dimen/_6sdp"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:background="@color/green"
@@ -55,11 +54,11 @@
                 android:id="@+id/Medium"
                 android:textSize="@dimen/_15sdp"
                 android:text="Medium"
-                android:layout_margin="@dimen/_8sdp"
+                android:layout_margin="@dimen/_6sdp"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
                 android:layout_width="0dp"
-                android:padding="@dimen/_8sdp"
+                android:padding="@dimen/_6sdp"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:background="@color/quantum_orange"
@@ -73,7 +72,8 @@
                 android:textColor="@color/white"
                 android:layout_gravity="center"
                 android:layout_width="0dp"
-                android:padding="@dimen/_8sdp"
+                android:layout_margin="@dimen/_6sdp"
+                android:padding="@dimen/_6sdp"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:background="@color/quantum_error_light"
@@ -90,7 +90,7 @@
             android:text="Parking Details"
             android:layout_gravity="start"
             android:gravity="start"
-            android:padding="@dimen/_15sdp"
+            android:padding="@dimen/_8sdp"
             android:drawablePadding="@dimen/_15sdp"
             android:drawableLeft="@drawable/reserve"
             android:layout_width="match_parent"
@@ -103,7 +103,7 @@
             android:text="Parking Name"
             android:layout_gravity="start"
             android:gravity="start"
-            android:padding="@dimen/_15sdp"
+            android:padding="@dimen/_8sdp"
             android:drawablePadding="@dimen/_15sdp"
             android:drawableLeft="@drawable/user"
             android:layout_width="match_parent"
@@ -116,7 +116,7 @@
             android:text="Parking Description "
             android:layout_gravity="start"
             android:gravity="start"
-            android:padding="@dimen/_15sdp"
+            android:padding="@dimen/_8sdp"
             android:drawablePadding="@dimen/_15sdp"
             android:drawableLeft="@drawable/reserve"
             android:layout_width="match_parent"
@@ -129,7 +129,7 @@
             android:text="Parking Owner name"
             android:layout_gravity="start"
             android:gravity="start"
-            android:padding="@dimen/_15sdp"
+            android:padding="@dimen/_8sdp"
             android:drawablePadding="@dimen/_15sdp"
             android:drawableLeft="@drawable/reserve"
             android:layout_width="match_parent"
@@ -142,7 +142,7 @@
             android:text="Parking Spots available"
             android:layout_gravity="start"
             android:gravity="start"
-            android:padding="@dimen/_15sdp"
+            android:padding="@dimen/_8sdp"
             android:drawablePadding="@dimen/_15sdp"
             android:drawableLeft="@drawable/reserve"
             android:layout_width="match_parent"
@@ -160,8 +160,7 @@
             android:background="@drawable/button_background"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_38sdp" />
+        </LinearLayout>
+    </RelativeLayout>
 
 
-    </LinearLayout>
-
-</FrameLayout>

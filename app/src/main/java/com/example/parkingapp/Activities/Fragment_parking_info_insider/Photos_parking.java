@@ -11,8 +11,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.parkingapp.Adapters.ImageParkingAdapter;
 import com.example.parkingapp.Intefaces.APIClient;
 import com.example.parkingapp.Intefaces.APIService;
@@ -26,6 +28,9 @@ import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.example.parkingapp.Intefaces.APIClient.BASE_IMG;
+import static com.example.parkingapp.Intefaces.APIClient.BASE_URL;
 
 
 public class Photos_parking extends Fragment {
@@ -53,6 +58,7 @@ public class Photos_parking extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+    ImageView image_view1,image_view2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,9 +69,9 @@ public class Photos_parking extends Fragment {
         }
     }
 
-    RecyclerView recyclerMain;
-    GridLayoutManager gridLayoutManager;
-    ArrayList<ImageParkingModel>  models=new ArrayList<>();
+ //   RecyclerView recyclerMain;
+ //   GridLayoutManager gridLayoutManager;
+   // ArrayList<ImageParkingModel>  models=new ArrayList<>();
     Context context;
     ReservationPreferences preferences;
     ImageParkingAdapter adapter;
@@ -88,13 +94,19 @@ public class Photos_parking extends Fragment {
         }
 
         View view= inflater.inflate(R.layout.fragment_photos_parking, container, false);
-        recyclerMain=view.findViewById(R.id.recyclerMain);
+      //  recyclerMain=view.findViewById(R.id.recyclerMain);
 
-        gridLayoutManager=new GridLayoutManager(context,3, LinearLayoutManager.VERTICAL,false);
-        recyclerMain.setHasFixedSize(true);
-        recyclerMain.setLayoutManager(gridLayoutManager);
+     //   gridLayoutManager=new GridLayoutManager(context,3, LinearLayoutManager.VERTICAL,false);
+     //   recyclerMain.setHasFixedSize(true);
+       // recyclerMain.setLayoutManager(gridLayoutManager);
 
-        callApiRecycler();
+        image_view1=view.findViewById(R.id.image_view1);
+        image_view2=view.findViewById(R.id.image_view2);
+
+        Glide.with(context).load(BASE_IMG+preferences.getParking_image1()).into(image_view1);
+        Glide.with(context).load(BASE_IMG+preferences.getParkingImage2()).into(image_view2);
+
+       // callApiRecycler();
 
         return view;
     }
@@ -107,10 +119,11 @@ public class Photos_parking extends Fragment {
             @Override
             public void onResponse(Call<ImageParkingModel> call, Response<ImageParkingModel> response) {
                 ImageParkingModel model=response.body();
+
                 if (model.getStatus().equalsIgnoreCase("success")){
-                    models=model.getParkingPicData();
+                  /*  models=model.getParkingPicData();
                     adapter=new ImageParkingAdapter(context,models);
-                    recyclerMain.setAdapter(adapter);
+                    recyclerMain.setAdapter(adapter);*/
 
                 }else {
                     Toast.makeText(context, model.getError(), Toast.LENGTH_SHORT).show();

@@ -89,6 +89,29 @@ public class ParkingModel {
     @SerializedName("time_stamp")
     @Expose
     private String timeStamp;
+    @SerializedName("parking_image1")
+    @Expose
+    private String parking_image1;
+
+    public String getParking_image1() {
+        return parking_image1;
+    }
+
+    public void setParking_image1(String parking_image1) {
+        this.parking_image1 = parking_image1;
+    }
+
+    public String getParking_image2() {
+        return parking_image2;
+    }
+
+    public void setParking_image2(String parking_image2) {
+        this.parking_image2 = parking_image2;
+    }
+
+    @SerializedName("parking_image2")
+    @Expose
+    private String parking_image2;
 
     public String getParkingId() {
         return parkingId;

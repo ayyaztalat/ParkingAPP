@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.parkingapp.Intefaces.APIClient;
@@ -50,6 +51,7 @@ public class TruckAddClass extends AppCompatActivity {
     Preferences preferences;
     ProgressDialog dialog;
     LinearLayout item,item2;
+    TextView text_confirm,text_confirm2;
   AppCompatEditText edit_text_truck_number,edit_text_truck_make,edit_text_truck_color;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,6 +64,8 @@ public class TruckAddClass extends AppCompatActivity {
         edit_text_truck_color=findViewById(R.id.edit_text_truck_color);
 
         item=findViewById(R.id.item);
+        text_confirm=findViewById(R.id.text_confirm);
+        text_confirm=findViewById(R.id.text_confirm2);
         item2=findViewById(R.id.item2);
 
         edit_text_truck_number.setText(preferences.getTruckNum());
@@ -195,25 +199,29 @@ public class TruckAddClass extends AppCompatActivity {
 
 
     private void callTrackAddAPI() {
+        try {
+            String truckNum = edit_text_truck_number.getText().toString();
+            String truckName = edit_text_truck_make.getText().toString();
+            String truckColor = edit_text_truck_color.getText().toString();
 
-        String truckNum=edit_text_truck_number.getText().toString();
-        String truckName=edit_text_truck_make.getText().toString();
-        String truckColor=edit_text_truck_color.getText().toString();
+            if (TextUtils.isEmpty(truckName)) {
+                edit_text_truck_make.setError("Please enter Manufacture");
+            } else if (TextUtils.isEmpty(truckColor)) {
+                edit_text_truck_color.setError("Please enter truck color");
+            } else if (TextUtils.isEmpty(truckNum)) {
+                edit_text_truck_number.setError("Please enter truck number");
+            } else if (pictureMainPath.equalsIgnoreCase("") || pictureMainPath == null) {
+                Toast.makeText(this, "No Picture Added", Toast.LENGTH_SHORT).show();
+            } else if (pictureMainPath2.equalsIgnoreCase("") || pictureMainPath2 == null) {
+                Toast.makeText(this, "No Picture Added", Toast.LENGTH_SHORT).show();
+            } else {
+                callAPITruck(truckNum, truckColor, truckName);
+            }
 
-        if (TextUtils.isEmpty(truckName)){
-            edit_text_truck_make.setError("Please enter Manufacture");
-        }else if (TextUtils.isEmpty(truckColor)){
-            edit_text_truck_color.setError("Please enter truck color");
-        }else if (TextUtils.isEmpty(truckNum)){
-            edit_text_truck_number.setError("Please enter truck number");
-        }else if (pictureMainPath.equalsIgnoreCase("")){
-            Toast.makeText(this, "No Picture Added", Toast.LENGTH_SHORT).show();
-        }else if (pictureMainPath2.equalsIgnoreCase("")){
-            Toast.makeText(this, "No Picture Added", Toast.LENGTH_SHORT).show();
-        }else{
-            callAPITruck(truckNum,truckColor,truckName);
+        }catch (Exception e){
+            e.printStackTrace();
+            Toast.makeText(this, "Images are not available", Toast.LENGTH_SHORT).show();
         }
-
     }
     String picturePath, pictureName;
 
@@ -232,6 +240,7 @@ public class TruckAddClass extends AppCompatActivity {
                 pictureMainPath = storeCameraPhotoInSDCard(thumbnail, partFilename);
 
                 Toast.makeText(this, "First document added", Toast.LENGTH_SHORT).show();
+                text_confirm2.setVisibility(View.VISIBLE);
               //  pictureName = picturePath.substring(picturePath.lastIndexOf("/") + 1);
 
               //  callSavingAPI(picturePath);
@@ -249,6 +258,7 @@ public class TruckAddClass extends AppCompatActivity {
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 pictureMainPath = cursor.getString(columnIndex);
                 Toast.makeText(this, "First document added", Toast.LENGTH_SHORT).show();
+                text_confirm2.setVisibility(View.VISIBLE);
               //  pictureName = picturePath.substring(picturePath.lastIndexOf("/") + 1);
                 cursor.close();
               //  callSavingAPI(picturePath);
@@ -264,6 +274,7 @@ public class TruckAddClass extends AppCompatActivity {
                 String partFilename = currentDateFormat();
                 pictureMainPath2 = storeCameraPhotoInSDCard(thumbnail, partFilename);
                 Toast.makeText(this, "second document added", Toast.LENGTH_SHORT).show();
+                text_confirm.setVisibility(View.VISIBLE);
               //  pictureName = picturePath.substring(picturePath.lastIndexOf("/") + 1);
 
               //  callSavingAPI(picturePath);
@@ -281,6 +292,7 @@ public class TruckAddClass extends AppCompatActivity {
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 pictureMainPath2 = cursor.getString(columnIndex);
                 Toast.makeText(this, "second document added", Toast.LENGTH_SHORT).show();
+                text_confirm.setVisibility(View.VISIBLE);
               //  pictureName = picturePath.substring(picturePath.lastIndexOf("/") + 1);
                 cursor.close();
               //  callSavingAPI(picturePath);
@@ -329,8 +341,8 @@ public class TruckAddClass extends AppCompatActivity {
     }
 
 
-    String pictureMainPath;
-    String pictureMainPath2;
+    String pictureMainPath=null;
+    String pictureMainPath2=null;
     private void callAPITruck(String truckNum, String truckColor, String truckName) {
 
         dialog=new ProgressDialog(TruckAddClass.this);

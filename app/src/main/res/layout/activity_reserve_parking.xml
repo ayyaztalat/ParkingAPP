@@ -179,6 +179,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:gravity="end"
+                android:weightSum="3"
                 android:orientation="horizontal">
 
                 <EditText
@@ -186,14 +187,16 @@
                     android:hint="Enter Number of Spots"
                     android:layout_gravity="center"
                     android:gravity="center"
+                    android:layout_weight="1.6"
                     android:layout_margin="@dimen/_8sdp"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:inputType="number"
                     android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/text_total_days"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.7"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_8sdp"
                     android:padding="@dimen/_8sdp"
@@ -202,7 +205,8 @@
 
                 <TextView
                     android:id="@+id/text_days"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.7"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_8sdp"
                     android:layout_marginTop="@dimen/_8sdp"
@@ -257,8 +261,11 @@
         android:id="@+id/calender"
 
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/reserve"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.050000012"
         tools:visibility="gone">
 
         <CalendarView

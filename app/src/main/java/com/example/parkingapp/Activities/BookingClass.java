@@ -1,18 +1,22 @@
 package com.example.parkingapp.Activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.braintreepayments.api.dropin.DropInActivity;
@@ -36,6 +40,9 @@ public class BookingClass extends AppCompatActivity {
     String parking_reserved_spots,parking_filled_spots,parking_remaining_spots;
     Preferences preferences;
     ConstraintLayout abc;
+    Toolbar toolbar;
+    String time_from_1,time_to_1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +51,10 @@ public class BookingClass extends AppCompatActivity {
         preferences=new Preferences(this);
         abc=findViewById(R.id.abc);
 
-
+        toolbar=findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("RESERVE PARKING");
 
         dialog=new ProgressDialog(this);
         dialog.setTitle("Booking");
@@ -62,27 +72,69 @@ public class BookingClass extends AppCompatActivity {
 
         reserve=findViewById(R.id.reserve);
         calendarView=findViewById(R.id.calendarView);
+        time_picker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LayoutInflater inflater = getLayoutInflater();
+                View alertLayout = inflater.inflate(R.layout.pop_time_picker, null);
+                final AlertDialog.Builder alert = new AlertDialog.Builder(BookingClass.this);
+
+                Button btn_save_time=alertLayout.findViewById(R.id.btn_save_time);
+                final TimePicker time_pickers=alertLayout.findViewById(R.id.time_picker);
+
+                // this is set the view from XML inside AlertDialog
+                alert.setView(alertLayout);
+                // disallow cancel of AlertDialog on click of back button and outside touch
+                alert.setCancelable(true);
+                final AlertDialog dialog = alert.create();
+                dialog.show();
+
+
+
+                time_pickers.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+                    @Override
+                    public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                        time_to_1=convertDate(hourOfDay)+":"+convertDate(minute);
+                    }
+                });
+
+                btn_save_time.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (TextUtils.isEmpty(time_to_1)) {
+                            time_to_1=convertDate(time_pickers.getHour())+":"+convertDate(time_pickers.getMinute());
+                            time_picker.setText(time_to_1);
+                            dialog.dismiss();
+                        } else {
+                            time_picker.setText(time_to_1);
+                            dialog.dismiss();
+                        }}
+                });
+            }
+        });
 
         calendarView.setVisibility(View.GONE);
 
         if (preferences.getSwitchNightMod()){
             abc.setBackgroundColor(getResources().getColor(R.color.black));
-            name_icon.setTextColor(getResources().getColor(R.color.white));
+           /* name_icon.setTextColor(getResources().getColor(R.color.white));
             title.setTextColor(getResources().getColor(R.color.white));
             price.setTextColor(getResources().getColor(R.color.white));
             from_date.setTextColor(getResources().getColor(R.color.white));
             to_date.setTextColor(getResources().getColor(R.color.white));
             text_days.setTextColor(getResources().getColor(R.color.white));
             time_picker.setTextColor(getResources().getColor(R.color.white));
+            calendarView.setBackgroundColor(getResources().getColor(R.color.white));*/
         }else {
-            abc.setBackgroundColor(getResources().getColor(R.color.black));
-            name_icon.setTextColor(getResources().getColor(R.color.black));
+            abc.setBackgroundColor(getResources().getColor(R.color.white));
+            /*name_icon.setTextColor(getResources().getColor(R.color.black));
             title.setTextColor(getResources().getColor(R.color.black));
             price.setTextColor(getResources().getColor(R.color.black));
             from_date.setTextColor(getResources().getColor(R.color.black));
             to_date.setTextColor(getResources().getColor(R.color.black));
             text_days.setTextColor(getResources().getColor(R.color.black));
-            time_picker.setTextColor(getResources().getColor(R.color.black));
+            calendarView.setBackgroundColor(getResources().getColor(R.color.white));
+            time_picker.setTextColor(getResources().getColor(R.color.black));*/
         }
 
         /*.putExtra("truck_id",arrayList.get(i).getTruckId())
@@ -122,9 +174,9 @@ public class BookingClass extends AppCompatActivity {
             truck_id=getIntent().getStringExtra("truck_id");
             truck_owner_name=getIntent().getStringExtra("truck_owner_name");
 
-            truck_owner_name=getIntent().getStringExtra("parking_remaining_spots");
-            truck_owner_name=getIntent().getStringExtra("parking_filled_spots");
-            truck_owner_name=getIntent().getStringExtra("parking_reserved_spots");
+            parking_remaining_spots=getIntent().getStringExtra("parking_remaining_spots");
+            parking_filled_spots=getIntent().getStringExtra("parking_filled_spots");
+            parking_reserved_spots=getIntent().getStringExtra("parking_reserved_spots");
 
 
             name_icon.setText(titles);
@@ -188,61 +240,179 @@ public class BookingClass extends AppCompatActivity {
     }
 
     private void callCardSavingApi(String paymentNonce) {
-        dialog.show();
-        APIService service=APIClient.getClient().create(APIService.class);
-        Call<BookingModel> modelCall=service.booking(truck_id,parking_id,truck_owner_name,parking_owner_name,truck_number,truck_color,estimate_time,from_dates,to_dates,paymentNonce,amount,"",truck_owner_id,amount,parking_filled_spots,parking_remaining_spots,parking_reserved_spots);
-        modelCall.enqueue(new Callback<BookingModel>() {
-            @Override
-            public void onResponse(Call<BookingModel> call, Response<BookingModel> response) {
-                BookingModel model=response.body();
-                dialog.dismiss();
-                if (model.getStatus().equalsIgnoreCase("success")){
-                    Toast.makeText(BookingClass.this, model.getPayment(), Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext(),HomeActivity.class));
-                    finishAffinity();
-                }else{
-                    Toast.makeText(BookingClass.this, model.getError(), Toast.LENGTH_SHORT).show();
+
+        estimate_time=time_picker.getText().toString().trim();
+
+        if (TextUtils.isEmpty(truck_id)){
+            Toast.makeText(this, "Data is missing please contact admin", Toast.LENGTH_SHORT).show();
+            Log.e("error", "callCardSavingApi: truck_id"+truck_id );
+        }
+        else if (TextUtils.isEmpty(parking_id)){
+            Toast.makeText(this, "Data is missing please contact admin", Toast.LENGTH_SHORT).show();
+            Log.e("error", "callCardSavingApi: parking_id"+parking_id);
+        }
+        else if (TextUtils.isEmpty(truck_owner_name)){
+            Toast.makeText(this, "Data is missing please contact admin", Toast.LENGTH_SHORT).show();
+            Log.e("error", "callCardSavingApi: truck_owner_name"+truck_owner_name);
+        }
+        else if (TextUtils.isEmpty(parking_owner_name)){
+            Toast.makeText(this, "Data is missing please contact admin", Toast.LENGTH_SHORT).show();
+            Log.e("error", "callCardSavingApi: parking_owner_name"+parking_owner_name);
+        }
+        else if (TextUtils.isEmpty(truck_number)){
+            Toast.makeText(this, "Data is missing please contact admin", Toast.LENGTH_SHORT).show();
+            Log.e("error", "callCardSavingApi: truck_number"+truck_number);
+        }
+        else if (TextUtils.isEmpty(truck_color)){
+            Toast.makeText(this, "Data is missing please contact admin", Toast.LENGTH_SHORT).show();
+            Log.e("error", "callCardSavingApi: truck_color"+truck_color);
+        }
+        else if (TextUtils.isEmpty(estimate_time)){
+            time_picker.setError("Please enter Estimate Time");
+        }
+        else if (TextUtils.isEmpty(from_dates)){
+            Toast.makeText(this, "Data is missing please contact admin", Toast.LENGTH_SHORT).show();
+            Log.e("error", "callCardSavingApi: from_dates"+from_dates);
+        }
+        else if (TextUtils.isEmpty(to_dates)){
+            Toast.makeText(this, "Data is missing please contact admin", Toast.LENGTH_SHORT).show();
+            Log.e("error", "callCardSavingApi: to_dates"+to_dates);
+        }
+
+        else if (TextUtils.isEmpty(amount)){
+            amount="0";
+        }
+        else if (TextUtils.isEmpty(truck_owner_name)){
+            Toast.makeText(this, "Data is missing please contact admin", Toast.LENGTH_SHORT).show();
+            Log.e("error", "callCardSavingApi: truck_owner_name"+truck_owner_name);
+        }
+        else if (TextUtils.isEmpty(amount)){
+            amount="0";
+        }
+       /* else if (TextUtils.isEmpty(parking_filled_spots)){
+            Toast.makeText(this, "Data is missing please contact admin", Toast.LENGTH_SHORT).show();
+            Log.e("error", "callCardSavingApi: parking_filled_spot"+parking_filled_spots);
+        }
+        else if (TextUtils.isEmpty(parking_remaining_spots)){
+            Toast.makeText(this, "Data is missing please contact admin", Toast.LENGTH_SHORT).show();
+            Log.e("error", "callCardSavingApi: parking_remaining_spot"+parking_remaining_spots);
+        }*/
+        else if (TextUtils.isEmpty(parking_reserved_spots)){
+            Toast.makeText(this, "Data is missing please contact admin", Toast.LENGTH_SHORT).show();
+            Log.e("error", "callCardSavingApi: parking_reserved_spots"+parking_reserved_spots);
+        }else {
+
+            dialog.show();
+            APIService service = APIClient.getClient().create(APIService.class);
+            Call<BookingModel> modelCall = service.booking(truck_id, parking_id, truck_owner_name, parking_owner_name,
+                    truck_number, truck_color, estimate_time, from_dates, to_dates, paymentNonce,
+                    amount, "", truck_owner_id, amount
+                    , parking_reserved_spots);
+            modelCall.enqueue(new Callback<BookingModel>() {
+                @Override
+                public void onResponse(Call<BookingModel> call, Response<BookingModel> response) {
+                    BookingModel model = response.body();
+                    dialog.dismiss();
+                    if (model.getStatus().equalsIgnoreCase("success")) {
+                        Toast.makeText(BookingClass.this, model.getPayment(), Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                        finishAffinity();
+                    } else {
+                        Toast.makeText(BookingClass.this, model.getError(), Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<BookingModel> call, Throwable t) {
-                dialog.dismiss();
-                Toast.makeText(BookingClass.this, "Network error", Toast.LENGTH_SHORT).show();
-                Log.e("error", "onFailure: "+t.getMessage() );
-            }
-        });
-
+                @Override
+                public void onFailure(Call<BookingModel> call, Throwable t) {
+                    dialog.dismiss();
+                    Toast.makeText(BookingClass.this, "Network error", Toast.LENGTH_SHORT).show();
+                    Log.e("error", "onFailure: " + t.getMessage());
+                }
+            });
+        }
     }
 
 
     private void APICall(String id) {
-        dialog.show();
-        APIService service= APIClient.getClient().create(APIService.class);
-        Call<BookingModel> modelCall=service.booking(truck_id,parking_id,truck_owner_name,parking_owner_name,
-                                                        truck_number,truck_color,estimate_time,from_dates,
-                                                        to_dates,"",amount,
-                                                        id,truck_owner_id,amount,parking_filled_spots,parking_remaining_spots,parking_reserved_spots);
-        modelCall.enqueue(new Callback<BookingModel>() {
-            @Override
-            public void onResponse(Call<BookingModel> call, Response<BookingModel> response) {
-                BookingModel model=response.body();
-                dialog.dismiss();
-                if (model.getStatus().equalsIgnoreCase("success")){
-                    Toast.makeText(BookingClass.this, model.getPayment(), Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext(),HomeActivity.class));
-                    finishAffinity();
-                }else{
-                    Toast.makeText(BookingClass.this, model.getError(), Toast.LENGTH_SHORT).show();
-                }
-            }
+        if (TextUtils.isEmpty(truck_id)) {
+            Toast.makeText(this, "Data is missing please contact admin", Toast.LENGTH_SHORT).show();
+            Log.e("error", "callCardSavingApi: truck_id" + truck_id);
+        } else if (TextUtils.isEmpty(parking_id)) {
+            Toast.makeText(this, "Data is missing please contact admin", Toast.LENGTH_SHORT).show();
+            Log.e("error", "callCardSavingApi: parking_id" + parking_id);
+        } else if (TextUtils.isEmpty(truck_owner_name)) {
+            Toast.makeText(this, "Data is missing please contact admin", Toast.LENGTH_SHORT).show();
+            Log.e("error", "callCardSavingApi: truck_owner_name" + truck_owner_name);
+        } else if (TextUtils.isEmpty(parking_owner_name)) {
+            Toast.makeText(this, "Data is missing please contact admin", Toast.LENGTH_SHORT).show();
+            Log.e("error", "callCardSavingApi: parking_owner_name" + parking_owner_name);
+        } else if (TextUtils.isEmpty(truck_number)) {
+            Toast.makeText(this, "Data is missing please contact admin", Toast.LENGTH_SHORT).show();
+            Log.e("error", "callCardSavingApi: truck_number" + truck_number);
+        } else if (TextUtils.isEmpty(truck_color)) {
+            Toast.makeText(this, "Data is missing please contact admin", Toast.LENGTH_SHORT).show();
+            Log.e("error", "callCardSavingApi: truck_color" + truck_color);
+        } else if (TextUtils.isEmpty(estimate_time)) {
+           // time_picker.setError("Please enter Estimate Time");
+        } else if (TextUtils.isEmpty(from_dates)) {
+            Toast.makeText(this, "Data is missing please contact admin", Toast.LENGTH_SHORT).show();
+            Log.e("error", "callCardSavingApi: from_dates" + from_dates);
+        } else if (TextUtils.isEmpty(to_dates)) {
+            Toast.makeText(this, "Data is missing please contact admin", Toast.LENGTH_SHORT).show();
+            Log.e("error", "callCardSavingApi: to_dates" + to_dates);
+        } else if (TextUtils.isEmpty(amount)) {
+            amount = "0";
+        } else if (TextUtils.isEmpty(truck_owner_name)) {
+            Toast.makeText(this, "Data is missing please contact admin", Toast.LENGTH_SHORT).show();
+            Log.e("error", "callCardSavingApi: truck_owner_name" + truck_owner_name);
+        } else if (TextUtils.isEmpty(amount)) {
+            amount = "0";
+        } else if (TextUtils.isEmpty(parking_filled_spots)) {
+            Toast.makeText(this, "Data is missing please contact admin", Toast.LENGTH_SHORT).show();
+            Log.e("error", "callCardSavingApi: parking_filled_spot" + parking_filled_spots);
+        } else if (TextUtils.isEmpty(parking_remaining_spots)) {
+            Toast.makeText(this, "Data is missing please contact admin", Toast.LENGTH_SHORT).show();
+            Log.e("error", "callCardSavingApi: parking_remaining_spot" + parking_remaining_spots);
+        } else if (TextUtils.isEmpty(parking_reserved_spots)) {
+            Toast.makeText(this, "Data is missing please contact admin", Toast.LENGTH_SHORT).show();
+            Log.e("error", "callCardSavingApi: parking_reserved_spots" + parking_reserved_spots);
+        } else {
 
-            @Override
-            public void onFailure(Call<BookingModel> call, Throwable t) {
-                dialog.dismiss();
-                Toast.makeText(BookingClass.this, "Network error", Toast.LENGTH_SHORT).show();
-                Log.e("error", "onFailure: "+t.getMessage() );
-            }
-        });
+            dialog.show();
+            APIService service = APIClient.getClient().create(APIService.class);
+            Call<BookingModel> modelCall = service.booking(truck_id, parking_id, truck_owner_name, parking_owner_name,
+                    truck_number, truck_color, estimate_time, from_dates,
+                    to_dates, "", amount,
+                    id, truck_owner_id, amount,  parking_reserved_spots);
+            modelCall.enqueue(new Callback<BookingModel>() {
+                @Override
+                public void onResponse(Call<BookingModel> call, Response<BookingModel> response) {
+                    BookingModel model = response.body();
+                    dialog.dismiss();
+                    if (model.getStatus().equalsIgnoreCase("success")) {
+                        Toast.makeText(BookingClass.this, model.getPayment(), Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                        finishAffinity();
+                    } else {
+                        Toast.makeText(BookingClass.this, model.getError(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BookingModel> call, Throwable t) {
+                    dialog.dismiss();
+                    Toast.makeText(BookingClass.this, "Network error", Toast.LENGTH_SHORT).show();
+                    Log.e("error", "onFailure: " + t.getMessage());
+                }
+            });
+        }
+    }
+
+    public String convertDate(int input) {
+        if (input >= 10) {
+            return String.valueOf(input);
+        } else {
+            return "0" + String.valueOf(input);
+        }
     }
 }

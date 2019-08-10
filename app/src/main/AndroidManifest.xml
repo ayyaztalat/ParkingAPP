@@ -33,7 +33,7 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".Activities.TempGuest.GuestMapFragment"></activity>
         <activity android:name=".Activities.tempClass" />
-        <activity android:name=".Activities.BookingClass" />
+        <activity android:name=".Activities.BookingClass" android:parentActivityName=".Activities.HomeActivity"/>
         <activity android:name=".Activities.ReserveParking" />
         <activity android:name=".Activities.EditParkingClass" />
         <activity android:name=".Activities.ReservationParkingClass" android:parentActivityName=".Activities.HomeActivity"/>

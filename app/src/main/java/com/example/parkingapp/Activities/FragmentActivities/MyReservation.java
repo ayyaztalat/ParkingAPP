@@ -101,7 +101,7 @@ public class MyReservation extends Fragment {
     private void callAPIData(final Context context) {
         dialog.show();
         APIService service= APIClient.getClient().create(APIService.class);
-        Call<ReservationModel> modelCall=service.MyReservationCall();
+        Call<ReservationModel> modelCall=service.MyReservationCall(preferenceMain.getUserId());
         modelCall.enqueue(new Callback<ReservationModel>() {
             @Override
             public void onResponse(Call<ReservationModel> call, Response<ReservationModel> response) {

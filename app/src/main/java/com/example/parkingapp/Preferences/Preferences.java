@@ -319,4 +319,12 @@ public class Preferences {
     public Boolean getDontShowParking(){
         return Prefs.getBoolean("dont_show_parking",false);
     }
+
+    public void setFilterClicked(Boolean filterClicked) {
+        Prefs.putBoolean("filterCheck",filterClicked);
+    }
+
+    public boolean getFilterClicked() {
+        return Prefs.getBoolean("filterCheck",false);
+    }
 }

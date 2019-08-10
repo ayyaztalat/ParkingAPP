@@ -1,8 +1,11 @@
 package com.example.parkingapp.Activities.Fragment_parking_info_insider;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
@@ -11,13 +14,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.Preference;
+import android.support.annotation.DrawableRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatDelegate;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
@@ -151,7 +157,7 @@ public class Map_fragment_parking extends Fragment {
         googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
     }
 
-
+String type_of_vehical;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -181,6 +187,7 @@ public class Map_fragment_parking extends Fragment {
         preferences=new ReservationPreferences(context);
          latitude=Double.parseDouble(preferences.getLatitude());
          longitude=Double.parseDouble(preferences.getLongitude());
+         type_of_vehical=preferences.getVehicalType();
         final String parkingName=preferences.getParkingName();
 
 
@@ -224,8 +231,27 @@ new Handler().postDelayed(new Runnable() {
     public void run() {
         try {
             LatLng latLng=new LatLng(latitude,longitude);
-            googleMap.addMarker(new MarkerOptions().position(latLng).title(parkingName).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).draggable(false).visible(true));
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f));
+
+            if (!type_of_vehical.equalsIgnoreCase("")|| type_of_vehical.equalsIgnoreCase(null)) {
+
+                if (type_of_vehical.equalsIgnoreCase("truck_stops")) {
+                    googleMap.addMarker(new MarkerOptions().position(latLng).title(parkingName).icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context, R.drawable.green_truck_area))).draggable(false).visible(true));
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f));
+                } else if (type_of_vehical.equalsIgnoreCase("rest_areas")) {
+                    googleMap.addMarker(new MarkerOptions().position(latLng).title(parkingName).icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context, R.drawable.rest_area))).draggable(false).visible(true));
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f));
+                } else if (type_of_vehical.equalsIgnoreCase("weight_station")) {
+                    googleMap.addMarker(new MarkerOptions().position(latLng).title(parkingName).icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context, R.drawable.weight_station))).draggable(false).visible(true));
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f));
+                } else {
+                    googleMap.addMarker(new MarkerOptions().position(latLng).title(parkingName).icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context, R.drawable.free_parking))).draggable(false).visible(true));
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f));
+                }
+            }else {
+                googleMap.addMarker(new MarkerOptions().position(latLng).title(parkingName).icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context, R.drawable.free_parking))).draggable(false).visible(true));
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f));
+            }
+
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -242,6 +268,27 @@ new Handler().postDelayed(new Runnable() {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    public static Bitmap createCustomMarker(Context context, @DrawableRes int resource) {
+
+        View marker = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.custom_marker_layout, null);
+
+        ImageView markerImage =  marker.findViewById(R.id.user_dp);
+        markerImage.setImageResource(resource);
+
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        marker.setLayoutParams(new ViewGroup.LayoutParams(52, ViewGroup.LayoutParams.WRAP_CONTENT));
+        marker.measure(displayMetrics.widthPixels, displayMetrics.heightPixels);
+        marker.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels);
+        marker.buildDrawingCache();
+        Bitmap bitmap = Bitmap.createBitmap(marker.getMeasuredWidth(), marker.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        marker.draw(canvas);
+
+        return bitmap;
     }
 
     @Override

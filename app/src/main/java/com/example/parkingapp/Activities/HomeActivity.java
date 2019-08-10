@@ -286,13 +286,18 @@ public class HomeActivity extends AppCompatActivity
             tokenCall.enqueue(new Callback<BrainTreeToken>() {
                 @Override
                 public void onResponse(Call<BrainTreeToken> call, Response<BrainTreeToken> response) {
-                    BrainTreeToken treeToken = response.body();
-                    assert treeToken != null;
-                    if (treeToken.status.equalsIgnoreCase("success")) {
-                        preferences.setBraintreeToken(treeToken.getToken());
-                    } else {
-                        Toast.makeText(HomeActivity.this, treeToken.getError(), Toast.LENGTH_SHORT).show();
-                    }
+                   try {
+                       BrainTreeToken treeToken = response.body();
+                       assert treeToken != null;
+                       if (treeToken.status.equalsIgnoreCase("success")) {
+                           preferences.setBraintreeToken(treeToken.getToken());
+                       } else {
+                           Toast.makeText(HomeActivity.this, treeToken.getError(), Toast.LENGTH_SHORT).show();
+                       }
+                   }catch (Exception e){
+                       e.printStackTrace();
+                       Toast.makeText(HomeActivity.this, "Braintree failed", Toast.LENGTH_SHORT).show();
+                   }
                 }
 
                 @Override
@@ -406,6 +411,7 @@ public class HomeActivity extends AppCompatActivity
                 callToast();
             }else {
                 fragmentClass= HistoryFragment.class;
+                change();
             }
 
         } else if (id == R.id.invite_friend) {

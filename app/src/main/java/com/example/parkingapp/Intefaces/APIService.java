@@ -69,8 +69,9 @@ public interface APIService {
                                 @Field("latitude") String latitude,
                                 @Field("longitude") String longitude);
 
-    @GET("view_all_reserved.php")
-    Call<ReservationModel> MyReservationCall();
+    @FormUrlEncoded
+    @POST("view_all_reserveds.php")
+    Call<ReservationModel> MyReservationCall(@Field("truck_owner_id")String truck_owner_id);
 
     @GET("view_all_parking.php")
     Call<ParkingModel> MyParkingCall();
@@ -170,8 +171,6 @@ public interface APIService {
                                @Field("customer_id") String customer_id,
                                @Field("truck_owner_id") String truck_owner_id,
                                @Field("total_price") String total_price,
-                               @Field("filled_parking_spots")String Filled_parking_spots,
-                               @Field("remaining_parking_spots")String remaining_parking_spots,
                                @Field("booked_parking_spots")String booked_parking_spots
     );
 

@@ -121,6 +121,7 @@ public class Parking_info_fragment extends Fragment {
         low=view.findViewById(R.id.low);
 
 
+
         if (parking_price.equalsIgnoreCase("0")|| parking_price.equalsIgnoreCase("free")){
             availablity_type.setVisibility(View.GONE);
         }else {

@@ -528,11 +528,11 @@ public class Signup extends AppCompatActivity {
             ;
 
         } else if (TextUtils.isEmpty(address)){
-            add_location.setError("Please provide proper location");
+            add_location.setError("Please provide proper Address");
         }else if (TextUtils.isEmpty(latitude)) {
-            Toast.makeText(this, "Location Missing Please provide permission and try again", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please Provide Address", Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(longitude)) {
-            Toast.makeText(this, "Location Missing Please provide permission and try again", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please Provide Address", Toast.LENGTH_SHORT).show();
         } else {
 
             if (status_value.equalsIgnoreCase("parking_owner")){

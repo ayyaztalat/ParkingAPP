@@ -103,8 +103,8 @@ try {
     }
 
     private void callCancelReservationAPI(final String reservedParkingId, final String parkingID,
-                                          final String reservedParkingSpots, final String filledParkingSpots,
-                                          final String remainingParkingSpots) {
+                                          final String reservedParkingSpots, final String filledParkingSpots
+                                         , final String remainingParkingSpots) {
 
         LayoutInflater inflater = ((HomeActivity)context).getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.pop_cancel_dialogue, null);
@@ -148,8 +148,8 @@ try {
             int remaining_parking = Integer.parseInt(remainingParkingSpots);
             int filled_parking = Integer.parseInt(filledParkingSpots);
 
-            remaining_parking = remaining_parking + 1;
-            filled_parking = filled_parking - 1;
+            remaining_parking = remaining_parking + reserved_parking;
+            filled_parking = filled_parking - reserved_parking;
 
 
             APIService service = APIClient.getClient().create(APIService.class);

@@ -103,4 +103,35 @@ public class ReservationPreferences {
     }
 
 
+    public void setOwnerNumber(String ownerNumber) {
+        Prefs.putString("ownerNumber",ownerNumber);
+    }
+
+    public String getOwnerNumber(){
+        return Prefs.getString("ownerNumber","");
+    }
+
+    public void setParkingImage1(String parking_image1) {
+        Prefs.putString("parking_image1",parking_image1);
+    }
+
+    public void setParkingImage2(String parking_image2) {
+        Prefs.putString("parking_image2",parking_image2);
+    }
+
+    public String getParking_image1() {
+      return   Prefs.getString("parking_image1","");
+    }
+
+    public String getParkingImage2() {
+       return Prefs.getString("parking_image2","");
+    }
+
+
+    public void setVehicalType(String typeofVehical) {
+        Prefs.putString("typeofVehical",typeofVehical);
+    }
+    public String getVehicalType(){
+        return Prefs.getString("typeofVehical","");
+    }
 }

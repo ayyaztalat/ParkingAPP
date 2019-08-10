@@ -2,6 +2,7 @@ package com.example.parkingapp.Activities;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -54,12 +55,22 @@ public class ReserveParking extends AppCompatActivity {
     EditText Spots;
     ConstraintLayout abc;
     Preferences preferences;
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reserve_parking);
         preferences=new Preferences(this);
+        main_card=findViewById(R.id.main_card);
+        calender=findViewById(R.id.calender);
+        calender.setVisibility(View.GONE);
+        calendarView = findViewById(R.id.calendarView);
 
+
+        progressDialog=new ProgressDialog(this);
+        progressDialog.setTitle("Reserving");
+        progressDialog.setMessage("Please wait for a minute");
+        progressDialog.setCancelable(false);
 
         abc=findViewById(R.id.abc);
      /*   if (preferences.getSwitchNightMod()){
@@ -92,7 +103,7 @@ public class ReserveParking extends AppCompatActivity {
 
         if (preferences.getSwitchNightMod()){
             abc.setBackgroundColor(getResources().getColor(R.color.black));
-            title.setTextColor(getResources().getColor(R.color.white));
+          /*  title.setTextColor(getResources().getColor(R.color.white));
             from_date.setTextColor(getResources().getColor(R.color.white));
             to_date.setTextColor(getResources().getColor(R.color.white));
             time_from.setTextColor(getResources().getColor(R.color.white));
@@ -100,10 +111,11 @@ public class ReserveParking extends AppCompatActivity {
             text_days.setTextColor(getResources().getColor(R.color.white));
             time_picker.setTextColor(getResources().getColor(R.color.white));
             price.setTextColor(getResources().getColor(R.color.white));
-            Spots.setTextColor(getResources().getColor(R.color.white));
+            Spots.setTextColor(getResources().getColor(R.color.white));*/
+          calender.setBackgroundColor(getResources().getColor(R.color.white));
         }else {
-            abc.setBackgroundColor(getResources().getColor(R.color.black));
-            title.setTextColor(getResources().getColor(R.color.black));
+            abc.setBackgroundColor(getResources().getColor(R.color.white));
+          /*  title.setTextColor(getResources().getColor(R.color.black));
             from_date.setTextColor(getResources().getColor(R.color.black));
             to_date.setTextColor(getResources().getColor(R.color.black));
             time_from.setTextColor(getResources().getColor(R.color.black));
@@ -111,16 +123,14 @@ public class ReserveParking extends AppCompatActivity {
             text_days.setTextColor(getResources().getColor(R.color.black));
             time_picker.setTextColor(getResources().getColor(R.color.black));
             price.setTextColor(getResources().getColor(R.color.black));
-            Spots.setTextColor(getResources().getColor(R.color.black));
+            Spots.setTextColor(getResources().getColor(R.color.black));*/
+            calender.setBackgroundColor(getResources().getColor(R.color.white));
         }
 
-        main_card=findViewById(R.id.main_card);
-        calender=findViewById(R.id.calender);
-        calender.setVisibility(View.GONE);
-         calendarView = findViewById(R.id.calendarView);
+
 
         title.setText(reservationPreferences.getParkingName());
-        price.setText(reservationPreferences.getParkingPrice());
+        price.setText(reservationPreferences.getParkingPrice()+" $");
         reserve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -280,7 +290,7 @@ public class ReserveParking extends AppCompatActivity {
             }
         });
     }
-
+    int remaining_parking_value,filled_parking_value;
     private void callReserveApi() {
 
         String estimate_time=time_picker.getText().toString().trim();
@@ -290,6 +300,7 @@ public class ReserveParking extends AppCompatActivity {
 
         String remaining_parking=reservationPreferences.getRemainingParkingSpots();
         String filled_spots=reservationPreferences.getFilled_parking_spots();
+
 
         if (TextUtils.isEmpty(estimate_time)){
             time_picker.setError("Please enter estimate time");
@@ -304,48 +315,116 @@ public class ReserveParking extends AppCompatActivity {
             Toast.makeText(this, "Please Add truck from profile first", Toast.LENGTH_LONG).show();
         }else if (TextUtils.isEmpty(remaining_parking)){
             Toast.makeText(this, "Remaining spots are empty", Toast.LENGTH_SHORT).show();
-        }else if (TextUtils.isEmpty(filled_spots)){
-            Toast.makeText(this, "Filled Spots", Toast.LENGTH_SHORT).show();
+        }else if (filled_spots.equalsIgnoreCase(remaining_parking)){
+            Toast.makeText(this, "All parking Spots are filled Can't Reserve", Toast.LENGTH_LONG).show();
         }
-        else{
+        else {
+            if (filled_spots == null || filled_spots == "") {
+                filled_spots = "0";
+            }
 
-            int rem_park= Integer.parseInt(remaining_parking);
-            int filled= Integer.parseInt(filled_spots);
-            int spot= Integer.parseInt(Spotss);
+            int rem_park = Integer.parseInt(remaining_parking);
+            int filled = Integer.parseInt(filled_spots);
+            int spot = Integer.parseInt(Spotss);
 
-            int remaining_parking_value=rem_park-spot;
-            int filled_parking_value=filled+spot;
+            remaining_parking_value = rem_park - spot;
 
-            APIService service= APIClient.getClient().create(APIService.class);
-            Call<AddReservationModel> call=service.addReservation(preferences.getTruckID(),reservationPreferences.getParkingID(),preferences.getName(),reservationPreferences.getParkingOwner()
-                    ,preferences.getTruckNum(),preferences.getTruckColor(),estimate_time,from_date_final,to_date_final,
-                    reservationPreferences.getParkingPrice(),preferences.getUserId(),reservationPreferences.getParkingOwnerId()
-            ,String.valueOf(remaining_parking_value),String.valueOf(filled_parking_value),Spotss);
+            filled_parking_value = filled + spot;
 
-            call.enqueue(new Callback<AddReservationModel>() {
-                @Override
-                public void onResponse(Call<AddReservationModel> call, Response<AddReservationModel> response) {
-                    AddReservationModel model=response.body();
-                    if (model.getStatus().equalsIgnoreCase("success")){
-                        Toast.makeText(ReserveParking.this, "Successfully Reserved", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(),HomeActivity.class));
+            APIService service = APIClient.getClient().create(APIService.class);
+            String truck_id = preferences.getTruckID();
+            String parking_id = reservationPreferences.getParkingID();
+            String name = preferences.getName();
+            String parking_owner = reservationPreferences.getParkingOwner();
+            String truckNum = preferences.getTruckNum();
+            String truckColor = preferences.getTruckColor();
+            String parkingprice = reservationPreferences.getParkingPrice();
+            String userid = preferences.getUserId();
+            String parking_owner_id = reservationPreferences.getParkingOwnerId();
+            String estimate = estimate_time;
+            String from_date = from_date_final;
+            String to_date_finals = to_date_final;
+            String remaining = String.valueOf(remaining_parking_value);
+            String fill = String.valueOf(filled_parking_value);
+            String spotaa = Spotss;
+
+            if (TextUtils.isEmpty(truck_id)) {
+                Toast.makeText(this, "Parking detail missing please contact admin", Toast.LENGTH_SHORT).show();
+                Log.e("error", "callReserveApi: truck_id"+ truck_id );
+            } else if (TextUtils.isEmpty(parking_id)) {
+                Toast.makeText(this, "Parking details missing please contact admin", Toast.LENGTH_SHORT).show();
+                Log.e("error", "callReserveApi: parking_id"+ parking_id );
+            } else if (TextUtils.isEmpty(name)) {
+                Toast.makeText(this, "Parking details missing please contact admin", Toast.LENGTH_SHORT).show();
+                Log.e("error", "callReserveApi:name "+ name );
+            } else if (TextUtils.isEmpty(parking_owner)) {
+                Toast.makeText(this, "Parking details missing please contact admin", Toast.LENGTH_SHORT).show();
+                Log.e("error", "callReserveApi:parking_owner "+ parking_owner );
+            } else if (TextUtils.isEmpty(truckNum)) {
+                Toast.makeText(this, "Parking details missing please contact admin", Toast.LENGTH_SHORT).show();
+                Log.e("error", "callReserveApi:truckNum "+ truckNum );
+            } else if (TextUtils.isEmpty(truckColor)) {
+                Toast.makeText(this, "Parking details missing please contact admin", Toast.LENGTH_SHORT).show();
+                Log.e("error", "callReserveApi: truckColor"+ truckColor );
+            } else if (TextUtils.isEmpty(parkingprice)) {
+                Toast.makeText(this, "Parking details missing please contact admin", Toast.LENGTH_SHORT).show();
+                Log.e("error", "callReserveApi: parkingprice"+ parkingprice );
+            } else if (TextUtils.isEmpty(userid)) {
+                Toast.makeText(this, "Parking details missing please contact admin", Toast.LENGTH_SHORT).show();
+                Log.e("error", "callReserveApi: userid"+ userid );
+            } else if (TextUtils.isEmpty(parking_owner_id)) {
+                Toast.makeText(this, "Parking details missing please contact admin", Toast.LENGTH_SHORT).show();
+                Log.e("error", "callReserveApi: parking_owner_id"+ parking_owner_id );
+            } else if (TextUtils.isEmpty(estimate)) {
+                Toast.makeText(this, "Parking details missing please contact admin", Toast.LENGTH_SHORT).show();
+                Log.e("error", "callReserveApi:estimate "+ estimate );
+            } else if (TextUtils.isEmpty(from_date)) {
+                Toast.makeText(this, "Parking details missing please contact admin", Toast.LENGTH_SHORT).show();
+                Log.e("error", "callReserveApi: from_date"+ from_date );
+            } else if (TextUtils.isEmpty(to_date_finals)) {
+                Toast.makeText(this, "Parking details missing please contact admin", Toast.LENGTH_SHORT).show();
+                Log.e("error", "callReserveApi: to_date_finals"+ to_date_finals );
+            } else if (TextUtils.isEmpty(remaining)) {
+                Toast.makeText(this, "Parking details missing please contact admin", Toast.LENGTH_SHORT).show();
+                Log.e("error", "callReserveApi: remaining"+ remaining );
+            } else if (TextUtils.isEmpty(fill)) {
+                Toast.makeText(this, "Parking details missing please contact admin", Toast.LENGTH_SHORT).show();
+                Log.e("error", "callReserveApi: fill"+ fill );
+            } else if (TextUtils.isEmpty(spotaa)) {
+                Toast.makeText(this, "Parking details missing please contact admin", Toast.LENGTH_SHORT).show();
+                Log.e("error", "callReserveApi: spotaa"+ spotaa );
+            } else {
+                progressDialog.show();
+
+                Call<AddReservationModel> call = service.addReservation(truck_id,parking_id,name,parking_owner,truckNum,truckColor,
+                        estimate_time,from_date,to_date_final,parkingprice,userid,parking_owner_id,remaining,fill,spotaa);
+
+                call.enqueue(new Callback<AddReservationModel>() {
+                    @Override
+                    public void onResponse(Call<AddReservationModel> call, Response<AddReservationModel> response) {
+                        AddReservationModel model = response.body();
+                        progressDialog.dismiss();
+                        if (model.getStatus().equalsIgnoreCase("success")) {
+                            Toast.makeText(ReserveParking.this, "Successfully Reserved", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                             finishAffinity();
 
-                    }else {
-                        Toast.makeText(ReserveParking.this, model.getError(), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(ReserveParking.this, model.getError(), Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
 
-                @Override
-                public void onFailure(Call<AddReservationModel> call, Throwable t) {
-                    Toast.makeText(ReserveParking.this, "Network Error", Toast.LENGTH_SHORT).show();
-                    Log.e("error", "onFailure: "+t );
-                }
-            });
+                    @Override
+                    public void onFailure(Call<AddReservationModel> call, Throwable t) {
+                        progressDialog.dismiss();
+                        Toast.makeText(ReserveParking.this, "Network Error", Toast.LENGTH_SHORT).show();
+                        Log.e("error", "onFailure: " + t);
+                    }
+                });
+
+            }
 
         }
-
-
 
     }
 
