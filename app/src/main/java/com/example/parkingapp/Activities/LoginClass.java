@@ -521,7 +521,7 @@ public class LoginClass extends AppCompatActivity {
           if (spinner.equalsIgnoreCase("truck_owner")){
               popupOwnerRemainingDetails(name,email,password,numbers,spinner,add_locations);
           }else{
-              apiReferalCodeCall(name,email,password,numbers,spinner,add_locations, "", "", "","");
+              apiReferalCodeCall(name,email,password,numbers,spinner,add_locations, "", "", "","", "", "", "");
           }
 
 
@@ -547,7 +547,9 @@ public class LoginClass extends AppCompatActivity {
         final EditText company_name = alertLayout.findViewById(R.id.company_name);
         final Button signupsss = alertLayout.findViewById(R.id.signupsss);
         final EditText tac_id = alertLayout.findViewById(R.id.tac_id);
-
+        final EditText bank_names=alertLayout.findViewById(R.id.bank_name);
+        final EditText account_names=alertLayout.findViewById(R.id.account_num);
+        final EditText routing_num=alertLayout.findViewById(R.id.routing_num);
         //  etcode = alertLayout.findViewById(R.id.et_password);
 
         // this is set the view from XML inside AlertDialog
@@ -564,7 +566,9 @@ public class LoginClass extends AppCompatActivity {
                 String states = state.getText().toString();
                 String company_names = company_name.getText().toString();
                 String tacID = tac_id.getText().toString();
-
+                String bank=bank_names.getText().toString();
+                String account=account_names.getText().toString();
+                String routing=routing_num.getText().toString();
                 if (TextUtils.isEmpty(citys)) {
                     city.setError("enter city");
 
@@ -575,12 +579,18 @@ public class LoginClass extends AppCompatActivity {
                     company_name.setError("please enter company name");
                 } else if (TextUtils.isEmpty(tacID)) {
                     tac_id.setError("please enter tac id");
+                }else if (TextUtils.isEmpty(bank)){
+                    bank_names.setError("please enter bank name");
+                }else if (TextUtils.isEmpty(account)){
+                    account_names.setError("please enter account number");
+                }else if (TextUtils.isEmpty(routing)){
+                    routing_num.setError("please enter routing number");
                 } else {
 
                     dialog.dismiss();
                     progressDialog.show();
 
-                    apiReferalCodeCall(name,email,password,numbers,spinner,add_locations,citys,states,company_names,tacID);
+                    apiReferalCodeCall(name,email,password,numbers,spinner,add_locations,citys,states,company_names,tacID,bank,account,routing);
                     //  apiServiceCall();
                     // hide virtual keyboard
                 }
@@ -594,9 +604,9 @@ public class LoginClass extends AppCompatActivity {
 
 
 
-        private void apiReferalCodeCall(String name, String email, String password, String numbers, String spinner, String add_locations, String citys, String states, String company_names, String tacID) {
+        private void apiReferalCodeCall(String name, String email, String password, String numbers, String spinner, String add_locations, String citys, String states, String company_names, String tacID, String bank, String account, String routing) {
     APIService service=APIClient.getClient().create(APIService.class);
-    Call<SignupModel> modelCall=service.signup(name,email,password,numbers,spinner,latitude,longitude,preferences.getFcmToken(),add_locations, citys, states, company_names, tacID);
+    Call<SignupModel> modelCall=service.signup(name,email,password,numbers,spinner,latitude,longitude,preferences.getFcmToken(),add_locations, citys, states, company_names, tacID,bank,account,routing);
     modelCall.enqueue(new Callback<SignupModel>() {
       @Override
       public void onResponse(Call<SignupModel> call, Response<SignupModel> response) {

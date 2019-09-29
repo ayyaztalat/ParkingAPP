@@ -13,6 +13,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center">
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -91,6 +94,48 @@
                 android:gravity="center"
                 android:padding="10dp"
                 android:textCursorDrawable="@color/black" />
+            <EditText
+                android:id="@+id/bank_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                android:background="@drawable/button_backgrounds"
+                android:drawablePadding="10dp"
+                android:fontFamily="sans-serif"
+                android:inputType="text"
+                android:hint="Enter your Bank Name"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textCursorDrawable="@color/black" />
+  <EditText
+                android:id="@+id/account_num"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                android:background="@drawable/button_backgrounds"
+                android:drawablePadding="10dp"
+                android:fontFamily="sans-serif"
+                android:inputType="text"
+                android:hint="Enter your Account Number"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textCursorDrawable="@color/black" />
+  <EditText
+                android:id="@+id/routing_num"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                android:background="@drawable/button_backgrounds"
+                android:drawablePadding="10dp"
+                android:fontFamily="sans-serif"
+                android:inputType="text"
+                android:hint="Enter your Routing number"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textCursorDrawable="@color/black" />
 
 
 
@@ -106,6 +151,7 @@
 
 
         </LinearLayout>
+        </ScrollView>
 
     </android.support.v7.widget.CardView>
 

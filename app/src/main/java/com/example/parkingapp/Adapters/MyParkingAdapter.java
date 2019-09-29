@@ -45,12 +45,12 @@ public class MyParkingAdapter extends RecyclerView.Adapter<MyParkingAdapter.Hold
     public void onBindViewHolder(@NonNull Holder holder, final int i) {
         String fullname=modelArrayList.get(i).getParkingOwnerName();
 
-
+/*
         StringBuilder initials = new StringBuilder();
         for (String s : fullname.split(" ")) {
             initials.append(s.charAt(0));
-        }
-        holder.image_name.setText(initials.toString());
+        }*/
+     //   holder.image_name.setText(initials.toString());
 
         holder.location.setText(modelArrayList.get(i).getParkingName());
         holder.location.setText(modelArrayList.get(i).getParkingLatitude());
@@ -61,7 +61,7 @@ public class MyParkingAdapter extends RecyclerView.Adapter<MyParkingAdapter.Hold
                 context.startActivity(new Intent(context, EditParkingClass.class)
                         .putExtra("parking_id",modelArrayList.get(i).getParkingId())
                         .putExtra("parking_price",modelArrayList.get(i).getParkingPrice())
-                        .putExtra("parking_vehical",modelArrayList.get(i).getTypeOfVehicle())
+                        .putExtra("parking_vehical","")
                         .putExtra("parking_time",modelArrayList.get(i).getParkingTime())
                         .putExtra("owner_number",modelArrayList.get(i).getParkingOwnerNumber())
                         .putExtra("parking_description",modelArrayList.get(i).getParkingDescription())

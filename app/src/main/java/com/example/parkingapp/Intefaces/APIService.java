@@ -55,7 +55,10 @@ public interface APIService {
                              @Field("city") String citys,
                              @Field("state") String states,
                              @Field("company_name") String company_names,
-                             @Field("tac_id") String tacID);
+                             @Field("tac_id") String tacID,
+                             @Field("bank_name")String bank_name,
+                             @Field("account_num")String account_num,
+                             @Field("routing_num")String routing_num);
 
     @FormUrlEncoded
     @POST("edit_profile.php")

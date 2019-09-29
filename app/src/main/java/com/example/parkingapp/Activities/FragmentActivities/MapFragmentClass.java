@@ -147,7 +147,7 @@ public class MapFragmentClass extends Fragment {
   Preferences preference;
 
 
-  FloatingActionButton fab, brightness, filter;
+  ImageView fab, brightness, filter;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -377,51 +377,53 @@ public class MapFragmentClass extends Fragment {
 
           if (truck_stops.isChecked()) {
               truck = "truck_stops";
-            //  preference.setTruckCheck(true);
+              preference.setTruckCheck(true);
           } else {
               truck = "";
-         //   preference.setTruckCheck(false);
+            preference.setTruckCheck(false);
           }
 
           if (weight_stations.isChecked()) {
               weight = "weight_station";
-         //   preference.setWeightStop(true);
+            preference.setWeightStop(true);
           } else {
               weight = "";
-         //   preference.setWeightStop(false);
+            preference.setWeightStop(false);
           }
 
           if (parking_areas.isChecked()) {
               parking_area = "parking_areas";
-         //   preference.setParkingArea(true);
+            preference.setParkingArea(true);
           } else {
               parking_area = "";
-        //    preference.setParkingArea(false);
+           preference.setParkingArea(false);
           }
           if (rest_parking.isChecked()) {
               rest_parkings = "rest_areas";
-         //   preference.setRestParking(true);
+           preference.setRestParking(true);
           } else {
               rest_parkings = "";
-          //  preference.setRestParking(false);
+            preference.setRestParking(false);
           }
 
           dialog.dismiss();
 
-          if (preference.getDontShowParking()) {
-              Toast.makeText(context, "Free Parking Closed", Toast.LENGTH_SHORT).show();
+          if (dont_show_free_parking.isChecked()) {
+         //     Toast.makeText(context, "Free Parking Closed", Toast.LENGTH_SHORT).show();
               googleMap.clear();
 
               filterClicked=false;
               preference.setFilterClicked(filterClicked);
               callAPIDataFetching();
+            //  callSecondFreeAPI();
 
           } else {
             filterClicked=true;
             preference.setFilterClicked(filterClicked);
             if (TextUtils.isEmpty(truck)&&TextUtils.isEmpty(weight)&&TextUtils.isEmpty(parking_area)&&TextUtils.isEmpty(rest_parkings)){
-
-              callSecondFreeAPI();
+                googleMap.clear();
+                callAPIDataFetching();
+                callSecondFreeAPI();
             }else {
               googleMap.clear();
               callAPIDataFetching();
@@ -472,26 +474,26 @@ public class MapFragmentClass extends Fragment {
 
                 if (typeofVehical.equalsIgnoreCase("truck_stops")){
                     googleMap.addMarker(new MarkerOptions().position(latLng)
-                           .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.green_truck_area))).title(""+i));
+                           .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.green_truck_area))).title("filter"+i));
 
                 }else if (typeofVehical.equalsIgnoreCase("rest_areas")){
                     googleMap.addMarker(new MarkerOptions().position(latLng)
-                           .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.rest_area))).title(""+i));
+                           .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.rest_area))).title("filter"+i));
 
                 }else if (typeofVehical.equalsIgnoreCase("weight_station")){
                     googleMap.addMarker(new MarkerOptions().position(latLng)
-                           .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.weight_station))).title(""+i));
+                           .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.weight_station))).title("filter"+i));
 
                 }else {
                     googleMap.addMarker(new MarkerOptions().position(latLng)
-                           .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.free_parking))).title(""+i));
+                           .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.free_parking))).title("filter"+i));
 
                 }
 
 
             //  callSecondFreeAPI();
 
-              googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            /*  googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker) {
                   ArrayList<CustomizationMapModel> modelForMaps=new ArrayList<>();
@@ -514,14 +516,14 @@ public class MapFragmentClass extends Fragment {
                     e.printStackTrace();
                   }
 
-            /*      startActivity(new Intent(context, ReservationParkingClass.class).putExtra("latitude",arrayListModel.get(i).getParkingLatitude())
+            *//*      startActivity(new Intent(context, ReservationParkingClass.class).putExtra("latitude",arrayListModel.get(i).getParkingLatitude())
                           .putExtra("longitude",arrayListModel.get(i).getParkingLongitude()).putExtra("parking_owner",arrayListModel.get(i).getParkingOwnerName()).putExtra("parking_name",arrayListModel.get(i).getParkingName())
                           .putExtra("parking_availability",arrayListModel.get(i).getParkingTime()).putExtra("parking_id",arrayListModel.get(i).getParkingId()).putExtra("parking_des",arrayListModel.get(i).getParkingDescription())
                           .putExtra("price",arrayListModel.get(i).getParkingPrice()).putExtra("owner_id",arrayListModel.get(i).getParkingOwnerId())
                           .putExtra("remaining_parking_spots",arrayListModel.get(i).getRemainingParkingSpots()).putExtra("filled_parking_spots",arrayListModel.get(i).getFilledParkingSpots()));
-                  */return true;
+                  *//*return true;
                 }
-              });
+              });*/
             }
           }catch (Exception e) {
               e.printStackTrace();
@@ -535,7 +537,7 @@ public class MapFragmentClass extends Fragment {
 
       @Override
       public void onFailure(Call<FilterModel> call, Throwable t) {
-
+        Toast.makeText(context, "Network Issue", Toast.LENGTH_SHORT).show();
       }
     });
   }
@@ -663,6 +665,7 @@ public class MapFragmentClass extends Fragment {
     }
   }
 
+  boolean first_time=true;
 
   private void onMapWork() {
    // mMapView.removeAllViews();
@@ -672,8 +675,14 @@ public class MapFragmentClass extends Fragment {
     try {
       Log.e(TAG, "onMapReady: "+latitude+longitude);
       LatLng latLng=new LatLng(latitude,longitude);
-      googleMap.addMarker(new MarkerOptions().position(latLng).title(preference.getName()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).draggable(false).visible(true));
-      googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f));
+      googleMap.addMarker(new MarkerOptions().position(latLng).title(preference.getName()).icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.mipmap.c_l))).draggable(false).visible(true));
+     if (first_time){
+       first_time=false;
+       googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f));
+     }else {
+       Log.e(TAG, "onMapWork: no need to animate" );
+     }
+
     }catch (Exception e){
       Toast.makeText(context, "Failed to get Location Update", Toast.LENGTH_SHORT).show();
     }
@@ -717,7 +726,7 @@ public class MapFragmentClass extends Fragment {
           if (TextUtils.isEmpty(truck) && TextUtils.isEmpty(weight) && TextUtils.isEmpty(parking_area) && TextUtils.isEmpty(rest_parkings)) {
            preference.setFilterClicked(false);
            callAPIDataFetching();
-            callSecondFreeAPI();
+          //  callSecondFreeAPI();
           } else {
          //   googleMap.clear();
             callAPIDataFetching();
@@ -725,10 +734,12 @@ public class MapFragmentClass extends Fragment {
           }
         }else {
           callAPIDataFetching();
-          callSecondFreeAPI();
+        //  callSecondFreeAPI();
         }
       } catch (Exception e) {
         e.printStackTrace();
+          Log.e("error", "onMapWork: "+e );
+  //      Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
       }
     }
 
@@ -760,6 +771,7 @@ public class MapFragmentClass extends Fragment {
           }
         } catch (Exception e) {
           e.printStackTrace();
+          Toast.makeText(context,e.getMessage() , Toast.LENGTH_SHORT).show();
         }
       }
 
@@ -786,13 +798,12 @@ public class MapFragmentClass extends Fragment {
       final String parking_owner_id=arrayList.get(i).getParkingOwnerId();
       final String remaining_parking_spots=arrayList.get(i).getRemainingParkingSpots();
       final String filled_parking_spots=arrayList.get(i).getFilledParkingSpots();
-      final String typeofVehical=arrayList.get(i).getTypeOfVehicle();
 
-
-       boolean truckss=preference.getTruckCheck();
+     boolean truckss=preference.getTruckCheck();
      boolean   weight_stations=preference.getWeightCheck();
      boolean   parking_areas=preference.getPrkingArea();
-     boolean   rest_parking=preference.getPrkingArea();
+     boolean   rest_parking=preference.getRestCheck();
+     filterClicked=preference.getFilterClicked();
 
 
         String truck,weight,parking_area,rest_parkings;
@@ -826,7 +837,7 @@ public class MapFragmentClass extends Fragment {
     //  Toast.makeText(context, "latlng "+latLng.latitude+latLng.longitude, Toast.LENGTH_SHORT).show();
       try{
 
-          if (typeofVehical.equalsIgnoreCase("truck_stops")){
+        /*  if (typeofVehical.equalsIgnoreCase("truck_stops")){
               googleMap.addMarker(new MarkerOptions().position(latLng)
                       .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.green_truck_area))).title(""+i));
 
@@ -844,15 +855,27 @@ public class MapFragmentClass extends Fragment {
 
           }
 
-          if (preference.getDontShowParking()){
+*/
+        googleMap.addMarker(new MarkerOptions().position(latLng).title(parking_title).icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.free_parking))).title(""+i));
+
+        if (preference.getDontShowParking()){
               Toast.makeText(context, "Free parking Closed", Toast.LENGTH_SHORT).show();
+             // callSecondFreeAPI();
+            //  callAPIDataFetching();
           }else {
 
+            if (TextUtils.isEmpty(truck) && TextUtils.isEmpty(weight) && TextUtils.isEmpty(parking_area) && TextUtils.isEmpty(rest_parkings) && !preference.getDontShowParking()){
+                filterClicked=false;
+                preference.setFilterClicked(false);
+            }
               if (filterClicked) {
              //   googleMap.clear();
-                   callAPIDataFetching();
+               //    callAPIDataFetching();
+
+
                   apiCallFilter(truck, weight, parking_area, rest_parkings);
               } else {
+                 // callAPIDataFetching();
                   callSecondFreeAPI();
               }
           }
@@ -867,8 +890,8 @@ public class MapFragmentClass extends Fragment {
               models.add(arrayList.get(Integer.parseInt(marker.getTitle())));
               modelForMaps.add(new CustomizationMapModel(models.get(0).getParkingLatitude(),models.get(0).getParkingLongitude(),models.get(0).getParkingName(),models.get(0).getParkingOwnerName(),models.get(0).getParkingTime(),
                       models.get(0).getParkingId(),models.get(0).getParkingDescription(),models.get(0).getParkingPrice(),
-                      models.get(0).getParkingOwnerId(),models.get(0).getRemainingParkingSpots(),models.get(0).getFilledParkingSpots(),models.get(0).getTypeOfVehicle(), models.get(0).getParkingName()
-                      ,models.get(0).getParkingOwnerNumber(),models.get(0).getParking_image1(),models.get(0).getParking_image2()));
+                      models.get(0).getParkingOwnerId(),models.get(0).getRemainingParkingSpots(),models.get(0).getFilledParkingSpots(),"", models.get(0).getParkingName()
+                      ,models.get(0).getParkingOwnerNumber(),models.get(0).getParkingImage1(),models.get(0).getParkingImage2()));
 
               Intent intent=new Intent(context,ReservationParkingClass.class);
               intent.putExtra("MapData",new Gson().toJson(modelForMaps));
@@ -887,6 +910,7 @@ public class MapFragmentClass extends Fragment {
         });
       }catch (Exception e){
             e.printStackTrace();
+        Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
       }
 
 
@@ -904,7 +928,7 @@ public class MapFragmentClass extends Fragment {
           FreeParkingModel model = response.body();
           if (model.getStatus().equalsIgnoreCase("success")) {
             if (preference.getDontShowParking()){
-              Toast.makeText(context, "Free Parking Closed", Toast.LENGTH_SHORT).show();
+          //    Toast.makeText(context, "Free Parking Closed", Toast.LENGTH_SHORT).show();
             }else {
             callSecondFetching(model.getParkingData());
                }
@@ -914,6 +938,7 @@ public class MapFragmentClass extends Fragment {
 
         }catch (Exception e){
           e.printStackTrace();
+          Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
       }
 
@@ -950,19 +975,19 @@ public class MapFragmentClass extends Fragment {
 
         if (typeofVehical.equalsIgnoreCase("truck_stops")){
           googleMap.addMarker(new MarkerOptions().position(latLng)
-                  .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.green_truck_area))).title(""+i));
+                  .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.green_truck_area))).title("free"+i));
 
         }else if (typeofVehical.equalsIgnoreCase("rest_areas")){
           googleMap.addMarker(new MarkerOptions().position(latLng)
-                  .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.rest_area))).title(""+i));
+                  .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.rest_area))).title("free"+i));
 
         }else if (typeofVehical.equalsIgnoreCase("weight_station")){
           googleMap.addMarker(new MarkerOptions().position(latLng)
-                 .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.weight_station))).title(""+i));
+                 .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.weight_station))).title("free"+i));
 
         }else {
           googleMap.addMarker(new MarkerOptions().position(latLng)
-                  .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.free_parking))).title(""+i));
+                  .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.free_parking))).title("free"+i));
 
         }
 
@@ -976,9 +1001,12 @@ public class MapFragmentClass extends Fragment {
             ArrayList<CustomizationMapModel> modelForMaps=new ArrayList<>();
             ArrayList<FreeParkingModel> models=new ArrayList<>();
 
-            if(marker.getTitle()!=null) {
+            if(marker.getTitle()!=null &&marker.getTitle().contains("free")) {
               try {
-                models.add(freeParkingModels.get(Integer.parseInt(marker.getTitle())));
+                  String id=marker.getTitle().substring(4);
+                  Log.e(TAG, "onMarkerClick: "+id );
+                  Log.e(TAG, "onMarkerClick: "+marker.getTitle() );
+                models.add(freeParkingModels.get(Integer.parseInt(id)));
                 modelForMaps.add(new CustomizationMapModel(models.get(0).getParkingLatitude(), models.get(0).getParkingLongitude(), models.get(0).getParkingName(), models.get(0).getParkingOwnerName(), models.get(0).getParkingTime(),
                         models.get(0).getParkingId(), models.get(0).getParkingDescription(), models.get(0).getParkingPrice(),
                         models.get(0).getParkingOwnerId(), models.get(0).getRemainingParkingSpots(),
@@ -991,7 +1019,61 @@ public class MapFragmentClass extends Fragment {
                 getActivity().finish();
               }catch (Exception e){
                 e.printStackTrace();
+                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
               }
+            }else if (marker.getTitle()!=null && marker.getTitle().contains("filter")){
+
+                        ArrayList<CustomizationMapModel> modelForMaps2=new ArrayList<>();
+                        ArrayList<FilterModel> models2=new ArrayList<>();
+
+                        try {
+                            if (marker.getTitle() != null) {
+                                String id=marker.getTitle().substring(5);
+                                Log.e(TAG, "onMarkerClick: "+marker.getTitle() );
+                                models2.add(arrayListModel.get(Integer.parseInt(id)));
+                                modelForMaps2.add(new CustomizationMapModel(models2.get(0).getParkingLatitude(), models2.get(0).getParkingLongitude(), models2.get(0).getParkingName(), models2.get(0).getParkingOwnerName(), models2.get(0).getParkingTime(),
+                                        models2.get(0).getParkingId(), models2.get(0).getParkingDescription(), models2.get(0).getParkingPrice(),
+                                        models2.get(0).getParkingOwnerId(), models2.get(0).getRemainingParkingSpots(), models2.get(0).getFilledParkingSpots(), models2.get(0).getTypeOfVehicle(), models2.get(0).getParkingName(),
+                                        models2.get(0).getParkingOwnerNumber(), models2.get(0).getParking_image1(), models2.get(0).getParking_image2()));
+
+                                Intent intent = new Intent(context, ReservationParkingClass.class);
+                                intent.putExtra("MapData", new Gson().toJson(modelForMaps2));
+                                startActivity(intent);
+                                getActivity().finish();
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+                /* startActivity(new Intent(context, ReservationParkingClass.class).putExtra("latitude",arrayListModel.get(i).getParkingLatitude())
+                          .putExtra("longitude",arrayListModel.get(i).getParkingLongitude()).putExtra("parking_owner",arrayListModel.get(i).getParkingOwnerName()).putExtra("parking_name",arrayListModel.get(i).getParkingName())
+                                .putExtra("parking_availability",arrayListModel.get(i).getParkingTime()).putExtra("parking_id",arrayListModel.get(i).getParkingId()).putExtra("parking_des",arrayListModel.get(i).getParkingDescription())
+                                .putExtra("price",arrayListModel.get(i).getParkingPrice()).putExtra("owner_id",arrayListModel.get(i).getParkingOwnerId())
+                                .putExtra("remaining_parking_spots",arrayListModel.get(i).getRemainingParkingSpots()).putExtra("filled_parking_spots",arrayListModel.get(i).getFilledParkingSpots()));
+                */
+
+            }else {
+                ArrayList<CustomizationMapModel> modelForMaps3 = new ArrayList<>();
+                ArrayList<ParkingModel> models3 = new ArrayList<>();
+                try {
+                    if (marker.getTitle() != null) {
+                        Log.e(TAG, "onMarkerClick: "+marker.getTitle() );
+                        models3.add(arrayList.get(Integer.parseInt(marker.getTitle())));
+                        modelForMaps3.add(new CustomizationMapModel(models3.get(0).getParkingLatitude(), models3.get(0).getParkingLongitude(), models3.get(0).getParkingName(), models3.get(0).getParkingOwnerName(), models3.get(0).getParkingTime(),
+                                models3.get(0).getParkingId(), models3.get(0).getParkingDescription(), models3.get(0).getParkingPrice(),
+                                models3.get(0).getParkingOwnerId(), models3.get(0).getRemainingParkingSpots(), models3.get(0).getFilledParkingSpots(), "", models3.get(0).getParkingName()
+                                , models3.get(0).getParkingOwnerNumber(), models3.get(0).getParkingImage1(), models3.get(0).getParkingImage2()));
+
+                        Intent intent = new Intent(context, ReservationParkingClass.class);
+                        intent.putExtra("MapData", new Gson().toJson(modelForMaps3));
+                        startActivity(intent);
+                        getActivity().finish();
+                    }
+
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
 
       /*      startActivity(new Intent(context, ReservationParkingClass.class).putExtra("latitude", freeParkingModels.get(i).getParkingLatitude())

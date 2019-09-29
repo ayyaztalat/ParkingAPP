@@ -263,7 +263,7 @@ public class HomeActivity extends AppCompatActivity
                      preferences.setCardCustomerLocation(model.getUserData().get(0).getCardCustomerLocation());
                      preferences.setCustomerID(model.getUserData().get(0).getCustomerId());
 
-                     Toast.makeText(HomeActivity.this, model.getUserData().get(0).getName(), Toast.LENGTH_SHORT).show();
+                 //    Toast.makeText(HomeActivity.this, model.getUserData().get(0).getName(), Toast.LENGTH_SHORT).show();
 
 
                  }else{
@@ -292,11 +292,12 @@ public class HomeActivity extends AppCompatActivity
                        if (treeToken.status.equalsIgnoreCase("success")) {
                            preferences.setBraintreeToken(treeToken.getToken());
                        } else {
-                           Toast.makeText(HomeActivity.this, treeToken.getError(), Toast.LENGTH_SHORT).show();
+                     //      Toast.makeText(HomeActivity.this, treeToken.getError(), Toast.LENGTH_SHORT).show();
+                           Log.e("error", "onResponse: "+treeToken.getError() );
                        }
                    }catch (Exception e){
                        e.printStackTrace();
-                       Toast.makeText(HomeActivity.this, "Braintree failed", Toast.LENGTH_SHORT).show();
+               //        Toast.makeText(HomeActivity.this, "Braintree failed", Toast.LENGTH_SHORT).show();
                    }
                 }
 

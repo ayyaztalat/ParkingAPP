@@ -121,7 +121,7 @@ public class Map_fragment_parking extends Fragment {
         }
     };
 
-    private void onMapWork(double latitude, double longitude) {
+    private void onMapWork(final double latitude, final double longitude) {
 
 
 
@@ -138,7 +138,12 @@ public class Map_fragment_parking extends Fragment {
                             googleMap.addPolyline(DirectionConverter.createPolyline(context, directionPositionList, 5, Color.RED));
                             setCameraWithCoordinationBounds(route);
                         } else {
-                            Toast.makeText(context, "Network issue", Toast.LENGTH_SHORT).show();
+                            //  Toast.makeText(context, "Network issue", Toast.LENGTH_SHORT).show();
+                            try {
+                                onMapWork(latitude, longitude);
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
                         }
                     }
 

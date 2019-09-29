@@ -30,6 +30,7 @@ public class ParkingModel {
     }
 
 
+
     @SerializedName("error")
     @Expose
     private String error;
@@ -74,9 +75,6 @@ public class ParkingModel {
     @SerializedName("parking_description")
     @Expose
     private String parkingDescription;
-    @SerializedName("type_of_vehicle")
-    @Expose
-    private String typeOfVehicle;
     @SerializedName("total_parking_spots")
     @Expose
     private String totalParkingSpots;
@@ -91,27 +89,10 @@ public class ParkingModel {
     private String timeStamp;
     @SerializedName("parking_image1")
     @Expose
-    private String parking_image1;
-
-    public String getParking_image1() {
-        return parking_image1;
-    }
-
-    public void setParking_image1(String parking_image1) {
-        this.parking_image1 = parking_image1;
-    }
-
-    public String getParking_image2() {
-        return parking_image2;
-    }
-
-    public void setParking_image2(String parking_image2) {
-        this.parking_image2 = parking_image2;
-    }
-
+    private String parkingImage1;
     @SerializedName("parking_image2")
     @Expose
-    private String parking_image2;
+    private String parkingImage2;
 
     public String getParkingId() {
         return parkingId;
@@ -209,14 +190,6 @@ public class ParkingModel {
         this.parkingDescription = parkingDescription;
     }
 
-    public String getTypeOfVehicle() {
-        return typeOfVehicle;
-    }
-
-    public void setTypeOfVehicle(String typeOfVehicle) {
-        this.typeOfVehicle = typeOfVehicle;
-    }
-
     public String getTotalParkingSpots() {
         return totalParkingSpots;
     }
@@ -247,6 +220,22 @@ public class ParkingModel {
 
     public void setTimeStamp(String timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public String getParkingImage1() {
+        return parkingImage1;
+    }
+
+    public void setParkingImage1(String parkingImage1) {
+        this.parkingImage1 = parkingImage1;
+    }
+
+    public String getParkingImage2() {
+        return parkingImage2;
+    }
+
+    public void setParkingImage2(String parkingImage2) {
+        this.parkingImage2 = parkingImage2;
     }
     public String  getError() {
         return error;

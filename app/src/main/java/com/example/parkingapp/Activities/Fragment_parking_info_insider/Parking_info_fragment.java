@@ -123,9 +123,13 @@ public class Parking_info_fragment extends Fragment {
 
 
         if (parking_price.equalsIgnoreCase("0")|| parking_price.equalsIgnoreCase("free")){
-            availablity_type.setVisibility(View.GONE);
-        }else {
             availablity_type.setVisibility(View.VISIBLE);
+            parking_spots.setVisibility(View.GONE);
+            next.setVisibility(View.GONE);
+        }else {
+            availablity_type.setVisibility(View.GONE);
+            parking_spots.setVisibility(View.VISIBLE);
+            next.setVisibility(View.VISIBLE);
         }
 
         high.setOnClickListener(new View.OnClickListener() {

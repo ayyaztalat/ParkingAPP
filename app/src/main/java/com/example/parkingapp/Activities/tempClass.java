@@ -11,7 +11,7 @@ public class tempClass extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Toast.makeText(this, "Theme Updated", Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(this, "Theme Updated", Toast.LENGTH_SHORT).show();
         finish();
         startActivity(new Intent(getApplicationContext(),HomeActivity.class));
     }

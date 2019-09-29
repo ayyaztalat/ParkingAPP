@@ -23,6 +23,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -47,7 +48,11 @@ import com.example.parkingapp.Intefaces.APIService;
 import com.example.parkingapp.Models.SignupModel;
 import com.example.parkingapp.Preferences.Preferences;
 import com.example.parkingapp.R;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Task;
 import com.schibstedspain.leku.LocationPickerActivity;
@@ -130,7 +135,7 @@ public class Signup extends AppCompatActivity {
 
 
 
-   /*      if (checkLocationPermission()) {
+         if (checkLocationPermission()) {
 
            request = new LocationRequest();
             request.setInterval(10000);
@@ -161,7 +166,6 @@ public class Signup extends AppCompatActivity {
         } else {
             checkLocationPermission();
         }
-*/
         add_location=findViewById(R.id.add_location);
         add_location.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -538,7 +542,7 @@ public class Signup extends AppCompatActivity {
             if (status_value.equalsIgnoreCase("parking_owner")){
                 popupOwnerRemainingDetails(email, password, name, phone,address);
             }else{
-                CallApiServiceSignup(email, password, name, phone,address, "", "", "", "");
+                CallApiServiceSignup(email, password, name, phone,address, "", "", "", "","","","");
             }
 
 
@@ -555,6 +559,9 @@ public class Signup extends AppCompatActivity {
         final EditText company_name=alertLayout.findViewById(R.id.company_name);
         final Button signupsss=alertLayout.findViewById(R.id.signupsss);
         final EditText tac_id=alertLayout.findViewById(R.id.tac_id);
+        final EditText bank_names=alertLayout.findViewById(R.id.bank_name);
+        final EditText account_names=alertLayout.findViewById(R.id.account_num);
+        final EditText routing_num=alertLayout.findViewById(R.id.routing_num);
 
         //  etcode = alertLayout.findViewById(R.id.et_password);
 
@@ -572,6 +579,9 @@ public class Signup extends AppCompatActivity {
                 String states=state.getText().toString();
                 String company_names=company_name.getText().toString();
                 String tacID=tac_id.getText().toString();
+                String bank=bank_names.getText().toString();
+                String account=account_names.getText().toString();
+                String routing=routing_num.getText().toString();
 
                 if (TextUtils.isEmpty(citys)) {
                     city.setError("enter city");
@@ -583,12 +593,18 @@ public class Signup extends AppCompatActivity {
                    company_name.setError("please enter company name");
                 }else if (TextUtils.isEmpty(tacID)){
                     tac_id.setError("please enter tac id");
+                }else if (TextUtils.isEmpty(bank)){
+                    bank_names.setError("please enter bank name");
+                }else if (TextUtils.isEmpty(account)){
+                    account_names.setError("please enter account number");
+                }else if (TextUtils.isEmpty(routing)){
+                    routing_num.setError("please enter routing number");
                 }else{
 
                     dialog.dismiss();
                     progressDialog.show();
 
-                    CallApiServiceSignup(email, password, name, phone,address,citys,states,company_names,tacID);
+                    CallApiServiceSignup(email, password, name, phone,address,citys,states,company_names,tacID,bank,account,routing);
                     //  apiServiceCall();
                     // hide virtual keyboard
                 }
@@ -600,10 +616,10 @@ public class Signup extends AppCompatActivity {
 
     }
 
-    private void CallApiServiceSignup(String email, String password, String name, String phone, String address, String citys, String states, String company_names, String tacID) {
+    private void CallApiServiceSignup(String email, String password, String name, String phone, String address, String citys, String states, String company_names, String tacID,String bank_name,String account_num,String routing_num) {
         progressDialog.show();
         APIService service = APIClient.getClient().create(APIService.class);
-        Call<SignupModel> modelCall = service.signup(name, email, password, phone, status_value, latitude, longitude, preferences.getFcmToken(),address,citys,states,company_names,tacID);
+        Call<SignupModel> modelCall = service.signup(name, email, password, phone, status_value, latitude, longitude, preferences.getFcmToken(),address,citys,states,company_names,tacID,bank_name,account_num,routing_num);
         Log.e("data", "CallApiServiceSignup: "+name+email+password+phone+status_value+latitude+longitude+preferences.getFcmToken() );
         modelCall.enqueue(new Callback<SignupModel>() {
             @Override
