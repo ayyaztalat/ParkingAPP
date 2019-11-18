@@ -24,14 +24,15 @@ public class TabsParking  extends FragmentStatePagerAdapter {
     public Fragment getItem(int position){
         switch (position){
             case 0:
-                Map_fragment_parking personal = new Map_fragment_parking();
-                return personal;
+                Parking_info_fragment contact = new Parking_info_fragment();
+                return contact;
+
             case 1:
                 Photos_parking about = new Photos_parking();
                 return about;
             case 2:
-                Parking_info_fragment contact = new Parking_info_fragment();
-                return contact;
+                Map_fragment_parking personal = new Map_fragment_parking();
+                return personal;
             default:
                 return null;
         }

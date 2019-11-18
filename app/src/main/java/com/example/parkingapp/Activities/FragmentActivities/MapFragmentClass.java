@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.DrawableRes;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -30,6 +31,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.parkingapp.Activities.HomeActivity;
@@ -767,10 +770,12 @@ public class MapFragmentClass extends Fragment {
             callMapFetchMethod(arrayList);
 
           } else {
+              callSecondFreeAPI();
             Toast.makeText(context, parkingModel.getError(), Toast.LENGTH_SHORT).show();
           }
         } catch (Exception e) {
           e.printStackTrace();
+            callSecondFreeAPI();
           Toast.makeText(context,e.getMessage() , Toast.LENGTH_SHORT).show();
         }
       }
@@ -785,57 +790,56 @@ public class MapFragmentClass extends Fragment {
 
   private void callMapFetchMethod(final ArrayList<ParkingModel> arrayList) {
 
-    for ( int i=0;i<arrayList.size();i++){
+    for ( int i=0;i<arrayList.size();i++) {
 
-      final String latitude=arrayList.get(i).getParkingLatitude();
-      final String longitude=arrayList.get(i).getParkingLongitude();
-      final String parking_title=arrayList.get(i).getParkingName();
-      final String parking_owner_name=arrayList.get(i).getParkingOwnerName();
-      final String parking_avaibility=arrayList.get(i).getParkingTime();
-      final String parking_id=arrayList.get(i).getParkingId();
-      final String parking_description=arrayList.get(i).getParkingDescription();
-      final String parking_price=arrayList.get(i).getParkingPrice();
-      final String parking_owner_id=arrayList.get(i).getParkingOwnerId();
-      final String remaining_parking_spots=arrayList.get(i).getRemainingParkingSpots();
-      final String filled_parking_spots=arrayList.get(i).getFilledParkingSpots();
+        final String latitude = arrayList.get(i).getParkingLatitude();
+        final String longitude = arrayList.get(i).getParkingLongitude();
+        final String parking_title = arrayList.get(i).getParkingName();
+        final String parking_owner_name = arrayList.get(i).getParkingOwnerName();
+        final String parking_avaibility = arrayList.get(i).getParkingTime();
+        final String parking_id = arrayList.get(i).getParkingId();
+        final String parking_description = arrayList.get(i).getParkingDescription();
+        final String parking_price = arrayList.get(i).getParkingPrice();
+        final String parking_owner_id = arrayList.get(i).getParkingOwnerId();
+        final String remaining_parking_spots = arrayList.get(i).getRemainingParkingSpots();
+        final String filled_parking_spots = arrayList.get(i).getFilledParkingSpots();
 
-     boolean truckss=preference.getTruckCheck();
-     boolean   weight_stations=preference.getWeightCheck();
-     boolean   parking_areas=preference.getPrkingArea();
-     boolean   rest_parking=preference.getRestCheck();
-     filterClicked=preference.getFilterClicked();
+        boolean truckss = preference.getTruckCheck();
+        boolean weight_stations = preference.getWeightCheck();
+        boolean parking_areas = preference.getPrkingArea();
+        boolean rest_parking = preference.getRestCheck();
+        filterClicked = preference.getFilterClicked();
 
 
-        String truck,weight,parking_area,rest_parkings;
+        String truck, weight, parking_area, rest_parkings;
 
-        if (truckss){
-            truck="truck_stops";
-        }else{
-            truck="";
+        if (truckss) {
+            truck = "truck_stops";
+        } else {
+            truck = "";
         }
 
-        if (weight_stations){
-            weight="weight_station";
-        }else {
-            weight="";
+        if (weight_stations) {
+            weight = "weight_station";
+        } else {
+            weight = "";
         }
 
-        if (parking_areas){
-            parking_area="parking_areas";
+        if (parking_areas) {
+            parking_area = "parking_areas";
+        } else {
+            parking_area = "";
         }
-        else {
-            parking_area="";
-        }
-        if (rest_parking){
-            rest_parkings="rest_areas";
-        }else {
-            rest_parkings="";
+        if (rest_parking) {
+            rest_parkings = "rest_areas";
+        } else {
+            rest_parkings = "";
         }
 
 
-      LatLng latLng=new LatLng(Double.parseDouble(latitude),Double.parseDouble(longitude));
-    //  Toast.makeText(context, "latlng "+latLng.latitude+latLng.longitude, Toast.LENGTH_SHORT).show();
-      try{
+        LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
+        //  Toast.makeText(context, "latlng "+latLng.latitude+latLng.longitude, Toast.LENGTH_SHORT).show();
+        try {
 
         /*  if (typeofVehical.equalsIgnoreCase("truck_stops")){
               googleMap.addMarker(new MarkerOptions().position(latLng)
@@ -856,64 +860,97 @@ public class MapFragmentClass extends Fragment {
           }
 
 */
-        googleMap.addMarker(new MarkerOptions().position(latLng).title(parking_title).icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context,R.drawable.free_parking))).title(""+i));
+            googleMap.addMarker(new MarkerOptions().position(latLng).title(parking_title).icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(context, R.drawable.free_parking))).title("" + i));
 
-        if (preference.getDontShowParking()){
-              Toast.makeText(context, "Free parking Closed", Toast.LENGTH_SHORT).show();
-             // callSecondFreeAPI();
-            //  callAPIDataFetching();
-          }else {
+            if (preference.getDontShowParking()) {
+                Toast.makeText(context, "Free parking Closed", Toast.LENGTH_SHORT).show();
+                // callSecondFreeAPI();
+                //  callAPIDataFetching();
+            } else {
 
-            if (TextUtils.isEmpty(truck) && TextUtils.isEmpty(weight) && TextUtils.isEmpty(parking_area) && TextUtils.isEmpty(rest_parkings) && !preference.getDontShowParking()){
-                filterClicked=false;
-                preference.setFilterClicked(false);
+                if (TextUtils.isEmpty(truck) && TextUtils.isEmpty(weight) && TextUtils.isEmpty(parking_area) && TextUtils.isEmpty(rest_parkings) && !preference.getDontShowParking()) {
+                    filterClicked = false;
+                    preference.setFilterClicked(false);
+                }
+                if (filterClicked) {
+                    //   googleMap.clear();
+                    //    callAPIDataFetching();
+
+
+                    apiCallFilter(truck, weight, parking_area, rest_parkings);
+                } else {
+                    // callAPIDataFetching();
+                    callSecondFreeAPI();
+                }
             }
-              if (filterClicked) {
-             //   googleMap.clear();
-               //    callAPIDataFetching();
+            googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context,R.style.SheetDialog);
+                    bottomSheetDialog.setContentView(R.layout.bottom_sheet);
+                    TextView textView=bottomSheetDialog.findViewById(R.id.image_name);
+
+                    LinearLayout availablity_type=bottomSheetDialog.findViewById(R.id.availablity_type);
+                    TextView name_user=bottomSheetDialog.findViewById(R.id.name_user);
+                    TextView location=bottomSheetDialog.findViewById(R.id.location);
+                    ImageView arrow=bottomSheetDialog.findViewById(R.id.arrow);
+                    TextView price=bottomSheetDialog.findViewById(R.id.price);
+                    TextView remaning_spots=bottomSheetDialog.findViewById(R.id.parking_value);
+                    Button submit_area=bottomSheetDialog.findViewById(R.id.submit_area);
 
 
-                  apiCallFilter(truck, weight, parking_area, rest_parkings);
-              } else {
-                 // callAPIDataFetching();
-                  callSecondFreeAPI();
-              }
-          }
-        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-          @Override
-          public boolean onMarkerClick(Marker marker) {
-
-            ArrayList<CustomizationMapModel> modelForMaps=new ArrayList<>();
-            ArrayList<ParkingModel> models=new ArrayList<>();
-
-            if(marker.getTitle()!=null){
-              models.add(arrayList.get(Integer.parseInt(marker.getTitle())));
-              modelForMaps.add(new CustomizationMapModel(models.get(0).getParkingLatitude(),models.get(0).getParkingLongitude(),models.get(0).getParkingName(),models.get(0).getParkingOwnerName(),models.get(0).getParkingTime(),
-                      models.get(0).getParkingId(),models.get(0).getParkingDescription(),models.get(0).getParkingPrice(),
-                      models.get(0).getParkingOwnerId(),models.get(0).getRemainingParkingSpots(),models.get(0).getFilledParkingSpots(),"", models.get(0).getParkingName()
-                      ,models.get(0).getParkingOwnerNumber(),models.get(0).getParkingImage1(),models.get(0).getParkingImage2()));
-
-              Intent intent=new Intent(context,ReservationParkingClass.class);
-              intent.putExtra("MapData",new Gson().toJson(modelForMaps));
-              startActivity(intent);
-              getActivity().finish();
-            }
 
 
-        /*      startActivity(new Intent(context, ReservationParkingClass.class).putExtra("latitude",arrayList.get(i).getParkingLatitude())
-              .putExtra("longitude",arrayList.get(i).getParkingLongitude()).putExtra("parking_owner",arrayList.get(i).getParkingOwnerName()).putExtra("parking_name",arrayList.get(i).getParkingName())
-              .putExtra("parking_availability",arrayList.get(i).getParkingTime()).putExtra("parking_id",arrayList.get(i).getParkingId()).putExtra("parking_des",arrayList.get(i).getParkingDescription())
-              .putExtra("price",arrayList.get(i).getParkingPrice()).putExtra("owner_id",arrayList.get(i).getParkingOwnerId())
-              .putExtra("remaining_parking_spots",arrayList.get(i).getRemainingParkingSpots()).putExtra("filled_parking_spots",arrayList.get(i).getFilledParkingSpots()));
-           */ return true;
-          }
-        });
-      }catch (Exception e){
+                    final ArrayList<CustomizationMapModel> modelForMaps2=new ArrayList<>();
+                    ArrayList<FilterModel> models2=new ArrayList<>();
+                    try {
+                        if (marker.getTitle() != null) {
+                            String id=marker.getTitle().substring(6);
+                            Log.e(TAG, "onMarkerClick: "+marker.getTitle() );
+                            models2.add(arrayListModel.get(Integer.parseInt(id)));
+                            modelForMaps2.add(new CustomizationMapModel(models2.get(0).getParkingLatitude(), models2.get(0).getParkingLongitude(), models2.get(0).getParkingName(), models2.get(0).getParkingOwnerName(), models2.get(0).getParkingTime(),
+                                    models2.get(0).getParkingId(), models2.get(0).getParkingDescription(), models2.get(0).getParkingPrice(),
+                                    models2.get(0).getParkingOwnerId(), models2.get(0).getRemainingParkingSpots(), models2.get(0).getFilledParkingSpots(), models2.get(0).getTypeOfVehicle(), models2.get(0).getParkingName(),
+                                    models2.get(0).getParkingOwnerNumber(), models2.get(0).getParking_image1(), models2.get(0).getParking_image2()));
+
+                            name_user.setText(models2.get(0).getParkingOwnerName());
+                            location.setText(models2.get(0).getParkingName());
+                            remaning_spots.setText(models2.get(0).getRemainingParkingSpots()+" Parking Available");
+                            price.setText(models2.get(0).getParkingPrice());
+                            submit_area.setText("Reserve Free Parking");
+                            availablity_type.setVisibility(View.VISIBLE);
+                            submit_area.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(context, ReservationParkingClass.class);
+                                    intent.putExtra("MapData", new Gson().toJson(modelForMaps2));
+                                    startActivity(intent);
+                                    getActivity().finish();
+                                }
+                            });
+                            arrow.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(context, ReservationParkingClass.class);
+                                    intent.putExtra("MapData", new Gson().toJson(modelForMaps2));
+                                    startActivity(intent);
+                                    getActivity().finish();
+                                }
+                            });
+                        }
+                        bottomSheetDialog.show();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                    return true;
+
+
+                }
+            });
+        } catch (Exception e) {
             e.printStackTrace();
-        Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-      }
-
-
+        }
     }
   }
 
@@ -997,8 +1034,18 @@ public class MapFragmentClass extends Fragment {
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
           @Override
           public boolean onMarkerClick(Marker marker) {
+              BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context,R.style.SheetDialog);
+              bottomSheetDialog.setContentView(R.layout.bottom_sheet);
+              TextView textView=bottomSheetDialog.findViewById(R.id.image_name);
+              LinearLayout availablity_type=bottomSheetDialog.findViewById(R.id.availablity_type);
+              TextView name_user=bottomSheetDialog.findViewById(R.id.name_user);
+              TextView location=bottomSheetDialog.findViewById(R.id.location);
+              TextView price=bottomSheetDialog.findViewById(R.id.price);
+              ImageView arrow=bottomSheetDialog.findViewById(R.id.arrow);
+              TextView remaning_spots=bottomSheetDialog.findViewById(R.id.parking_value);
+              Button submit_area=bottomSheetDialog.findViewById(R.id.submit_area);
 
-            ArrayList<CustomizationMapModel> modelForMaps=new ArrayList<>();
+            final ArrayList<CustomizationMapModel> modelForMaps=new ArrayList<>();
             ArrayList<FreeParkingModel> models=new ArrayList<>();
 
             if(marker.getTitle()!=null &&marker.getTitle().contains("free")) {
@@ -1012,18 +1059,39 @@ public class MapFragmentClass extends Fragment {
                         models.get(0).getParkingOwnerId(), models.get(0).getRemainingParkingSpots(),
                         models.get(0).getFilledParkingSpots(), models.get(0).getTypeOfVehicle(), models.get(0).getParkingName(),
                         models.get(0).getParkingOwnerNumber(),models.get(0).getParking_image1(),models.get(0).getParking_image2()));
+                  name_user.setText(models.get(0).getParkingOwnerName());
+                  location.setText(models.get(0).getParkingName());
+                  remaning_spots.setText(models.get(0).getRemainingParkingSpots()+" Parking Available");
+                  price.setText(models.get(0).getParkingPrice());
+                    submit_area.setText("Reserve Free Parking");
+                  availablity_type.setVisibility(View.VISIBLE);
+                  submit_area.setOnClickListener(new View.OnClickListener() {
+                      @Override
+                      public void onClick(View v) {
+                          Intent intent = new Intent(context, ReservationParkingClass.class);
+                          intent.putExtra("MapData", new Gson().toJson(modelForMaps));
+                          startActivity(intent);
+                          getActivity().finish();
+                      }
+                  });
+                  arrow.setOnClickListener(new View.OnClickListener() {
+                      @Override
+                      public void onClick(View v) {
+                          Intent intent = new Intent(context, ReservationParkingClass.class);
+                          intent.putExtra("MapData", new Gson().toJson(modelForMaps));
+                          startActivity(intent);
+                          getActivity().finish();
+                      }
+                  });
+            bottomSheetDialog.show();
 
-                Intent intent = new Intent(context, ReservationParkingClass.class);
-                intent.putExtra("MapData", new Gson().toJson(modelForMaps));
-                startActivity(intent);
-                getActivity().finish();
               }catch (Exception e){
                 e.printStackTrace();
                 Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
               }
             }else if (marker.getTitle()!=null && marker.getTitle().contains("filter")){
 
-                        ArrayList<CustomizationMapModel> modelForMaps2=new ArrayList<>();
+                        final ArrayList<CustomizationMapModel> modelForMaps2=new ArrayList<>();
                         ArrayList<FilterModel> models2=new ArrayList<>();
 
                         try {
@@ -1036,11 +1104,32 @@ public class MapFragmentClass extends Fragment {
                                         models2.get(0).getParkingOwnerId(), models2.get(0).getRemainingParkingSpots(), models2.get(0).getFilledParkingSpots(), models2.get(0).getTypeOfVehicle(), models2.get(0).getParkingName(),
                                         models2.get(0).getParkingOwnerNumber(), models2.get(0).getParking_image1(), models2.get(0).getParking_image2()));
 
-                                Intent intent = new Intent(context, ReservationParkingClass.class);
-                                intent.putExtra("MapData", new Gson().toJson(modelForMaps2));
-                                startActivity(intent);
-                                getActivity().finish();
+                                name_user.setText(models2.get(0).getParkingOwnerName());
+                                location.setText(models2.get(0).getParkingName());
+                                remaning_spots.setText(models2.get(0).getRemainingParkingSpots()+" Parking Available");
+                                price.setText(models2.get(0).getParkingPrice());
+                                submit_area.setText("Reserve Free Parking");
+                                availablity_type.setVisibility(View.VISIBLE);
+                                submit_area.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent(context, ReservationParkingClass.class);
+                                        intent.putExtra("MapData", new Gson().toJson(modelForMaps2));
+                                        startActivity(intent);
+                                        getActivity().finish();
+                                    }
+                                });
+                                arrow.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent(context, ReservationParkingClass.class);
+                                        intent.putExtra("MapData", new Gson().toJson(modelForMaps));
+                                        startActivity(intent);
+                                        getActivity().finish();
+                                    }
+                                });
                             }
+                            bottomSheetDialog.show();
                         }catch (Exception e){
                             e.printStackTrace();
                         }
@@ -1053,7 +1142,7 @@ public class MapFragmentClass extends Fragment {
                 */
 
             }else {
-                ArrayList<CustomizationMapModel> modelForMaps3 = new ArrayList<>();
+                final ArrayList<CustomizationMapModel> modelForMaps3 = new ArrayList<>();
                 ArrayList<ParkingModel> models3 = new ArrayList<>();
                 try {
                     if (marker.getTitle() != null) {
@@ -1064,12 +1153,32 @@ public class MapFragmentClass extends Fragment {
                                 models3.get(0).getParkingOwnerId(), models3.get(0).getRemainingParkingSpots(), models3.get(0).getFilledParkingSpots(), "", models3.get(0).getParkingName()
                                 , models3.get(0).getParkingOwnerNumber(), models3.get(0).getParkingImage1(), models3.get(0).getParkingImage2()));
 
-                        Intent intent = new Intent(context, ReservationParkingClass.class);
-                        intent.putExtra("MapData", new Gson().toJson(modelForMaps3));
-                        startActivity(intent);
-                        getActivity().finish();
-                    }
+                        name_user.setText(models3.get(0).getParkingOwnerName());
+                        location.setText(models3.get(0).getParkingName());
+                        remaning_spots.setText(models3.get(0).getRemainingParkingSpots()+" Parking Available");
+                        price.setText(models3.get(0).getParkingPrice());
+                        submit_area.setText("Reserve Parking Spot");
+                        submit_area.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(context, ReservationParkingClass.class);
+                                intent.putExtra("MapData", new Gson().toJson(modelForMaps3));
+                                startActivity(intent);
+                                getActivity().finish();
+                            }
+                        });
+                        arrow.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(context, ReservationParkingClass.class);
+                                intent.putExtra("MapData", new Gson().toJson(modelForMaps));
+                                startActivity(intent);
+                                getActivity().finish();
+                            }
+                        });
 
+                    }
+bottomSheetDialog.show();
 
                 }catch (Exception e){
                     e.printStackTrace();

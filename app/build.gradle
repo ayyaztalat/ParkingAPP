@@ -67,5 +67,6 @@ dependencies {
         exclude module: "play-services-places"
     }
     implementation 'com.facebook.android:facebook-android-sdk:5.+'
+    compile 'com.sothree.slidinguppanel:library:3.4.0'
 }
 apply plugin: 'com.google.gms.google-services'

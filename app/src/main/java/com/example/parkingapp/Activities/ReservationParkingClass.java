@@ -106,9 +106,9 @@ public class ReservationParkingClass extends AppCompatActivity implements Map_fr
      //   getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tablayout);
-        tabLayout.addTab(tabLayout.newTab().setText("Map"));
-        tabLayout.addTab(tabLayout.newTab().setText("Photos"));
         tabLayout.addTab(tabLayout.newTab().setText("Info"));
+        tabLayout.addTab(tabLayout.newTab().setText("Photos"));
+        tabLayout.addTab(tabLayout.newTab().setText("Map"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         TabsParking tabsAdapter = new TabsParking(getSupportFragmentManager(), tabLayout.getTabCount());
